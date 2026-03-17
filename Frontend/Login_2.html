@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Login | EventConnect</title>
+    <link rel="stylesheet" href="Global_Components.css">
+    <style>
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 80px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            color: #333;
+            position: fixed;
+            width: 90%;
+            height: 50px;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo h1 {
+            font-size:30px;
+            color: #080808;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #444;
+            font-size: 20px ;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #c14244;
+        }
+
+        .login-btn {
+            background: #6f42c1;
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 20px;
+            transition: 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: #ca202b;
+            transform: translateY(-2px);
+        }
+
+        /* Smooth scrolling when jumping from Home Page links */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6341a4, #44e4f3);
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-text {
+            color: rgb(255, 255, 255);
+            margin-top: 70px;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Container for the 3 Login Boxes */
+        .login-grid {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 40px 10px;
+            flex-wrap: wrap; /* Wraps on mobile */
+            max-width: 1200px;
+        }
+
+        /* Individual Login Card */
+        .login-box {
+            background: rgb(251, 250, 250);
+            width: 550px;
+            padding:20px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .login-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+        }
+
+        .login-box h2 {
+            text-align: center;
+            color: #070707;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        /* Visual indicator for different roles */
+        .student-box { border-top: 8px solid #ca202b; }
+        .organizer-box { border-top: 8px solid #ca202b; }
+        .admin-box { border-top: 8px solid #ca202b; }
+
+        .input-group {
+            margin-bottom: 20px;
+            display: flex;
+            border-color: #070707;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-group input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #6341a4;
+            box-shadow: 0 0 8px rgba(99, 65, 164, 0.2);
+        }
+
+        /* Button takes full width of the card */
+        .submit-btn {
+            width: 100%;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .box-footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+            color: #0c0c0c;
+        }
+
+        .box-footer a {
+            color: #6341a4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .box-footer a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+   <nav class="navbar">
+        <div class="logo"><h1>🎓 EventConnect</h1></div>
+        <ul class="nav-links">
+            <li><a href="Home_Page_2.html">Home</a></li>
+            <li><a href="Events_Page.html">Events</a></li>
+            <li><a href="#">Contact</a></li>
+            
+            <li class="dropdown">
+                <a href="#" class="login-btn"><b>Registration</b></a>
+                <div class="dropdown-card">
+                    <div class="arrow-up"></div>
+                    <a href="Student_Registration.html" class="hub-btn">Student Registration</a>
+                    <a href="Organizer_Registration.html" class="hub-btn">Organizer Registration</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div class="header-text">
+        <h1>EventConnect Login Portal</h1>
+        <p><b> Enter your credentials and Login your role</b></p>
+    </div>
+
+    <div class="login-grid">
+        
+        <div id="student-section" class="login-box student-box">
+            <h2>🧑‍🎓 Student Login</h2>
+            <p><b>Access and register for events</b></p>
+            <form id="studentLoginForm">
+                <div class="input-group">
+                    <label><b>Roll Number / Email</b></label>
+                    <input type="text" id="studentEmail" placeholder="Enter Roll No or Email" required>
+                </div>
+
+                <div class="input-group">
+                    <label><b>Password</b></label>
+                    <input type="password" id="studentPassword" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="login-btn submit-btn">
+                    Login as Student
+                </button>
+            </form>
+            <div class="box-footer">
+                <p>New here? <a href="Student_Registration.html">Create Account</a></p>
+                <p><a href="#">Forgot Password?</a></p>
+            </div>
+        </div>
+
+        <div id="organizer-section" class="login-box organizer-box">
+            <h2><b>📋 Organizer Login</b></h2>
+            <p><b>Create and control event activities</b></p>
+            <form id="Organizerloginform">
+                <div class="input-group">
+                    <label><b>Organizer ID / Email</b></label>
+                    <input type="text" id="organizerIdentifier" placeholder="Organizer ID or Email" required>
+                </div>
+                <div class="input-group">
+                    <label><b>Password</b></label>
+                    <input type="password" id="password_o" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="login-btn submit-btn">Login as Organizer</button>
+            </form>
+            <div class="box-footer">
+                <p>Need access? <a href="Organizer_Registration.html">Register Hub</a></p>
+            </div>
+        </div>
+
+        <div id="admin-section" class="login-box admin-box">
+            <h2><b>🛠 Admin Login</b></h2>
+            <p><b>Manage events and participants</b></p>
+            <form>
+                <div class="input-group">
+                    <label><b>Admin Username</b></label>
+                    <input type="text" placeholder="Enter Admin ID" required>
+                </div>
+                <div class="input-group">
+                    <label><b>Password</b></label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="login-btn submit-btn">Access Admin Hub</button>
+            </form>
+            <div class="box-footer">
+                <p><a href="#">Contact Support</a></p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const role = params.get("role");
+
+        const student = document.getElementById("student-section");
+        const organizer = document.getElementById("organizer-section");
+        const admin = document.getElementById("admin-section");
+
+        if (role === "student") {
+            organizer.style.display = "none";
+            admin.style.display = "none";
+        }
+        else if (role === "organizer") {
+            student.style.display = "none";
+            admin.style.display = "none";
+        }
+        else if (role === "admin") {
+            student.style.display = "none";
+            organizer.style.display = "none";
+        }
+
+        document.getElementById("studentLoginForm")
+        .addEventListener("submit", function(e) {
+
+            e.preventDefault();
+
+            const identifier = document.getElementById("studentEmail").value;
+            const password = document.getElementById("studentPassword").value;
+
+            fetch("http://127.0.0.1:8000/Student_login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    identifier: identifier,
+                    password: password
+                })
+            })
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error("Invalid credentials");
+                }
+
+                return response.json();
+            })
+            .then(data => {
+
+                // ✅ Store student id
+                localStorage.setItem("student_id", data.id);
+
+                // ✅ Redirect to dashboard
+                window.location.href = "student_dashboard.html";
+
+            })
+            .catch(error => {
+                alert("Login failed: " + error.message);
+            });
+
+        });
+
+
+        document.getElementById("Organizerloginform")
+        .addEventListener("submit", function(e) {
+
+            e.preventDefault();
+
+            const identifier = document.getElementById("organizerIdentifier").value;
+            const password = document.getElementById("password_o").value;
+
+            fetch("http://127.0.0.1:8000/organizer_login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    identifier: identifier,
+                    password: password
+                })
+            })
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error("Invalid credentials");
+                }
+
+                return response.json();
+            })
+            .then(data => {
+
+                // ✅ Store student id
+                localStorage.setItem("organizer_id", data.id);
+
+                // ✅ Redirect to dashboard
+                window.location.href = "organizer_Dashboard_1.html";
+
+            })
+            .catch(error => {
+                alert("Login failed: " + error.message);
+            });
+
+        });
+
+    </script>
+</body>
+</html>

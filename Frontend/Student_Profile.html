@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventConnect - Profile Settings</title>
+    <style>
+        /* Base Reset & Variables */
+        :root {
+            --bg-dark: #88a2eb;
+            --bg-sidebar: #0f172a;
+            --bg-card: #111827;
+            --bg-input: #1f2937;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --text-muted: #64748b;
+            --primary-cyan: #0891b2;
+            --primary-hover: #0e7490;
+            --border-slate: #1e293b;
+            --border-input: #374151;
+            --accent-orange: #f97316;
+            
+            --success-green: #10b981;
+            --error-red: #f87171;
+            --modal-overlay: rgba(0, 0, 0, 0.85);
+            
+            /* Social Brand Colors */
+            --linkedin-blue: #0077b5;
+            --github-white: #ffffff;
+            --portfolio-emerald: #10b981;
+            --email-rose: #f43f5e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-slate);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding: 0 16px;
+        }
+
+        .logo-box {
+            background-color: var(--primary-cyan);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: -0.025em;
+        }
+
+        .nav-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #22d3ee;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+            color: white;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .sidebar-footer {
+            padding-top: 10px;
+            border-top: 1px solid var(--border-slate);
+        }
+
+        .logout-btn {
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 12px 16px;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            color: #f87171;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .role-indicator {
+            padding: 4px 16px;
+            background-color: rgba(8, 145, 178, 0.1);
+            color: var(--primary-cyan);
+            border: 1px solid rgba(8, 145, 178, 0.2);
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Cards */
+        .settings-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-slate);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .profile-header-content {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .profile-pic-container {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--border-slate);
+            position: relative;
+            flex-shrink: 0;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-upload-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .profile-pic-container:hover .profile-upload-overlay {
+            opacity: 1;
+        }
+
+        /* Social Icons Section (Display at Top) */
+        .social-bar {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-input);
+            border: 1px solid var(--border-input);
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .social-icon.linkedin:hover { background: var(--linkedin-blue); border-color: var(--linkedin-blue); }
+        .social-icon.github:hover { background: #333; border-color: #444; }
+        .social-icon.portfolio:hover { background: var(--portfolio-emerald); border-color: var(--portfolio-emerald); }
+        .social-icon.email:hover { background: var(--email-rose); border-color: var(--email-rose); }
+
+        /* Form Controls */
+        .form-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-field {
+            background: var(--bg-input);
+            border: 1px solid var(--border-input);
+            border-radius: 12px;
+            padding: 12px 16px;
+            width: 100%;
+            color: white;
+            outline: none;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-cyan);
+            background: #262f3f;
+            box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);
+        }
+
+        .read-only-id {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed var(--border-input);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            text-align: center;
+            font-family: monospace;
+        }
+
+        /* Security Card Styles */
+        .security-card {
+            border-left: 4px solid var(--accent-orange);
+        }
+
+        .password-section {
+            margin-top: 10px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            border: 1px solid var(--border-slate);
+        }
+
+        .password-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Recovery Mode Selector */
+        .recovery-options {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .recovery-chip {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-input);
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dim);
+            transition: all 0.2s;
+        }
+
+        .recovery-chip.selected {
+            border-color: var(--accent-orange);
+            background: rgba(249, 115, 22, 0.1);
+            color: var(--accent-orange);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-bottom: 60px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background: var(--primary-cyan);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-dim);
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-input);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-dim);
+            color: white;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-dim);
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            border-left: 4px solid var(--success-green);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+            animation: slideIn 0.3s ease-out forwards;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: var(--modal-overlay);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 2px solid var(--border-slate);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 480px;
+            padding: 32px;
+            position: relative;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Utilities */
+        .text-2xl { font-size: 1.5rem; font-weight: 700; }
+        .text-lg { font-size: 1.125rem; font-weight: 600; }
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+        .mb-2 { margin-bottom: 8px; }
+        .mb-4 { margin-bottom: 16px; }
+        .mb-6 { margin-bottom: 24px; }
+        .uppercase { text-transform: uppercase; }
+        .tracking-widest { letter-spacing: 0.1em; }
+        .font-bold { font-weight: 700; }
+        .hidden { display: none; }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            main { padding: 20px; }
+            .profile-header-content { flex-direction: column; text-align: center; }
+            .social-bar { justify-content: center; }
+            .btn-group { flex-direction: column; }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-box">
+                <svg class="nav-icon" viewBox="0 0 24 24" stroke="white"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <h1 class="sidebar-title">STUDENT PANEL</h1>
+        </div>
+
+        <nav class="nav-list">
+            <a href="Home_Page_2.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Home
+            </a>
+            <a href="Student_Dashboard.html" class="nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a>
+            <a href="Events_Page.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Explore Events
+            </a>
+            <a href="#" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Registrations
+            </a>
+            <a href="Student_Profile.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Profile Settings
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="#" class="logout-btn">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <main>
+        <div class="container">
+            <div class="header-row">
+                <h2 class="text-2xl">Profile Settings</h2>
+                <div id="role-indicator" class="role-indicator">Student</div>
+            </div>
+
+            <!-- Profile Overview -->
+            <div class="settings-card">
+                <div class="profile-header-content">
+                    <div class="profile-pic-container" onclick="document.getElementById('avatar-input').click()">
+                        <img id="display-avatar" src="https://raw.githubusercontent.com/Sanjaysanjay31/Images/main/Sanjay_mall.jpeg" alt="Avatar">
+                        <div class="profile-upload-overlay">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                            <span class="text-xs mt-2" style="color:white">Change Photo</span>
+                        </div>
+                        <input type="file" id="avatar-input" style="display: none;" accept="image/*">
+                    </div>
+
+                    <div style="flex: 1;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 8px;">
+                            <div>
+                                <h3 id="display-name" class="text-2xl">Katta Sanjay</h3>
+                                <p id="display-email-text" style="color: var(--text-muted); font-size: 14px;">kattasanjay39@gmail.com</p>
+                            </div>
+                            <div>
+                                <span class="text-xs uppercase font-bold tracking-widest" style="color: var(--text-muted); display: block; margin-bottom: 4px;">Account ID</span>
+                                <input type="text" id="display-id" class="input-field read-only-id text-xs" style="width: 140px;" value="24B11DS095" readonly>
+                            </div>
+                        </div>
+                        <p id="display-bio" style="color: #cbd5e1; font-size: 14px; line-height: 1.6; font-style: italic; margin-bottom: 12px;">
+                            "Passionate about Tech Events and Hackathons."
+                        </p>
+
+                        <!-- SOCIAL LINKS BAR (Dynamic) -->
+                        <div class="social-bar">
+                            <a id="btn-link-linkedin" href="https://linkedin.com" target="_blank" class="social-icon linkedin" title="LinkedIn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                            </a>
+                            <a id="btn-link-github" href="https://github.com" target="_blank" class="social-icon github" title="GitHub">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                            </a>
+                            <a id="btn-link-portfolio" href="#" target="_blank" class="social-icon portfolio" title="Portfolio Website">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                            </a>
+                            <a id="btn-link-email" href="mailto:kattasanjay39@gmail.com" class="social-icon email" title="Contact Email">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="profile-form">
+                <!-- Personal Details Card -->
+                <div class="settings-card">
+                    <h4 class="text-lg mb-6" style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Personal Details
+                    </h4>
+                    <div class="form-rows">
+                        <div class="form-grid">
+                            <div>
+                                <label class="label">Full Name</label>
+                                <input type="text" id="input-name" class="input-field" placeholder="Enter full name">
+                            </div>
+                            <div>
+                                <label class="label">Email Address</label>
+                                <input type="email" id="input-email" class="input-field" placeholder="email@example.com">
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div>
+                                <label class="label">Phone Number</label>
+                                <input type="tel" id="input-phone" class="input-field" placeholder="+91 0000000000">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="label">About Me (Bio)</label>
+                            <textarea id="input-bio" rows="2" class="input-field" style="resize: vertical;" placeholder="Tell us about yourself..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Details Card -->
+                <div class="settings-card">
+                    <h4 class="text-lg mb-6" style="display:flex;align-items:center;gap:8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)" stroke-width="2">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
+                        </svg>
+                        Academic Details
+                    </h4>
+
+                    <div class="form-rows">
+                        <div class="form-grid">
+                            <div>
+                                <label class="label">Educational Institution</label>
+                                <input type="text" id="input-college" class="input-field" placeholder="Enter College/University name">
+                            </div>
+
+                            <div>
+                                <label class="label">Academic Degree</label>
+                                <select id="input-degree" class="input-field">
+                                    <option value="">Select Degree</option>
+                                    <option value="B.Tech">B.Tech / B.E</option>
+                                    <option value="M.Tech">M.Tech / M.E</option>
+                                    <option value="BCA">BCA</option>
+                                    <option value="MCA">MCA</option>
+                                    <option value="B.Sc">B.Sc</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div>
+                                <label class="label">Specialization / Branch</label>
+                                <input type="text" id="input-branch" class="input-field" placeholder="Computer Science">
+                            </div>
+
+                    
+                        </div>
+                    </div>
+                </div>
+
+
+                
+                <!-- NEW: SOCIAL LINKS MODIFICATION SECTION  -->
+                <div class="settings-card">
+                    <h4 class="text-lg mb-6" style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        Social Profiles & Links
+                    </h4>
+                    <div class="form-rows">
+                        <div class="form-grid">
+                            <div>
+                                <label class="label">LinkedIn URL</label>
+                                <input type="url" id="input-linkedin" class="input-field" placeholder="https://linkedin.com/in/username">
+                            </div>
+                            <div>
+                                <label class="label">GitHub URL</label>
+                                <input type="url" id="input-github" class="input-field" placeholder="https://github.com/username">
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div>
+                                <label class="label">Portfolio Website</label>
+                                <input type="url" id="input-portfolio" class="input-field" placeholder="https://yourwebsite.com">
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ENHANCED SECURITY SECTION -->
+                <div class="settings-card security-card">
+                    <h4 class="text-lg mb-2" style="color: var(--accent-orange); display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        Security & Password
+                    </h4>
+                    <p class="text-sm mb-6" style="color: var(--text-dim);">Manage your password and recovery methods.</p>
+                    
+                    <div class="password-section">
+                        <div class="password-grid">
+                            <div>
+                                <label class="label">Current Password</label>
+                                <input type="password" id="cur-pass" class="input-field" placeholder="••••••••">
+                            </div>
+                            <div>
+                                <label class="label">New Password</label>
+                                <input type="password" id="new-pass-main" class="input-field" placeholder="Min. 8 characters">
+                            </div>
+                            <div>
+                                <label class="label">Confirm New Password</label>
+                                <input type="password" id="conf-pass-main" class="input-field" placeholder="Repeat new password">
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: flex-start;">
+                            <button type="button" class="btn-primary" style="background: var(--accent-orange);" onclick="handleUpdatePasswordMain()">
+                                Change Password
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RESET OPTIONS -->
+                    <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-slate);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
+                            <div>
+                                <p class="font-bold text-sm">Forgot your password?</p>
+                                <p class="text-xs" style="color: var(--text-dim); margin-bottom: 12px;">Choose where to receive your verification code:</p>
+                                
+                                <div class="recovery-options">
+                                    <div class="recovery-chip selected" onclick="selectRecovery('email', this)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                        Email
+                                    </div>
+                                    <div class="recovery-chip" onclick="selectRecovery('phone', this)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                        Phone (SMS)
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-outline" onclick="openResetModal()">Send Verification Code</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn-ghost" onclick="resetForm()">Discard Changes</button>
+                    <button type="submit" class="btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                        Save All Modifications
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Unified Recovery Modal -->
+    <div id="recovery-modal" class="modal">
+        <div class="modal-content">
+            <div id="step-otp">
+                <h3 class="text-lg mb-2">Verify Identity</h3>
+                <p id="modal-desc" class="text-sm" style="color: var(--text-dim); margin-bottom: 20px;">
+                    A 6-digit code has been sent to your <span id="recovery-target">email</span>.
+                </p>
+                
+                <div class="mb-6">
+                    <label class="label">Enter Verification OTP</label>
+                    <input type="text" id="otp-input" maxlength="6" class="input-field text-2xl tracking-widest" style="text-align: center; font-family: monospace;" placeholder="000000">
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button type="button" class="btn-primary" onclick="verifyOTP()">Verify OTP</button>
+                    <button type="button" class="btn-ghost" onclick="closeResetModal()">Cancel</button>
+                </div>
+            </div>
+
+            <div id="step-password" class="hidden">
+                <h3 class="text-lg mb-2">Reset Password</h3>
+                <p class="text-sm" style="color: var(--text-dim); margin-bottom: 24px;">
+                    Your identity is verified. Please set your new secure password.
+                </p>
+                
+                <div class="mb-4">
+                    <label class="label">New Password</label>
+                    <input type="password" id="modal-new-pass" class="input-field" placeholder="Min. 8 characters">
+                </div>
+
+                <div class="mb-6">
+                    <label class="label">Confirm New Password</label>
+                    <input type="password" id="modal-conf-pass" class="input-field" placeholder="Repeat password">
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button type="button" class="btn-primary" style="background: var(--success-green);" onclick="submitNewPassword()">Update Password</button>
+                    <button type="button" class="btn-ghost" onclick="closeResetModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script>
+        let selectedRecoveryMethod = 'email';
+        /*After save the Modifications it reload the icon id */
+        const links = JSON.parse(localStorage.getItem("socialLinks"));
+        if (links) {
+            document.getElementById("input-github").value = links.github;
+        }
+
+
+        const socialLinks = {
+            github: document.getElementById("input-github").value,
+            linkedin: document.getElementById("input-linkedin").value,
+            portfolio: document.getElementById("input-portfolio").value
+        };
+
+        localStorage.setItem("socialLinks", JSON.stringify(socialLinks));
+
+        // Latent Social Links added to currentUser object
+        const currentUser = {
+            id: '24B11DS095',
+            role: 'student',
+            name: 'Katta Sanjay',
+            email: 'kattasanjay39@gmail.com',
+            phone: '8978806254',
+            bio: 'Passionate about Tech Events and Hackathons. Always looking for opportunities to learn UI/UX and Full Stack Development.',
+            college: 'JNTU Hyderabad',
+            department: 'Computer Science',
+            avatar: 'https://raw.githubusercontent.com/Sanjaysanjay31/Images/main/Sanjay_mall.jpeg',
+            // Default Links
+            linkedin: 'https://linkedin.com/in/kattasanjay',
+            github: 'https://github.com/Sanjaysanjay31',
+            portfolio: 'https://sanjayportfolio.dev',
+            socialEmail: 'kattasanjay39@gmail.com'
+        };
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            if (type === 'error') toast.style.borderColor = 'var(--error-red)';
+            
+            toast.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${type === 'success' ? 'var(--success-green)' : 'var(--error-red)'}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(20px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function updateDisplayElements() {
+            // Profile Top Section
+            document.getElementById('display-name').innerText = currentUser.name;
+            document.getElementById('display-email-text').innerText = currentUser.email;
+            document.getElementById('display-bio').innerText = `"${currentUser.bio}"`;
+            document.getElementById('display-avatar').src = currentUser.avatar;
+            
+            // Social Icons Links (Top Bar)
+            document.getElementById('btn-link-linkedin').href = currentUser.linkedin;
+            document.getElementById('btn-link-github').href = currentUser.github;
+            document.getElementById('btn-link-portfolio').href = currentUser.portfolio;
+            document.getElementById('btn-link-email').href = `mailto:${currentUser.socialEmail}`;
+
+            // Form Fields
+            document.getElementById('input-name').value = currentUser.name;
+            document.getElementById('input-email').value = currentUser.email;
+            document.getElementById('input-phone').value = currentUser.phone;
+            document.getElementById('input-bio').value = currentUser.bio;
+            
+            // Link Input Fields
+            document.getElementById('input-linkedin').value = currentUser.linkedin;
+            document.getElementById('input-github').value = currentUser.github;
+            document.getElementById('input-portfolio').value = currentUser.portfolio;
+            document.getElementById('input-social-email').value = currentUser.socialEmail;
+        }
+
+        function initProfile() {
+            const role = currentUser.role;
+            document.getElementById('panel-title').innerText = `${role.toUpperCase()} PANEL`;
+            document.getElementById('role-indicator').innerText = role;
+
+            updateDisplayElements();
+
+            // Real-time preview handlers
+            document.getElementById('input-name').oninput = (e) => document.getElementById('display-name').innerText = e.target.value || currentUser.name;
+            document.getElementById('input-email').oninput = (e) => document.getElementById('display-email-text').innerText = e.target.value || currentUser.email;
+            document.getElementById('input-bio').oninput = (e) => document.getElementById('display-bio').innerText = `"${e.target.value || currentUser.bio}"`;
+            
+            // Social Link real-time updates
+            document.getElementById('input-linkedin').oninput = (e) => document.getElementById('btn-link-linkedin').href = e.target.value || '#';
+            document.getElementById('input-github').oninput = (e) => document.getElementById('btn-link-github').href = e.target.value || '#';
+            document.getElementById('input-portfolio').oninput = (e) => document.getElementById('btn-link-portfolio').href = e.target.value || '#';
+            document.getElementById('input-social-email').oninput = (e) => document.getElementById('btn-link-email').href = `mailto:${e.target.value}` || '#';
+
+            // Avatar Upload Handler
+            document.getElementById('avatar-input').onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        document.getElementById('display-avatar').src = event.target.result;
+                        showToast('Avatar preview updated!');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            const spec = document.getElementById('role-specific-container');
+            spec.innerHTML = `
+                <h4 class="text-lg mb-6" style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    Academic Information
+                </h4>
+                <div class="form-grid">
+                    <div><label class="label">College</label><input class="input-field" value="${currentUser.college}"></div>
+                    <div><label class="label">Department</label><input class="input-field" value="${currentUser.department}"></div>
+                </div>
+            `;
+        }
+
+        // Security Functions
+        function selectRecovery(method, el) {
+            selectedRecoveryMethod = method;
+            document.querySelectorAll('.recovery-chip').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function handleUpdatePasswordMain() {
+            const cur = document.getElementById('cur-pass').value;
+            const n1 = document.getElementById('new-pass-main').value;
+            const n2 = document.getElementById('conf-pass-main').value;
+
+            if (!cur) return showToast('Enter current password', 'error');
+            if (n1.length < 8) return showToast('New password must be at least 8 characters', 'error');
+            if (n1 !== n2) return showToast('Passwords do not match', 'error');
+
+            showToast('Password updated successfully!');
+            document.getElementById('cur-pass').value = '';
+            document.getElementById('new-pass-main').value = '';
+            document.getElementById('conf-pass-main').value = '';
+        }
+
+        // Modal Flow
+        function openResetModal() {
+            const target = selectedRecoveryMethod === 'email' ? currentUser.email : currentUser.phone;
+            document.getElementById('recovery-target').innerText = `${selectedRecoveryMethod} (${target})`;
+            document.getElementById('step-otp').classList.remove('hidden');
+            document.getElementById('step-password').classList.add('hidden');
+            document.getElementById('otp-input').value = '';
+            document.getElementById('recovery-modal').style.display = 'flex';
+        }
+
+        function closeResetModal() {
+            document.getElementById('recovery-modal').style.display = 'none';
+        }
+
+        function verifyOTP() {
+            const otp = document.getElementById('otp-input').value;
+            if (otp.length !== 6 || isNaN(otp)) {
+                return showToast('Please enter a valid 6-digit OTP', 'error');
+            }
+            showToast('OTP Verified successfully!');
+            document.getElementById('step-otp').classList.add('hidden');
+            document.getElementById('step-password').classList.remove('hidden');
+        }
+
+        function submitNewPassword() {
+            const p1 = document.getElementById('modal-new-pass').value;
+            const p2 = document.getElementById('modal-conf-pass').value;
+            if (p1.length < 8) return showToast('Password too short (min 8 chars)', 'error');
+            if (p1 !== p2) return showToast('Passwords do not match', 'error');
+            showToast('Password has been reset successfully!');
+            closeResetModal();
+            document.getElementById('modal-new-pass').value = '';
+            document.getElementById('modal-conf-pass').value = '';
+        }
+
+        function resetForm() {
+            updateDisplayElements();
+            showToast('Changes discarded.');
+        }
+
+        document.getElementById('profile-form').onsubmit = (e) => {
+            e.preventDefault();
+            
+            // Save basic data
+            currentUser.name = document.getElementById('input-name').value;
+            currentUser.email = document.getElementById('input-email').value;
+            currentUser.phone = document.getElementById('input-phone').value;
+            currentUser.bio = document.getElementById('input-bio').value;
+            currentUser.avatar = document.getElementById('display-avatar').src;
+
+            // Save Social Links
+            currentUser.linkedin = document.getElementById('input-linkedin').value;
+            currentUser.github = document.getElementById('input-github').value;
+            currentUser.portfolio = document.getElementById('input-portfolio').value;
+            currentUser.socialEmail = document.getElementById('input-social-email').value;
+
+            updateDisplayElements();
+            showToast('Profile and Social Links updated successfully!');
+        };
+
+        window.onload = initProfile;
+    </script>
+</body>
+</html>

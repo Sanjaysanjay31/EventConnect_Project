@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6ee6dc 0%, #3b82f6 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+        }
+        /* Navbar */
+                .navbar {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 15px 80px;
+                    background: rgba(255, 255, 255, 0.9);
+                    backdrop-filter: blur(10px);
+                    color: #333;
+                    position: fixed;
+                    width: 100%;
+                    top: 0;
+                    left: 0;
+                    z-index: 1000;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                }
+
+                .logo h1 {
+                    font-size:30px;
+                    color: #080808;
+                }
+
+                .nav-links {
+                    list-style: none;
+                    display: flex;
+                    gap: 30px;
+                    align-items: center;
+                }
+
+                .nav-links a {
+                    text-decoration: none;
+                    color: #444;
+                    font-size: 20px ;
+                    font-weight: 500;
+                    transition: 0.3s;
+                }
+
+                .nav-links a:hover {
+                    color: #c14244;
+                }
+
+                .login-btn {
+                    background: #6f42c1;
+                    color: white !important;
+                    padding: 8px 20px;
+                    border-radius: 20px;
+                    transition: 0.3s ease;
+                }
+
+                .login-btn:hover {
+                    background: #ca202b;
+                    transform: translateY(-2px);
+                }
+
+
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding-top: 30PX;
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            font-size: 40px;
+            text-box : bold;
+            color: #0b0b0b;
+            font-weight: 600;
+        }
+
+        .header p {
+            color: #090909;
+            margin-top: 6px;
+            font-size: 20px;
+        }
+
+        /* Card */
+        .form-card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 14px;
+            width: 750px;
+            max-width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transition: 0.3s ease;
+        }
+
+        .form-card:hover {
+            transform: translateY(-3px);
+        }
+
+        /* 2 column layout */
+        .row {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        .input-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-box label {
+            font-size: 16px;
+            text : bold;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #222;
+        }
+
+        .input-box input {
+            padding: 11px;
+            border-radius: 8px;
+            border: 2px solid #414040;
+            background: #f9f9f9;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .input-box input:focus {
+            border-color: #6f42c1;
+            box-shadow: 0 0 8px rgba(111, 66, 193, 0.3);
+            background: #fff;
+            outline: none;
+        }
+
+        .input-box select {
+            padding: 11px;
+            border-radius: 8px;
+            border: 2px solid #414040;
+            background: #f9f9f9;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .input-box select:focus {
+            border-color: #6f42c1;
+            box-shadow: 0 0 8px rgba(111, 66, 193, 0.3);
+            background: #fff;
+            outline: none;
+        }
+
+
+        /* Button */
+        .btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #5bc0de, #8e2de2);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: scale(1.01);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #6f42c1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .form-card {
+                padding: 25px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<!--Nav Bar -->
+<nav class="navbar">
+        <div class="logo"><h1>🎓 EventConnect</h1></div>
+        <ul class="nav-links">
+            <li><a href="Home_Page_2.html">Home</a></li>
+            <li><a href="#">Events</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="Login_Page.html" class="login-btn"><b>Login</b></a></li>
+        </ul>
+    </nav>
+
+
+<!-- Heading Outside Card -->
+<div class="header">
+    <div class="icon"></div>
+    <h1>Create a 🆕 Account</h1>
+    <p>Sign up to start registering for events</p>
+</div>
+
+<!-- Main Card -->
+<div class="form-card">
+    <form>
+
+        <div class="row">
+            <div class="input-box">
+                <label>Full Name</label>
+                <input type="text" id="full_name" placeholder="John Doe" required>
+            </div>
+
+            <div class="input-box">
+                <label>Student ID</label>
+                <input type="text" id="student_id" placeholder="STU12345" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-box">
+                <label>Phone Number</label>
+                <input type="tel" id="phone_number" placeholder="9876543210" required>
+            </div>
+
+            <div class="input-box">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="student@university.edu" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-box">
+                <label>College</label>
+                <input type="text" id="college" placeholder="ABC College" required>
+            </div>
+
+            <div class="input-box">
+                <label>Department</label>
+                <select id="department" required>
+                    <option value="" disabled selected>Select Department</option>
+                    <option value="CSE">CSE</option>
+                    <option value="AIML">AIML</option>
+                    <option value="DS">DS</option>
+                    <option value="ECE">ECE</option>
+                    <option value="EEE">EEE</option>
+                    <option value="IT">IT</option>
+                    <option value="MECH">MECH</option>
+                </select>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-box">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Create a strong password" required>
+            </div>
+
+            <div class="input-box">
+                <label>Confirm Password</label>
+                <input type="password" id="confirm_password" placeholder="Re-enter your password" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn">Create Account</button>
+
+        <p class="login-link">
+            Already have an account? <a href="Login_Page.html">Login</a>
+        </p>
+
+    </form>
+</div>
+
+
+    <script>
+        const registrationForm = document.querySelector('form');
+
+        registrationForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Stop page from refreshing
+
+           // 1️⃣ Collect values safely using ID
+            const fullName = document.getElementById("full_name").value.trim();
+            const studentId = document.getElementById("student_id").value.trim();
+            const phoneNumber = document.getElementById("phone_number").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const college = document.getElementById("college").value.trim();
+            const department = document.getElementById("department").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm_password").value;
+
+             // 2️⃣ Client-side validation
+            if (password !== confirmPassword) {
+                alert("❌ Passwords do not match!");
+                return;
+            }
+
+            if (!department) {
+                alert("❌ Please select a department.");
+                return;
+            }
+
+            try {
+                // 3. Send data to FastAPI (running on port 8000)
+                const response = await fetch('http://127.0.0.1:8000/Student_register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        full_name: fullName,
+                        student_id: studentId,
+                        phone_number: phoneNumber,
+                        email: email,
+                        college: college,
+                        department: department,
+                        password: password
+                    })
+                });
+
+                let result;
+                try {
+                    result = await response.json();
+                } catch {
+                    result = {};
+                }
+
+                if (response.ok) {
+                    // Store student_id in localStorage
+                    localStorage.setItem("student_id", result.student_id);
+
+                    alert("🎉 Registration Successful!");
+                    
+                    // Redirect directly to dashboard
+                    window.location.href = "Student_Dashboard.html";
+                }
+                else {
+                    alert("❌ Error: " + (result.detail || "Something went wrong"));
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+                alert("Could not connect to the server. Is FastAPI running?");
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Panel - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Base Reset & Variables */
+        :root {
+            --bg-dark: #0f172a;
+            --bg-sidebar: #0b0f1a;
+            --bg-card: #111827;
+            --bg-panel: rgba(255, 255, 255, 0.03);
+            --bg-input: #1f2937;
+            --bg-card-border: rgba(255, 255, 255, 0.08);
+            --border-slate: #1e293b;
+            --border-input: #374151;
+            --primary-cyan: #0891b2;
+            --primary-hover: #0e7490;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --text-muted: #64748b;
+            --accent-green: #22c55e;
+            --accent-purple: #a855f7;
+            --accent-yellow: #eab308;
+            --accent-blue: #3b82f6;
+            --accent-orange: #f97316;
+            --accent-rose: #f43f5e;
+            --success-green: #10b981;
+            --error-red: #f87171;
+            --modal-overlay: rgba(0, 0, 0, 0.85);
+
+            /* Social Brand Colors */
+            --linkedin-blue: #0077b5;
+            --github-white: #ffffff;
+            --portfolio-emerald: #10b981;
+            --email-rose: #f43f5e;
+        }
+
+        
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-slate);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding: 0 16px;
+        }
+
+        .logo-box {
+            background-color: var(--primary-cyan);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: -0.025em;
+        }
+
+        .nav-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #22d3ee;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+            color: white;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .sidebar-footer {
+            padding-top: 24px;
+            border-top: 1px solid var(--border-slate);
+        }
+
+        .logout-btn {
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .logout-btn:hover {
+            color: #f87171;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .panel {
+            background: var(--bg-panel);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        /* Welcome Header */
+        .welcome-header {
+            border-left: 4px solid var(--primary-cyan);
+        }
+
+        .welcome-title {
+            font-size: 1.875rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .welcome-subtitle {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        /* Cards */
+        .settings-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-slate);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .profile-header-content {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .profile-pic-container {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--border-slate);
+            position: relative;
+            flex-shrink: 0;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-upload-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .profile-pic-container:hover .profile-upload-overlay {
+            opacity: 1;
+        }
+
+        /* Social Icons Section (Display at Top) */
+        .social-bar {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-input);
+            border: 1px solid var(--border-input);
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .social-icon.linkedin:hover { background: var(--linkedin-blue); border-color: var(--linkedin-blue); }
+        .social-icon.github:hover { background: #333; border-color: #444; }
+        .social-icon.portfolio:hover { background: var(--portfolio-emerald); border-color: var(--portfolio-emerald); }
+        .social-icon.email:hover { background: var(--email-rose); border-color: var(--email-rose); }
+
+        /* Stats Grid - 3 columns */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            padding: 24px;
+            border-bottom-width: 3px;
+            border-bottom-style: solid;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 900;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        td {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.875rem;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        .badge-confirmed { background: rgba(8, 145, 178, 0.1); color: #22d3ee; }
+        .badge-pending { background: rgba(234, 179, 8, 0.1); color: #eab308; }
+
+        /* Achievement Cards */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .achievement-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+        }
+
+        .achievement-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+        }
+
+        .achievement-title { font-weight: 700; font-size: 0.95rem; }
+        .achievement-meta { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .achievements-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .profile-banner { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-box">
+                <svg class="nav-icon" viewBox="0 0 24 24" stroke="white"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <h1 class="sidebar-title">STUDENT PANEL</h1>
+        </div>
+
+        <nav class="nav-list">
+            <a href="Home_Page_2.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Home
+            </a>
+            <a href="Student_Dashboard.html" class="nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a>
+            <a href="Events_Page.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Explore Events
+            </a>
+            <a href="#" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Registrations
+            </a>
+            <a href="Student_Profile.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Profile Settings
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="#" class="logout-btn">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <header class="panel welcome-header">
+            <h2 id="welcomeName" class="welcome-title">Welcome, Katta Sanjay 🎓</h2>
+            <p class="welcome-subtitle">Manage your events, track your participations, and see your winnings.</p>
+        </header>
+
+         <!-- Profile Overview -->
+            <div class="settings-card">
+                <div class="profile-header-content">
+                    <div class="profile-pic-container" onclick="document.getElementById('avatar-input').click()">
+                        <img id="display-avatar" src="https://raw.githubusercontent.com/Sanjaysanjay31/Images/main/Sanjay_mall.jpeg" alt="Avatar">
+                        <div class="profile-upload-overlay">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                            <span class="text-xs mt-2" style="color:white">Change Photo</span>
+                        </div>
+                        <input type="file" id="avatar-input" style="display: none;" accept="image/*">
+                    </div>
+
+                    <div style="flex: 1;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 8px;">
+                            <div>
+                                <h3 id="display-name" class="text-2xl">Katta Sanjay</h3>
+                                <p id="display-email-text" style="color: var(--text-muted); font-size: 14px;">kattasanjay39@gmail.com</p>
+                            </div>
+                            <div>
+                                <span class="text-xs uppercase font-bold tracking-widest" style="color: var(--text-muted); display: block; margin-bottom: 4px;">Account ID</span>
+                                <input type="text" id="display-id" class="input-field read-only-id text-xs" style="width: 140px;" value="24B11DS095" readonly>
+                            </div>
+                        </div>
+                        <p id="display-bio" style="color: #cbd5e1; font-size: 14px; line-height: 1.6; font-style: italic; margin-bottom: 12px;">
+                            "Passionate about Tech Events and Hackathons."
+                        </p>
+
+                        <!-- SOCIAL LINKS BAR (Dynamic) -->
+                        <div class="social-bar">
+                            <a id="btn-link-linkedin" href="https://linkedin.com" target="_blank" class="social-icon linkedin" title="LinkedIn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                            </a>
+                            <a id="btn-link-github" href="https://github.com" target="_blank" class="social-icon github" title="GitHub">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                            </a>
+                            <a id="btn-link-portfolio" href="#" target="_blank" class="social-icon portfolio" title="Portfolio Website">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                            </a>
+                            <a id="btn-link-email" href="mailto:kattasanjay39@gmail.com" class="social-icon email" title="Contact Email">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- STATS GRID (NOW INCLUDES EXTERNAL) -->
+        <section class="stats-grid">
+            <div class="panel stat-card" style="border-color: var(--accent-green);">
+                <p class="stat-label" style="color: var(--accent-green);">Total Events</p>
+                <h3 class="stat-value">30</h3>
+            </div>
+            <div class="panel stat-card" style="border-color: var(--accent-purple);">
+                <p class="stat-label" style="color: var(--accent-purple);">Registered</p>
+                <h3 class="stat-value">15</h3>
+            </div>
+            <div class="panel stat-card" style="border-color: var(--accent-yellow);">
+                <p class="stat-label" style="color: var(--accent-yellow);">Upcoming</p>
+                <h3 class="stat-value">10</h3>
+            </div>
+            <div class="panel stat-card" style="border-color: var(--accent-blue);">
+                <p class="stat-label" style="color: var(--accent-blue);">Participated</p>
+                <h3 class="stat-value">12</h3>
+            </div>
+            <div class="panel stat-card" style="border-color: var(--accent-orange);">
+                <p class="stat-label" style="color: var(--accent-orange);">Winnings</p>
+                <h3 class="stat-value">03</h3>
+            </div>
+            <div class="panel stat-card" style="border-color: var(--accent-rose);">
+                <p class="stat-label" style="color: var(--accent-rose);">External</p>
+                <h3 class="stat-value">08</h3>
+            </div>
+        </section>
+
+        <!-- REGISTERED EVENTS -->
+        <section class="panel">
+            <h4 style="font-size: 1.25rem; font-weight: 700; font-style: italic; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+                <svg class="nav-icon" style="color: var(--primary-cyan);"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Registered Events
+            </h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event Details</th>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th style="text-align: right;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: 600;">Tech Fest 2026</td>
+                            <td style="color: var(--text-dim);">15 Mar 2026</td>
+                            <td style="color: var(--text-muted); font-size: 12px;">Technical</td>
+                            <td style="text-align: right;"><span class="badge badge-confirmed">CONFIRMED</span></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 600;">Cultural Night</td>
+                            <td style="color: var(--text-dim);">20 Mar 2026</td>
+                            <td style="color: var(--text-muted); font-size: 12px;">Cultural</td>
+                            <td style="text-align: right;"><span class="badge badge-pending">PENDING</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ACHIEVEMENTS -->
+        <section class="panel">
+            <h4 style="font-size: 1.25rem; font-weight: 700; font-style: italic; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+                <svg class="nav-icon" style="color: var(--accent-orange);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                Past Achievements
+            </h4>
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <div style="display: flex; align-items: center;">
+                        <div class="achievement-icon" style="background: rgba(234, 179, 8, 0.1); color: var(--accent-yellow);">
+                            <svg class="nav-icon"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55.47.98.97 1.21C11.47 18.44 12 19 12 19s.53-.56 1.03-.79c.5-.23.97-.66.97-1.21v-2.34M12 2v12.5"/></svg>
+                        </div>
+                        <div>
+                            <h5 class="achievement-title">Code Sprint</h5>
+                            <p class="achievement-meta">Feb 2026 • 1st Place</p>
+                        </div>
+                    </div>
+                    <span style="color: var(--accent-yellow); font-size: 10px; font-weight: 800; letter-spacing: 0.1em;">WINNER</span>
+                </div>
+                <div class="achievement-card">
+                    <div style="display: flex; align-items: center;">
+                        <div class="achievement-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);">
+                            <svg class="nav-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <div>
+                            <h5 class="achievement-title">Winter Marathon</h5>
+                            <p class="achievement-meta">Dec 2025 • Participation</p>
+                        </div>
+                    </div>
+                    <span style="color: var(--text-muted); font-size: 10px; font-weight: 800; letter-spacing: 0.1em;">COMPLETED</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // User Data Logic
+            console.log("Dashboard loaded successfully.");
+        });
+
+        const links = JSON.parse(localStorage.getItem("socialLinks"));
+        if (links) {
+            document.getElementById("btn-link-github").href = links.github;
+        }
+    </script>
+</body>
+</html>

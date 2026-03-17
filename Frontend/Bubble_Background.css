@@ -1,0 +1,94 @@
+/* Bubble Container */
+.bubbles {
+    position: fixed;   /* fixed so it covers full screen */
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+
+
+
+/* Morphing Shapes */
+
+/* html code for Shapes  */
+/*
+        <div class="hero-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+
+*/
+        .hero-bg-shapes .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: morph 15s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .shape-1 { width: 400px; height: 400px; top: -100px; left: -100px; }
+        .shape-2 { width: 300px; height: 300px; bottom: -50px; right: -50px; animation-delay: -5s; }
+        .shape-3 { width: 200px; height: 200px; top: 20%; right: 15%; animation-delay: -2s; }
+
+        @keyframes morph {
+            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(0deg) translate(0, 0); }
+            50% { border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%; transform: rotate(180deg) translate(20px, 30px); }
+            100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(360deg) translate(0, 0); }
+        }
+
+
+/* Individual Bubbles */
+
+/* html code for Bubbles */
+/*
+    <div class="bubbles">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+*/
+
+.bubbles span {
+    position: absolute;
+    bottom: -200px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    animation: float linear infinite;
+}
+
+/* Bigger Sizes + No Delay (Continuous Flow) */
+.bubbles span:nth-child(1)  { left: 5%;  width: 40px; height: 40px; animation-duration: 12s; animation-delay: -2; }
+.bubbles span:nth-child(2)  { left: 15%; width: 60px; height: 60px; animation-duration: 18s; animation-delay: 5;}
+.bubbles span:nth-child(3)  { left: 25%; width: 50px; height: 50px; animation-duration: 15s; animation-delay: 4;}
+.bubbles span:nth-child(4)  { left: 35%; width: 70px; height: 70px; animation-duration: 20s; animation-delay: 3;}
+.bubbles span:nth-child(5)  { left: 45%; width: 45px; height: 45px; animation-duration: 14s; }
+.bubbles span:nth-child(6)  { left: 55%; width: 65px; height: 65px; animation-duration: 19s; }
+.bubbles span:nth-child(7)  { left: 65%; width: 55px; height: 55px; animation-duration: 16s; }
+.bubbles span:nth-child(8)  { left: 75%; width: 75px; height: 75px; animation-duration: 22s; }
+.bubbles span:nth-child(9)  { left: 85%; width: 50px; height: 50px; animation-duration: 17s; }
+.bubbles span:nth-child(10) { left: 95%; width: 60px; height: 60px; animation-duration: 21s; }
+.bubbles span:nth-child(11) { left: 10%; width: 15px; height: 15px; animation-duration: 10s; animation-delay: 7s; } 
+.bubbles span:nth-child(12) { left: 25%; width: 25px; height: 25px; animation-duration: 25s; animation-delay: 5s; } 
+.bubbles span:nth-child(13) { left: 40%; width: 20px; height: 20px; animation-duration: 23s; animation-delay: -3s; } 
+.bubbles span:nth-child(14) { left: 55%; width: 30px; height: 30px; animation-duration: 22s; animation-delay: 5s; } 
+.bubbles span:nth-child(15) { left: 70%; width: 18px; height: 18px; animation-duration: 10s; animation-delay: -2s; }
+
+/* Smooth Continuous Animation */
+@keyframes float {
+    0% {
+        transform: translateY(0);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(-120vh);
+        opacity: 0;
+    }
+}

@@ -1,0 +1,82 @@
+/* --- GLOBAL BUTTON STYLES --- */
+.login-btn {
+    background: #6341a4;
+    color: rgb(235, 232, 236) !important;
+    padding: 10px 25px;
+    border-radius: 20px;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.3s ease;
+    transition-delay: 0.3s;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+}
+
+.login-btn:hover {
+    background: #ca202b;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* --- DROPDOWN STRUCTURE --- */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-card {
+    display: none;
+    position: absolute;
+    padding-top: 1px;
+    margin-top: 10px;
+    top: 45px; 
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f0c5c5; /* Pinkish background */
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 230px;
+    z-index: 2000;
+    flex-direction: column;
+    gap: 10px;
+    /* Transition logic */
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+    transition-delay: 0.5s;
+}
+
+.dropdown:hover .dropdown-card {
+    display: flex;
+}
+
+/* Arrow Pointer */
+.arrow-up {
+    width: 0; 
+    height: 0; 
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #efbbbb;
+    position: absolute;
+    top: -10px;
+    left: 60%;
+    transform: translateX(-50%);
+}
+
+/* Buttons inside the Dropdown */
+.hub-btn {
+    background: #12c0db !important;
+    color: rgb(20, 19, 19) !important;
+    padding: 10px;
+    text-align: center;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px !important;
+    transition: 0.3s;
+}
+
+.hub-btn:hover {
+    background: #65f324 !important;
+}
