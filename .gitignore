@@ -1,0 +1,13 @@
+# Environment files
+.env
+Backend/.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+Backend/Virtual_EventConnect/
+
+# VS Code
+.vscode/
