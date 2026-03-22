@@ -1,10 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException , Form , File , UploadFile
 from sqlalchemy.orm import Session
-from database import SessionLocal
-import models
-import schemas
+from database import SessionLocal , supabase ,SUPABASE_URL , SUPABASE_KEY
 from passlib.context import CryptContext
 from sqlalchemy import or_
+from datetime import datetime,timedelta
+import random , os , uuid , models , schemas
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from dotenv import load_dotenv
 
 router = APIRouter()
 
@@ -17,6 +20,53 @@ def get_db():
         yield db
     finally:
         db.close()
+
+# =========================
+# ENV
+# =========================
+load_dotenv()
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
+SENDER_EMAIL = os.getenv("SENDER_EMAIL")
+
+
+
+# ===============================
+# OTP STORE (with expiry)
+# ===============================
+otp_store = {}  # {identifier: (otp, expiry_time)}
+OTP_EXPIRY_MINUTES = 1
+
+# =========================
+# SEND EMAIL (SendGrid)
+# =========================
+def send_email_otp(to_email: str, otp: str):
+    if not SENDGRID_API_KEY or not SENDER_EMAIL:
+        raise HTTPException(status_code=500, detail="Email config missing")
+
+    message = Mail(
+        from_email=SENDER_EMAIL,
+        to_emails=to_email,
+        subject="Your OTP Code",
+        html_content=f"""
+        <div style="font-family: Arial; padding:16px">
+            <h2>🔐 OTP Verification</h2>
+            <p>Your OTP is:</p>
+            <h1>{otp}</h1>
+            <p>Expires in {OTP_EXPIRY_MINUTES} minutes.</p>
+        </div>
+        """
+    )
+
+    try:
+        sg = SendGridAPIClient(SENDGRID_API_KEY)
+        resp = sg.send(message)
+        print("SendGrid status:", resp.status_code)
+    except Exception as e:
+        print("SendGrid error:", e)
+        raise HTTPException(status_code=500, detail="Failed to send email")
+
+
+
 
 # Student registration form 
 
@@ -71,5 +121,194 @@ def login(user: schemas.Login, db: Session = Depends(get_db)):
     return {
         "message": "Login successful",
         "id": db_user.id,
-        "full_name": db_user.full_name
+        "full_name": db_user.full_name,
+        "email":db_user.email
     }
+
+
+# Get Student Info
+@router.get("/get-user/{user_id}")
+def get_user(user_id: int, db: Session = Depends(get_db)):
+
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return {
+        "id": user.id,
+        "full_name": user.full_name,
+        "user_id": user.student_id,
+        "phone_number": user.phone_number,
+        "email": user.email,
+        "college": user.college,
+        "department": user.department,
+        "bio": user.bio or "",
+        "degree": user.degree or "",
+        "linkedin": user.linkedin or "",
+        "github": user.github or "",
+        "portfolio": user.portfolio or "",
+        "image": user.image or ""
+    }
+
+
+
+#--------------------
+# Update the details
+#--------------------
+@router.patch("/update-organizer/{id}")
+async def update_organizer(
+    id: int,
+    name: str = Form(None),
+    phone: str = Form(None),
+    email: str = Form(None),
+    college: str = Form(None),
+    department: str = Form(None),
+    club: str = Form(None),
+    role: str = Form(None),
+    bio: str = Form(None),
+    linkedin: str = Form(None),
+    github: str = Form(None),
+    password: str = Form(None),   # ✅ added
+    image: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
+    user = db.query(models.Organizer).filter(models.Organizer.id == id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Organizer not found")
+
+    # ✅ Email check
+    if email:
+        existing = db.query(models.Organizer).filter(models.Organizer.email == email).first()
+        if existing and existing.id != id:
+            raise HTTPException(status_code=400, detail="Email already in use")
+
+    # ✅ Password update
+    if password:
+        if len(password) < 6:
+            raise HTTPException(status_code=400, detail="Password too short")
+        user.password = pwd_context.hash(password)
+
+    # ✅ Image upload
+    if image:
+        try:
+            file_bytes = await image.read()
+            file_name = f"{id}_{uuid.uuid4()}.jpg"
+
+            supabase.storage.from_("Profile_Images").upload(
+                file_name,
+                file_bytes,
+                {"content-type": image.content_type}
+            )
+
+            user.image = f"{SUPABASE_URL}/storage/v1/object/public/Profile_Images/{file_name}"
+        except:
+            raise HTTPException(status_code=500, detail="Image upload failed")
+
+    # ✅ Update fields
+    if name: user.name = name
+    if phone: user.number = phone
+    if email: user.email = email
+    if college: user.college = college
+    if department: user.department = department
+    if club: user.club = club
+    if role: user.role = role
+    if bio: user.bio = bio
+    if linkedin: user.linkedin = linkedin
+    if github: user.github = github
+
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "message": "Organizer updated successfully",
+        "image": user.image
+    }
+
+# ===============================
+# SEND OTP
+# ===============================
+@router.post("/send-otp")
+def send_otp(data: schemas.OTPRequest, db: Session = Depends(get_db)):
+
+    user = db.query(models.User).filter(
+        or_(
+            models.User.email == data.identifier,
+            models.User.phone_number == data.identifier
+        )
+    ).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    if "@" not in data.identifier:
+        raise HTTPException(status_code=400, detail="Use email for OTP")
+    
+    # simple rate-limit
+    if data.identifier in otp_store:
+        _, old_exp = otp_store[data.identifier]
+        if datetime.utcnow() < old_exp:
+            raise HTTPException(status_code=429, detail="Wait before requesting again")
+
+    otp = str(random.randint(100000, 999999))
+    expiry = datetime.utcnow() + timedelta(minutes=OTP_EXPIRY_MINUTES)
+
+    otp_store[data.identifier] = (otp, expiry)
+
+    send_email_otp(data.identifier, otp)
+
+    return {"message": "OTP sent successfully"}
+
+
+# ===============================
+# VERIFY OTP
+# ===============================
+@router.post("/verify-otp")
+def verify_otp(data: schemas.OTPVerify):
+
+    record = otp_store.get(data.identifier)
+
+    if not record:
+        raise HTTPException(status_code=400, detail="OTP not found")
+
+    otp, expiry = record
+
+    if datetime.utcnow() > expiry:
+        otp_store.pop(data.identifier)
+        raise HTTPException(status_code=400, detail="OTP expired")
+
+    if otp != data.otp:
+        raise HTTPException(status_code=400, detail="Invalid OTP")
+
+    return {"message": "OTP verified"}
+
+
+# ===============================
+# RESET PASSWORD
+# ===============================
+@router.post("/reset-password")
+def reset_password(data: schemas.ResetPassword, db: Session = Depends(get_db)):
+
+    record = otp_store.get(data.identifier)
+
+    if not record:
+        raise HTTPException(status_code=400, detail="Verify OTP first")
+
+    user = db.query(models.User).filter(
+        or_(
+            models.User.email == data.identifier,
+            models.User.phone_number == data.identifier
+        )
+    ).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user.hashed_password = pwd_context.hash(data.new_password)
+
+    # 🔥 Remove OTP after use
+    otp_store.pop(data.identifier)
+
+    db.commit()
+    db.refresh(user)
+    return {"message": "Password updated successfully"}

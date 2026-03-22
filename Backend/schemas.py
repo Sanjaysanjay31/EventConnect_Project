@@ -15,7 +15,19 @@ class Login(BaseModel):
     identifier: str   # can be email OR roll number
     password: str
 
-
+class StudentUpdate(BaseModel):
+    full_name: Optional[str] = None
+    phone_number: Optional[str] = None
+    email: Optional[EmailStr] = None
+    college: Optional[str] = None
+    degree:Optional[str] = None
+    department: Optional[str] = None
+    bio: Optional[str] = None
+    image: Optional[str] = None
+    linkedin: Optional[str] = None
+    github: Optional[str] = None
+    portfolio: Optional[str] = None
+    password: Optional[str] = None
 
 class OrganizerCreate(BaseModel):
     name : str
@@ -46,3 +58,13 @@ class EventCreate(BaseModel):
     max_participants : Optional[int] = 500
 
 
+class OTPRequest(BaseModel):
+    identifier: str
+
+class OTPVerify(BaseModel):
+    identifier: str
+    otp: str
+
+class ResetPassword(BaseModel):
+    identifier: str
+    new_password: str

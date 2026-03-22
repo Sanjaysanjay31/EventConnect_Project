@@ -393,7 +393,7 @@
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 Home
             </a>
-            <a href="Student_Dashboard.html" class="nav-item active">
+            <a href="Student_Profile_2.html" class="nav-item active">
                 <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 Dashboard
             </a>
@@ -405,14 +405,14 @@
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                 Registrations
             </a>
-            <a href="Student_Profile.html" class="nav-item">
+            <a href="Student_Profile_2.html" class="nav-item">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 Profile Settings
             </a>
         </nav>
 
         <div class="sidebar-footer">
-            <a href="#" class="logout-btn">
+            <a href="javascript:void(0)" class="logout-btn">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 Logout
             </a>
@@ -422,35 +422,34 @@
     <!-- MAIN CONTENT -->
     <main>
         <header class="panel welcome-header">
-            <h2 id="welcomeName" class="welcome-title">Welcome, Katta Sanjay 🎓</h2>
+            <h2 id="welcomeName" class="welcome-title">Welcome, Loading... 🎓</h2>
             <p class="welcome-subtitle">Manage your events, track your participations, and see your winnings.</p>
         </header>
 
          <!-- Profile Overview -->
             <div class="settings-card">
                 <div class="profile-header-content">
-                    <div class="profile-pic-container" onclick="document.getElementById('avatar-input').click()">
-                        <img id="display-avatar" src="https://raw.githubusercontent.com/Sanjaysanjay31/Images/main/Sanjay_mall.jpeg" alt="Avatar">
+                    <div class="profile-pic-container" >
+                        <img id="display-avatar" src="https://raw.githubusercontent.com/Sanjaysanjay31/Images/main/Sanjay_mall.jpeg" alt="User Pic">
                         <div class="profile-upload-overlay">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                            <span class="text-xs mt-2" style="color:white">Change Photo</span>
                         </div>
-                        <input type="file" id="avatar-input" style="display: none;" accept="image/*">
                     </div>
 
                     <div style="flex: 1;">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 8px;">
                             <div>
-                                <h3 id="display-name" class="text-2xl">Katta Sanjay</h3>
-                                <p id="display-email-text" style="color: var(--text-muted); font-size: 14px;">kattasanjay39@gmail.com</p>
+                                <h3 id="display-name" class="text-2xl">Username Loading...</h3>
+                                <p id="display-email-text" style="color: var(--text-muted); font-size: 14px;">user@gmail.com</p>
                             </div>
                             <div>
-                                <span class="text-xs uppercase font-bold tracking-widest" style="color: var(--text-muted); display: block; margin-bottom: 4px;">Account ID</span>
-                                <input type="text" id="display-id" class="input-field read-only-id text-xs" style="width: 140px;" value="24B11DS095" readonly>
+                                <span class="text-xs uppercase font-bold tracking-widest" style="color: var(--accent-rose) ;font-size: 20px;  display: block ;  margin-bottom: 4px;">User ID</span>
+                                <p id="display-id" style="color: var(--text-muted); font-size: 16px;">id223242</p>
+                                
                             </div>
                         </div>
                         <p id="display-bio" style="color: #cbd5e1; font-size: 14px; line-height: 1.6; font-style: italic; margin-bottom: 12px;">
-                            "Passionate about Tech Events and Hackathons."
+                            "No Bio"
                         </p>
 
                         <!-- SOCIAL LINKS BAR (Dynamic) -->
@@ -570,16 +569,91 @@
     </main>
 
     <script>
-
-        document.addEventListener("DOMContentLoaded", function () {
-            // User Data Logic
+       document.addEventListener("DOMContentLoaded", function () {
             console.log("Dashboard loaded successfully.");
-        });
 
-        const links = JSON.parse(localStorage.getItem("socialLinks"));
-        if (links) {
-            document.getElementById("btn-link-github").href = links.github;
-        }
+            // =========================
+            // LOAD USER DATA
+            // =========================
+            const userId = localStorage.getItem("user_id");
+            if (!userId) {
+                alert("Please login first");
+                window.location.href = "login_2.html?role=student";
+                return;
+            }
+
+            fetch(`http://127.0.0.1:8000/get-user/${userId}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("Failed to fetch user");
+                }
+                return res.json();
+            })
+            .then(data => {
+
+                document.getElementById("display-name").textContent = data.full_name || "User";
+                document.getElementById("welcomeName").textContent = `Welcome, ${data.full_name} 🎓`;
+                document.getElementById("display-email-text").textContent = data.email || "No email";
+                document.getElementById("display-bio").textContent = data.bio || "No Bio added yet";
+                document.getElementById("display-id").textContent = data.user_id || "No Id";
+
+
+                const avatar = document.getElementById("display-avatar");
+                // ✅ Only DB image
+                if (data.image) {
+                    console.log("Image URL:", data.image);
+                    avatar.src = data.image;
+                } else {
+                    avatar.src = "https://via.placeholder.com/150"; // default image
+                }
+
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Something went wrong while loading profile");
+            });
+            
+            
+
+            // =========================
+            // LOAD SOCIAL LINKS
+            // =========================
+            const links = JSON.parse(localStorage.getItem("socialLinks") || "{}");
+
+            if (links) {
+                if (links.linkedin) document.getElementById("btn-link-linkedin").href = links.linkedin;
+                if (links.github) document.getElementById("btn-link-github").href = links.github;
+                if (links.portfolio) document.getElementById("btn-link-portfolio").href = links.portfolio;
+            }
+
+
+
+            // Logout 
+            document.querySelector(".logout-btn").addEventListener("click", function () {
+                localStorage.clear();
+                window.location.href = "login_2.html?role=student";
+            });
+            // =========================
+            // OPTIONAL: NAV ACTIVE STATE
+            // =========================
+            const currentPage = window.location.pathname.split("/").pop();
+
+            document.querySelectorAll(".nav-item").forEach(link => {
+                if (link.getAttribute("href") === currentPage) {
+                    link.classList.add("active");
+                }
+            });
+
+            // =========================
+            // OPTIONAL: CLICK EVENT ROWS
+            // =========================
+            document.querySelectorAll("tbody tr").forEach(row => {
+                row.addEventListener("click", () => {
+                    const eventName = row.cells[0].innerText;
+                    console.log("Clicked event:", eventName);
+                });
+            });
+        });
     </script>
 </body>
 </html>

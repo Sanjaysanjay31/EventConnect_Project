@@ -37,6 +37,7 @@
             box-sizing: border-box;
         }
 
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-dark);
@@ -54,7 +55,11 @@
             display: flex;
             flex-direction: column;
             padding: 24px;
-            flex-shrink: 0;
+
+            position: fixed;   /* 🔥 IMPORTANT */
+            top: 0;
+            left: 0;
+            height: 100vh;     /* full screen height */
         }
 
         .sidebar-header {
@@ -122,6 +127,7 @@
         }
 
         .sidebar-footer {
+            margin-top: auto; /* 🔥 this pushes it to bottom */
             padding-top: 10px;
             border-top: 1px solid var(--border-slate);
         }
@@ -130,22 +136,38 @@
             color: #cbd5e1;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 10px; /* increase spacing */
             padding: 12px 16px;
             text-decoration: none;
+            width: 100%; /* full width */
+            border-radius: 10px;
+            transition: 0.2s;
         }
 
         .logout-btn:hover {
             color: #f87171;
+            background: rgba(255, 255, 255, 0.05);
         }
-
+        .logo-box {
+            background-color: var(--primary-cyan);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .nav-list {
+            flex: 1; /* takes remaining space */
+        }
         /* Main Content */
         main {
             flex: 1;
             padding: 40px;
+            margin-left: 280px; /* 🔥 same as sidebar width */
             overflow-y: auto;
         }
-
         .container {
             max-width: 1050px;
             margin: 0 auto;
@@ -154,15 +176,16 @@
         .header-row {
             display: flex;
             justify-content: space-between;
+            color: #0f172a;
             align-items: center;
             margin-bottom: 32px;
         }
 
         .role-indicator {
             padding: 4px 16px;
-            background-color: rgba(8, 145, 178, 0.1);
-            color: var(--primary-cyan);
-            border: 1px solid rgba(8, 145, 178, 0.2);
+            background-color: rgba(121, 72, 72, 0.958);
+            color: rgba(229, 234, 236, 0.955);
+            border: 2px solid rgba(229, 234, 236, 0.955);
             border-radius: 9999px;
             font-size: 12px;
             font-weight: 700;
@@ -237,7 +260,7 @@
             align-items: center;
             justify-content: center;
             background: var(--bg-input);
-            border: 1px solid var(--border-input);
+            border: 2px solid var(--border-input);
             color: var(--text-dim);
             text-decoration: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -276,12 +299,12 @@
         }
 
         .input-field {
-            background: var(--bg-input);
+            background: #c4d6f0;
             border: 1px solid var(--border-input);
+            color: #080808;
             border-radius: 12px;
             padding: 12px 16px;
             width: 100%;
-            color: white;
             outline: none;
             transition: all 0.2s;
             font-size: 14px;
@@ -289,14 +312,14 @@
 
         .input-field:focus {
             border-color: var(--primary-cyan);
-            background: #262f3f;
+            background: #9dd7e0;
             box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.15);
         }
 
         .read-only-id {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(226, 223, 223, 0.05);
             border: 1px dashed var(--border-input);
-            color: var(--text-muted);
+            color: var(--github-white);
             cursor: not-allowed;
             text-align: center;
             font-family: monospace;
@@ -492,7 +515,7 @@
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 Home
             </a>
-            <a href="Organizer_Dashboard_1.html" class="nav-item active">
+            <a href="Organizer_Dashboard.html" class="nav-item active">
                 <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 Dashboard
             </a>
@@ -502,9 +525,9 @@
             </a>
             <a href="#" class="nav-item">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                Registrations
+                My Events
             </a>
-            <a href="Organizer_Profile_Settings.html" class="nav-item">
+            <a href="Organizer_Profile_2.html" class="nav-item">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 Profile Settings
             </a>
@@ -521,7 +544,7 @@
     <main>
         <div class="container">
             <div class="header-row">
-                <h2 class="text-2xl">Profile Settings</h2>
+                <h2 class="text-2xl" >Profile Settings</h2>
                 <div id="role-indicator" class="role-indicator">Organizer</div>
             </div>
 
@@ -529,27 +552,28 @@
             <div class="settings-card">
                 <div class="profile-header-content">
                     <div class="profile-pic-container" onclick="document.getElementById('avatar-input').click()">
-                        <img id="display-avatar" src="https://raw.githubusercontent.com/Sanjaysanjay31/Images/main/Sanjay_mall.jpeg" alt="Avatar">
+                        <img id="display-avatar" src="" alt="Avatar">
                         <div class="profile-upload-overlay">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                             <span class="text-xs mt-2" style="color:white">Change Photo</span>
                         </div>
-                        <input type="file" id="avatar-input" style="display: none;" accept="image/*">
+                        <input type="file" id="avatar-input" style="display: none;" accept="image/*" onchange="handleImageUpload(event)">
                     </div>
 
                     <div style="flex: 1;">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 8px;">
                             <div>
-                                <h3 id="display-name" class="text-2xl">Katta Sanjay</h3>
-                                <p id="display-email-text" style="color: var(--text-muted); font-size: 14px;">kattasanjay39@gmail.com</p>
+                                <h3 id="display-name" class="text-2xl">Username Loading...</h3>
+                                <p id="display-email-text" style="color: var(--text-muted); font-size: 14px;">user@gmail.com</p>
                             </div>
                             <div>
-                                <span class="text-xs uppercase font-bold tracking-widest" style="color: var(--text-muted); display: block; margin-bottom: 4px;">Account ID</span>
-                                <input type="text" id="display-id" class="input-field read-only-id text-xs" style="width: 140px;" value="24B11DS095" readonly>
+                                <span class="text-xs uppercase font-bold tracking-widest" style="font-size: 20px;  display: block ;  margin-bottom: 4px;">User ID</span>
+                                <p id="display-id" style="color: var(--text-muted); font-size: 16px;">id223242</p>
+                                
                             </div>
                         </div>
                         <p id="display-bio" style="color: #cbd5e1; font-size: 14px; line-height: 1.6; font-style: italic; margin-bottom: 12px;">
-                            "Passionate about Tech Events and Hackathons."
+                            "No Bio"
                         </p>
 
                         <!-- SOCIAL LINKS BAR (Dynamic) -->
@@ -560,7 +584,6 @@
                             <a id="btn-link-github" href="https://github.com" target="_blank" class="social-icon github" title="GitHub">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
                             </a>
-                            
                             <a id="btn-link-email" href="mailto:kattasanjay39@gmail.com" class="social-icon email" title="Contact Email">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                             </a>
@@ -569,7 +592,7 @@
                 </div>
             </div>
 
-            <form id="profile-form">
+            <form id="profile-form" autocomplete="off">
                 <!-- Personal Details Card -->
                 <div class="settings-card">
                     <h4 class="text-lg mb-6" style="display: flex; align-items: center; gap: 8px;">
@@ -583,20 +606,16 @@
                                 <input type="text" id="input-name" class="input-field" placeholder="Enter full name">
                             </div>
                             <div>
-                                <label class="label">Email Address</label>
-                                <input type="email" id="input-email" class="input-field" placeholder="email@example.com">
-                            </div>
-                        </div>
-                        <div class="form-grid">
-                            <div>
                                 <label class="label">Phone Number</label>
                                 <input type="tel" id="input-phone" class="input-field" placeholder="+91 0000000000">
                             </div>
-                            <div>
-                                <label class="label">Location</label>
-                                <input type="text" class="input-field" value="Hyderabad, India">
-                            </div>
+                            
                         </div>
+                            
+                            <div>
+                                <label class="label">Email Address</label>
+                                <input type="email" id="input-email" class="input-field" placeholder="Enter Email Address">                            
+                            </div>
                         <div>
                             <label class="label">About Me (Bio)</label>
                             <textarea id="input-bio" rows="2" class="input-field" style="resize: vertical;" placeholder="Tell us about yourself..."></textarea>
@@ -620,39 +639,21 @@
                                 <label class="label">Educational Institution</label>
                                 <input type="text" id="input-college" class="input-field" placeholder="Enter College/University name">
                             </div>
-
-                            <div>
-                                <label class="label">Academic Degree</label>
-                                <select id="input-degree" class="input-field">
-                                    <option value="">Select Degree</option>
-                                    <option value="B.Tech">B.Tech / B.E</option>
-                                    <option value="M.Tech">M.Tech / M.E</option>
-                                    <option value="BCA">BCA</option>
-                                    <option value="MCA">MCA</option>
-                                    <option value="B.Sc">B.Sc</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-grid">
                             <div>
                                 <label class="label">Department</label>
                                 <input type="text" id="input-department" class="input-field" placeholder="Computer Science">
                             </div>
+                        </div>
 
+                        <div class="form-grid">
                             <div>
                                 <label class="label">Role</label>
                                 <input type="text" id="input-role" class="input-field" placeholder="Admin Faculty">
                             </div>
-
-                    
-                        </div>
-                        <div class="form-grid">
                             <div>
                                 <label class="label">Club Name</label>
                                 <input type="text" id="input-clubname" class="input-field" placeholder="Digital Media club" >
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -665,24 +666,15 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                         Social Profiles & Links
                     </h4>
-                    <div class="form-rows">
-                        <div class="form-grid">
-                            <div>
-                                <label class="label">LinkedIn URL</label>
-                                <input type="url" id="input-linkedin" class="input-field" placeholder="https://linkedin.com/in/username">
-                            </div>
-                            <div>
-                                <label class="label">GitHub URL</label>
-                                <input type="url" id="input-github" class="input-field" placeholder="https://github.com/username">
-                            </div>
+                    <div class="form-rows">   
+                        <div>
+                            <label class="label">LinkedIn URL</label>
+                            <input type="text" id="input-linkedin" rows="2" class="input-field" placeholder="https://linkedin.com/in/username"></textarea>
                         </div>
-                        <div class="form-grid">
-                            <div>
-                                <label class="label">Portfolio Website</label>
-                                <input type="url" id="input-portfolio" class="input-field" placeholder="https://yourwebsite.com">
-                            </div>
-                            
-                        </div>
+                        <div>
+                            <label class="label">GitHub URL</label>
+                            <input type="text" id="input-github"  class="input-field" placeholder="https://github.com/username"></textarea>
+                        </div>  
                     </div>
                 </div>
 
@@ -795,213 +787,385 @@
     </div>
 
     <div id="toast-container"></div>
+    
+        <script>
+            const API_BASE = "http://127.0.0.1:8000";
 
-    <script>
-        let selectedRecoveryMethod = 'email';
-        /*After save the Modifications it reload the icon id */
-        const links = JSON.parse(localStorage.getItem("socialLinks"));
-        if (links) {
-            document.getElementById("input-github").value = links.github;
-        }
+            // ===============================
+            // 🚀 INIT (ONLY ONCE)
+            // ===============================
+            document.addEventListener("DOMContentLoaded", () => {
+                loadProfile();
+                document.getElementById("profile-form")?.addEventListener("submit", handleProfileUpdate);
+            });
 
-
-        const socialLinks = {
-            github: document.getElementById("input-github").value,
-            linkedin: document.getElementById("input-linkedin").value,
-            portfolio: document.getElementById("input-portfolio").value
-        };
-
-        localStorage.setItem("socialLinks", JSON.stringify(socialLinks));
-
-        // Latent Social Links added to currentUser object
-        const currentUser = {
-            id: '24B11DS095',
-            role: 'student',
-            name: 'Katta Sanjay',
-            email: 'kattasanjay39@gmail.com',
-            phone: '8978806254',
-            bio: 'Passionate about Tech Events and Hackathons. Always looking for opportunities to learn UI/UX and Full Stack Development.',
-            college: 'JNTU Hyderabad',
-            department: 'Computer Science',
-            avatar: 'https://raw.githubusercontent.com/Sanjaysanjay31/Images/main/Sanjay_mall.jpeg',
-            // Default Links
-            linkedin: 'https://linkedin.com/in/kattasanjay',
-            github: 'https://github.com/Sanjaysanjay31',
-            portfolio: 'https://sanjayportfolio.dev',
-            socialEmail: 'kattasanjay39@gmail.com'
-        };
-
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            if (type === 'error') toast.style.borderColor = 'var(--error-red)';
-            
-            toast.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${type === 'success' ? 'var(--success-green)' : 'var(--error-red)'}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span>${message}</span>
-            `;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(20px)';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        function updateDisplayElements() {
-            // Profile Top Section
-            document.getElementById('display-name').innerText = currentUser.name;
-            document.getElementById('display-email-text').innerText = currentUser.email;
-            document.getElementById('display-bio').innerText = `"${currentUser.bio}"`;
-            document.getElementById('display-avatar').src = currentUser.avatar;
-            
-            // Social Icons Links (Top Bar)
-            document.getElementById('btn-link-linkedin').href = currentUser.linkedin;
-            document.getElementById('btn-link-github').href = currentUser.github;
-            document.getElementById('btn-link-portfolio').href = currentUser.portfolio;
-            document.getElementById('btn-link-email').href = `mailto:${currentUser.socialEmail}`;
-
-            // Form Fields
-            document.getElementById('input-name').value = currentUser.name;
-            document.getElementById('input-email').value = currentUser.email;
-            document.getElementById('input-phone').value = currentUser.phone;
-            document.getElementById('input-bio').value = currentUser.bio;
-            
-            // Link Input Fields
-            document.getElementById('input-linkedin').value = currentUser.linkedin;
-            document.getElementById('input-github').value = currentUser.github;
-            document.getElementById('input-portfolio').value = currentUser.portfolio;
-            document.getElementById('input-social-email').value = currentUser.socialEmail;
-        }
-
-        function initProfile() {
-            const role = currentUser.role;
-            document.getElementById('panel-title').innerText = `${role.toUpperCase()} PANEL`;
-            document.getElementById('role-indicator').innerText = role;
-
-            updateDisplayElements();
-
-            // Real-time preview handlers
-            document.getElementById('input-name').oninput = (e) => document.getElementById('display-name').innerText = e.target.value || currentUser.name;
-            document.getElementById('input-email').oninput = (e) => document.getElementById('display-email-text').innerText = e.target.value || currentUser.email;
-            document.getElementById('input-bio').oninput = (e) => document.getElementById('display-bio').innerText = `"${e.target.value || currentUser.bio}"`;
-            
-            // Social Link real-time updates
-            document.getElementById('input-linkedin').oninput = (e) => document.getElementById('btn-link-linkedin').href = e.target.value || '#';
-            document.getElementById('input-github').oninput = (e) => document.getElementById('btn-link-github').href = e.target.value || '#';
-            document.getElementById('input-portfolio').oninput = (e) => document.getElementById('btn-link-portfolio').href = e.target.value || '#';
-            document.getElementById('input-social-email').oninput = (e) => document.getElementById('btn-link-email').href = `mailto:${e.target.value}` || '#';
-
-            // Avatar Upload Handler
-            document.getElementById('avatar-input').onchange = (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        document.getElementById('display-avatar').src = event.target.result;
-                        showToast('Avatar preview updated!');
-                    };
-                    reader.readAsDataURL(file);
-                }
+            // ===============================
+            // 🔧 COMMON HELPERS
+            // ===============================
+            const getVal = (id) => document.getElementById(id)?.value.trim();
+            const setVal = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.value = val || "";
+            };
+            const setText = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = val || "";
             };
 
-            const spec = document.getElementById('role-specific-container');
-            spec.innerHTML = `
-                <h4 class="text-lg mb-6" style="display: flex; align-items: center; gap: 8px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                    Academic Information
-                </h4>
-                <div class="form-grid">
-                    <div><label class="label">College</label><input class="input-field" value="${currentUser.college}"></div>
-                    <div><label class="label">Department</label><input class="input-field" value="${currentUser.department}"></div>
-                </div>
-            `;
-        }
+            // ===============================
+            // 🔐 LOAD PROFILE
+            // ===============================
+            async function loadProfile() {
+                const userId = localStorage.getItem("user_id");
 
-        // Security Functions
-        function selectRecovery(method, el) {
-            selectedRecoveryMethod = method;
-            document.querySelectorAll('.recovery-chip').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-        }
+                if (!userId) {
+                    console.warn("User not logged in");
+                    window.location.href = "Login_2.html?role=organizer";
+                    return;
+                }
 
-        function handleUpdatePasswordMain() {
-            const cur = document.getElementById('cur-pass').value;
-            const n1 = document.getElementById('new-pass-main').value;
-            const n2 = document.getElementById('conf-pass-main').value;
+                try {
+                    const res = await fetch(`${API_BASE}/get-organizer/${userId}`);
+                    if (!res.ok) throw new Error();
 
-            if (!cur) return showToast('Enter current password', 'error');
-            if (n1.length < 8) return showToast('New password must be at least 8 characters', 'error');
-            if (n1 !== n2) return showToast('Passwords do not match', 'error');
+                    const user = await res.json();
 
-            showToast('Password updated successfully!');
-            document.getElementById('cur-pass').value = '';
-            document.getElementById('new-pass-main').value = '';
-            document.getElementById('conf-pass-main').value = '';
-        }
+                    setText("display-name", user.name);
+                    setText("display-email-text", user.email);
+                    setText("display-bio", user.bio);
 
-        // Modal Flow
-        function openResetModal() {
-            const target = selectedRecoveryMethod === 'email' ? currentUser.email : currentUser.phone;
-            document.getElementById('recovery-target').innerText = `${selectedRecoveryMethod} (${target})`;
-            document.getElementById('step-otp').classList.remove('hidden');
-            document.getElementById('step-password').classList.add('hidden');
-            document.getElementById('otp-input').value = '';
-            document.getElementById('recovery-modal').style.display = 'flex';
-        }
+                    setText("display-id", user.user_id);
 
-        function closeResetModal() {
-            document.getElementById('recovery-modal').style.display = 'none';
-        }
+                    setVal("input-name", user.name);
+                    setVal("input-email", user.email);
+                    setVal("input-phone", user.phone);
+                    setVal("input-bio", user.bio);
 
-        function verifyOTP() {
-            const otp = document.getElementById('otp-input').value;
-            if (otp.length !== 6 || isNaN(otp)) {
-                return showToast('Please enter a valid 6-digit OTP', 'error');
+                    setVal("input-college", user.college);
+                    setVal("input-department", user.department);
+                    setVal("input-clubname",user.club);
+                    setVal("input-role",user.role)
+
+                    setVal("input-linkedin", user.linkedin);
+                    setVal("input-github", user.github);
+
+                    if (user.image) {
+                        document.getElementById("display-avatar").src = user.image;
+                    }
+
+                } catch {
+                    showToast("Error loading profile", "error");
+                }
             }
-            showToast('OTP Verified successfully!');
-            document.getElementById('step-otp').classList.add('hidden');
-            document.getElementById('step-password').classList.remove('hidden');
-        }
 
-        function submitNewPassword() {
-            const p1 = document.getElementById('modal-new-pass').value;
-            const p2 = document.getElementById('modal-conf-pass').value;
-            if (p1.length < 8) return showToast('Password too short (min 8 chars)', 'error');
-            if (p1 !== p2) return showToast('Passwords do not match', 'error');
-            showToast('Password has been reset successfully!');
-            closeResetModal();
-            document.getElementById('modal-new-pass').value = '';
-            document.getElementById('modal-conf-pass').value = '';
-        }
+            let selectedImage = null;
 
-        function resetForm() {
-            updateDisplayElements();
-            showToast('Changes discarded.');
-        }
+            // ===============================
+            // 📸 IMAGE
+            // ===============================
+            function handleImageUpload(event) {
+                const file = event.target.files[0];
+                if (!file.type.startsWith("image/")) {
+                    return showToast("Only image files allowed", "error");
+                }
 
-        document.getElementById('profile-form').onsubmit = (e) => {
-            e.preventDefault();
-            
-            // Save basic data
-            currentUser.name = document.getElementById('input-name').value;
-            currentUser.email = document.getElementById('input-email').value;
-            currentUser.phone = document.getElementById('input-phone').value;
-            currentUser.bio = document.getElementById('input-bio').value;
-            currentUser.avatar = document.getElementById('display-avatar').src;
+                if (file.size > 5 * 1024 * 1024) {
+                    return showToast("Image must be less than 5MB", "error");
+                }
+                if (!file) return;
 
-            // Save Social Links
-            currentUser.linkedin = document.getElementById('input-linkedin').value;
-            currentUser.github = document.getElementById('input-github').value;
-            currentUser.portfolio = document.getElementById('input-portfolio').value;
-            currentUser.socialEmail = document.getElementById('input-social-email').value;
+                selectedImage = file; // ✅ store for upload
 
-            updateDisplayElements();
-            showToast('Profile and Social Links updated successfully!');
-        };
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("display-avatar").src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
 
-        window.onload = initProfile;
-    </script>
-</body>
+
+            // ===============================
+            // ✏️ UPDATE PROFILE
+            // ===============================
+            async function handleProfileUpdate(e) {
+                e.preventDefault();
+
+                const userId = localStorage.getItem("user_id");
+
+                const updateData = {
+                    name: getVal("input-name"),
+                    email: getVal("input-email"),
+                    phone: getVal("input-phone"),
+                    bio: getVal("input-bio"),
+                    college: getVal("input-college"),
+                    department: getVal("input-department"),
+                    club: getVal("input-clubname"),
+                    role: getVal("input-role"),
+                    linkedin: getVal("input-linkedin"),
+                    github: getVal("input-github"),
+                };
+
+                // Remove empty fields
+                Object.keys(updateData).forEach(
+                    key => !updateData[key] && delete updateData[key]
+                );
+
+                // Validations
+                if (updateData.email && !updateData.email.includes("@")) {
+                    return showToast("Invalid email", "error");
+                }
+
+                if (updateData.phone && updateData.phone.length < 10) {
+                    return showToast("Invalid phone number", "error");
+                }
+
+                try {
+                    // ✅ Create FormData
+                    const formData = new FormData();
+
+                    // ✅ Add all text fields
+                    Object.keys(updateData).forEach(key => {
+                        formData.append(key, updateData[key]);
+                    });
+
+                    // ✅ ADD IMAGE HERE
+                    if (selectedImage) {
+                        formData.append("image", selectedImage);
+                    }
+                    const res = await fetch(`${API_BASE}/update-organizer/${userId}`, {
+                        method: "PATCH",
+                        body: formData
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok) {
+                        showToast("Profile updated successfully");
+                        selectedImage = null;
+                        loadProfile();
+                    } else {
+                        showToast(data.detail || "Update failed", "error");
+                    }
+
+                } catch {
+                    showToast("Server error", "error");
+                }
+            }
+
+
+
+            // ===============================
+            // 🔐 CHANGE PASSWORD
+            // ===============================
+            async function handleUpdatePasswordMain() {
+                const userId = localStorage.getItem("user_id");
+
+                const newPass = getVal("new-pass-main");
+                const confirmPass = getVal("conf-pass-main");
+
+                if (!newPass) return showToast("Enter new password", "error");
+                if (newPass.length < 6) return showToast("Min 6 characters", "error");
+                if (newPass !== confirmPass) return showToast("Passwords do not match", "error");
+
+                try {
+                    const formData = new FormData();
+                    formData.append("password", newPass);
+
+                    const res = await fetch(`${API_BASE}/update-organizer/${userId}`, {
+                        method: "PATCH",
+                        body: formData
+                    });
+
+                    if (res.ok) {
+                        showToast("Password updated");
+                        setVal("new-pass-main", "");
+                        setVal("conf-pass-main", "");
+                    } else {
+                        const data = await res.json();
+                        showToast(data.detail, "error");
+                    }
+
+                } catch {
+                    showToast("Server error", "error");
+                }
+            }
+
+            // ===============================
+            // 🔄 Recovery Type (Email / Phone)
+            // ===============================
+            let recoveryType = "email";
+            let recoveryValue = "";
+
+            // Select chip
+            function selectRecovery(type, element) {
+                recoveryType = type;
+
+                document.querySelectorAll(".recovery-chip").forEach(el => el.classList.remove("selected"));
+                element.classList.add("selected");
+            }
+
+
+            // ===============================
+            // 📩 Open Modal + Send OTP
+            // ===============================
+            async function openResetModal() {
+
+                const email = document.getElementById("input-email").value.trim();
+                const phone = document.getElementById("input-phone").value.trim();
+
+                recoveryValue = (recoveryType === "email") ? email : phone;
+
+                if (!recoveryValue) {
+                    return alert(`Please enter your ${recoveryType}`);
+                }
+
+                try {
+                    const response = await fetch("http://127.0.0.1:8000/send-otp", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            identifier: recoveryValue
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        return alert(data.detail);
+                    }
+
+                    document.getElementById("recovery-modal").style.display = "flex";
+                    document.getElementById("recovery-target").innerText = recoveryType;
+
+                } catch (error) {
+                    alert("Error sending OTP");
+                    console.error(error);
+                }
+            }
+
+
+            // ===============================
+            // ❌ Close Modal
+            // ===============================
+            function closeResetModal() {
+                document.getElementById("recovery-modal").style.display = "none";
+
+                // Reset steps
+                document.getElementById("step-otp").classList.remove("hidden");
+                document.getElementById("step-password").classList.add("hidden");
+            }
+
+
+            // ===============================
+            // 🔐 Verify OTP
+            // ===============================
+            async function verifyOTP() {
+
+                const otp = document.getElementById("otp-input").value.trim();
+
+                if (otp.length !== 6) {
+                    return alert("Enter valid 6-digit OTP");
+                }
+
+                try {
+                    const response = await fetch("http://127.0.0.1:8000/verify-otp", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            identifier: recoveryValue,
+                            otp: otp
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        return alert(data.detail);
+                    }
+
+                    // Move to password step
+                    document.getElementById("step-otp").classList.add("hidden");
+                    document.getElementById("step-password").classList.remove("hidden");
+
+                } catch (error) {
+                    alert("Error verifying OTP");
+                    console.error(error);
+                }
+            }
+
+
+            // ===============================
+            // 🔑 Submit New Password
+            // ===============================
+            async function submitNewPassword() {
+
+                const newPass = document.getElementById("modal-new-pass").value.trim();
+                const confirmPass = document.getElementById("modal-conf-pass").value.trim();
+
+                if (newPass.length < 6) {
+                    return alert("Password must be at least 6 characters");
+                }
+
+                if (newPass !== confirmPass) {
+                    return alert("Passwords do not match");
+                }
+
+                try {
+                    const response = await fetch("http://127.0.0.1:8000/reset-password", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            identifier: recoveryValue,
+                            new_password: newPass
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        return alert(data.detail);
+                    }
+
+                    alert("Password updated successfully!");
+
+                    closeResetModal();
+
+                } catch (error) {
+                    alert("Error resetting password");
+                    console.error(error);
+                }
+            }
+
+
+
+            // ===============================
+            // 🔔 TOAST
+            // ===============================
+            function showToast(message, type = "success") {
+                const container = document.getElementById("toast-container");
+
+                const toast = document.createElement("div");
+                toast.className = "toast";
+                toast.style.borderLeftColor = type === "error" ? "#f87171" : "#10b981";
+                toast.innerText = message;
+
+                container.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+
+            // ===============================
+            // 🚪 LOGOUT
+            // ===============================
+           document.querySelector(".logout-btn")?.addEventListener("click", function () {
+                localStorage.clear();
+                window.location.href = "login_2.html?role=organizer";
+            });
+        </script>
+    </body>
 </html>

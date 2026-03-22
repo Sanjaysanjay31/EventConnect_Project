@@ -12,12 +12,11 @@
         }
 
         :root {
-            /* New Dedicated Organizer Palette (Indigo/Deep Purple Theme) */
-            --bg-dark: #131319;
-            --bg-sidebar: #06060a;
-            --bg-card: #12121e;
+            --bg-dark: #85c5d1;
+            --bg-sidebar: #06060ac4;
+            --bg-card: #12121ecb;
             --bg-panel: rgba(255, 255, 255, 0.02);
-            --bg-card-border: rgba(99, 102, 241, 0.15);
+            --bg-card-border:  #09f9a9;
             --border-slate: #1e1e2e;
             
             /* Primary Colors - Indigo */
@@ -26,7 +25,7 @@
             
             --text-main: #f8fafc;
             --text-dim: #94a3b8;
-            --text-muted: #64748b;
+            --text-muted: #8ba1c0;
             
             /* Status Colors */
             --accent-success: #10b981;
@@ -158,22 +157,23 @@
 
         /* Profile Header Card */
         .profile-card {
-            background: linear-gradient(to right, var(--bg-card), rgba(99, 102, 241, 0.05));
+            background: linear-gradient(to right, var(--bg-card));
             border: 1px solid var(--bg-card-border);
-            border-radius: 24px;
+            border-radius: 28px;
             padding: 30px;
             margin-bottom: 30px;
             display: flex;
+            height: 300px;
             align-items: center;
             gap: 24px;
         }
 
         .profile-pic-container {
-            width: 100px;
-            height: 100px;
-            border-radius: 24px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
             overflow: hidden;
-            border: 2px solid var(--primary-org);
+            border: 2px solid var(--accent-success);
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
 
@@ -185,8 +185,8 @@
 
         .social-bar {
             display: flex;
-            gap: 12px;
-            margin-top: 15px;
+            gap: 15px;
+            margin-top: 35px;
         }
 
         .social-icon {
@@ -196,7 +196,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(159, 219, 233, 0.05);
+            border-color: #eeeef2;
             color: var(--text-dim);
             text-decoration: none;
             transition: all 0.2s;
@@ -204,7 +205,7 @@
 
         .social-icon:hover {
             background: var(--primary-org);
-            color: white;
+            color: rgb(234, 225, 225);
             transform: translateY(-3px);
         }
 
@@ -299,15 +300,15 @@
         </div>
 
         <nav class="nav-list">
-            <a href="#" class="nav-item active">
+            <a href="Organizer_Dashboard_1.html" class="nav-item active">
                 <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 Dashboard
             </a>
-            <a href="hom" class="nav-item">
+            <a href="Home_Page_2.html" class="nav-item">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6"/></svg>
                 Home
             </a>
-            <a href="Explore_Events.html" class="nav-item">
+            <a href="Events_Page.html" class="nav-item">
                 <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 Explore Events
             </a>
@@ -327,14 +328,14 @@
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                 Notifications
             </a>
-            <a href="#" class="nav-item">
+            <a href="Organizer_Profile_2.html" class="nav-item">
                 <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                 Profile Settings
             </a>
         </nav>
 
         <div class="sidebar-footer">
-            <a href="#" class="logout-btn">
+            <a href="javascript:void(0)" class="logout-btn">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 Logout
             </a>
@@ -343,26 +344,44 @@
 
     <main>
         <!-- Organizer Profile Header -->
+         <header class="panel welcome-header">
+            <h2 id="welcomeName" class="welcome-title">Welcome, Loading... </h2>
+            <p class="welcome-subtitle">Manage your events,Create events , Manage Students.</p>
+        </header>
         <div class="profile-card">
             <div class="profile-pic-container">
-                <img src="https://raw.githubusercontent.com/Sanjaysanjay31/Images/main/Sanjay_mall.jpeg" alt="Sanjay">
+                <img id="display-avatar" src="" alt="User Pic">
+                <div class="profile-upload-overlay">
+                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </div>         
             </div>
             <div style="flex: 1;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 8px;">
                     <div>
-                        <h2 style="font-size: 1.8rem; font-weight: 800; color: #fff;">Katta Sanjay</h2>
-                        <p style="color: var(--primary-org); font-weight: 600; font-size: 0.9rem;">Event Administrator</p>
+                        <h3 id="display-name" class="text-2xl">Username Loading...</h3>
+                        <p id="display-email-text" style="color: var(--text-muted); font-size: 14px;">user@gmail.com</p>
                     </div>
-                    <div style="text-align: right;">
-                        <span style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800;">VERIFIED ORGANIZER</span>
-                        <p style="color: var(--accent-success); font-weight: 700; font-size: 0.75rem;">Organizer ID : Loading...</p>
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest" style="color: var(--accent-rose) ;font-size: 20px;  display: block ;  margin-bottom: 4px;">User ID</span>
+                        <p id="display-id" style="color: var(--text-muted); font-size: 16px;">id223242</p>
+                        
                     </div>
                 </div>
-                <p style="color: var(--text-dim); margin-top: 10px; font-size: 0.85rem; max-width: 600px;">Managing technical summits and innovation hubs since 2024. Focused on building high-impact community events.</p>
+                <p id="display-bio" style="color: #cbd5e1; font-size: 14px; line-height: 1.6; font-style: italic; margin-bottom: 12px;">
+                    "No Bio"
+                </p>
+
+                <!-- SOCIAL LINKS BAR (Dynamic) -->
                 <div class="social-bar">
-                    <a href="#" class="social-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-                    <a href="#" class="social-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
-                    <a href="mailto:kattasanjay39@gmail.com" class="social-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+                    <a id="btn-link-linkedin" href="https://linkedin.com" target="_blank" class="social-icon linkedin" title="LinkedIn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                    </a>
+                    <a id="btn-link-github" href="https://github.com" target="_blank" class="social-icon github" title="GitHub">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                    </a>
+                    <a id="btn-link-email" href="mailto:kattasanjay39@gmail.com" class="social-icon email" title="Contact Email">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </a>
                 </div>
             </div>
         </div>
@@ -434,5 +453,91 @@
             </table>
         </div>
     </main>
+    <script>
+       document.addEventListener("DOMContentLoaded", function () {
+            console.log("Dashboard loaded successfully.");
+
+            // =========================
+            // LOAD USER DATA
+            // =========================
+            const userId = localStorage.getItem("user_id");
+            if (!userId) {
+                alert("Please login first");
+                window.location.href = "login_2.html?role=organizer";
+                return;
+            }
+
+            fetch(`http://127.0.0.1:8000/get-organizer/${userId}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("Failed to fetch user");
+                }
+                return res.json();
+            })
+            .then(data => {
+
+                document.getElementById("display-name").textContent = data.name || "User";
+                document.getElementById("welcomeName").textContent = `Welcome, ${data.name} `;
+                document.getElementById("display-email-text").textContent = data.email || "No email";
+                document.getElementById("display-bio").textContent = data.bio || "No Bio added yet";
+                document.getElementById("display-id").textContent = data.user_id || "No Id";
+
+
+                const avatar = document.getElementById("display-avatar");
+                // ✅ Only DB image
+                if (data.image) {
+                    console.log("Image URL:", data.image);
+                    avatar.src = data.image;
+                } else {
+                    avatar.src = "https://via.placeholder.com/150"; // default image
+                }
+
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Something went wrong while loading profile");
+            });
+            
+            
+
+            // =========================
+            // LOAD SOCIAL LINKS
+            // =========================
+            const links = JSON.parse(localStorage.getItem("socialLinks") || "{}");
+
+            if (links) {
+                if (links.linkedin) document.getElementById("btn-link-linkedin").href = links.linkedin;
+                if (links.github) document.getElementById("btn-link-github").href = links.github;
+                if (links.email) document.getElementById("btn-link-email").href = links.email;
+            }
+
+
+            // Logout 
+            document.querySelector(".logout-btn").addEventListener("click", function () {
+                localStorage.clear();
+                window.location.href = "login_2.html?role=organizer";
+            });
+            // =========================
+            // OPTIONAL: NAV ACTIVE STATE
+            // =========================
+            const currentPage = window.location.pathname.split("/").pop();
+
+            document.querySelectorAll(".nav-item").forEach(link => {
+                if (link.getAttribute("href") === currentPage) {
+                    link.classList.add("active");
+                }
+            });
+
+            // =========================
+            // OPTIONAL: CLICK EVENT ROWS
+            // =========================
+            document.querySelectorAll("tbody tr").forEach(row => {
+                row.addEventListener("click", () => {
+                    const eventName = row.cells[0].innerText;
+                    console.log("Clicked event:", eventName);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

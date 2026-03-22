@@ -318,11 +318,17 @@
             })
             .then(data => {
 
-                // ✅ Store student id
-                localStorage.setItem("student_id", data.id);
+                // ✅ Store user id (consistent key)
+                localStorage.setItem("user_id", data.id);
 
-                // ✅ Redirect to dashboard
-                window.location.href = "student_dashboard.html";
+                // ✅ Store user basic data for dashboard
+                localStorage.setItem("userData", JSON.stringify({
+                    name: data.full_name,
+                    email:data.email || "",
+                }));
+
+                // ✅ Redirect
+                window.location.href = "Student_Dashboard.html";
 
             })
             .catch(error => {
@@ -361,10 +367,10 @@
             .then(data => {
 
                 // ✅ Store student id
-                localStorage.setItem("organizer_id", data.id);
+                localStorage.setItem("user_id", data.id);
 
                 // ✅ Redirect to dashboard
-                window.location.href = "organizer_Dashboard_1.html";
+                window.location.href = "Organizer_Dashboard.html";
 
             })
             .catch(error => {

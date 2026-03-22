@@ -1,18 +1,18 @@
-from fastapi import APIRouter , Depends , HTTPException
-from sqlalchemy.orm import Session 
-from database import SessionLocal
-import models
-import schemas
-from typing import Optional
+from fastapi import APIRouter, Depends, HTTPException, Form, File, UploadFile
+from sqlalchemy.orm import Session
+from database import SessionLocal, supabase, SUPABASE_URL
+import models , schemas
 from passlib.context import CryptContext
 from sqlalchemy import or_
+import uuid
 
 router = APIRouter()
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-pwd_context = CryptContext(schemes=["bcrypt"] , deprecated = "auto")
 
-# Database Dependency
-
+# =========================
+# DB
+# =========================
 def get_db():
     db = SessionLocal()
     try:
@@ -20,89 +20,162 @@ def get_db():
     finally:
         db.close()
 
-#-------------------------
-# Organizer Registration
-#-------------------------
 
+# =========================
+# REGISTER
+# =========================
 @router.post("/Organizer_register")
-async def create_organizer(organizer : schemas.OrganizerCreate , db:Session=Depends(get_db)):
-    email_existing = db.query(models.Organizer).filter(
-        models.Organizer.email == organizer.email
-    ).first()
-    if email_existing :
-        raise HTTPException(status_code=400 ,detail="Email already Existed")
-    
-    existing_id = db.query(models.Organizer).filter(
-        models.Organizer.organizer_id == organizer.organizer_id
-    ).first()
+def create_organizer(organizer: schemas.OrganizerCreate, db: Session = Depends(get_db)):
 
-    if existing_id :
-        raise HTTPException(status_code=404 , detail = "Organizer ID is already Existed")
+    if db.query(models.Organizer).filter(models.Organizer.email == organizer.email).first():
+        raise HTTPException(status_code=400, detail="Email already exists")
 
-    hash_password = pwd_context.hash(organizer.password)
+    if db.query(models.Organizer).filter(models.Organizer.organizer_id == organizer.organizer_id).first():
+        raise HTTPException(status_code=400, detail="Organizer ID already exists")
 
-    new_organizer = models.Organizer(
-        name = organizer.name,
-        organizer_id = organizer.organizer_id,
-        number = organizer.number,
-        email = organizer.email,
-        college = organizer.college,
-        department = organizer.department,
-        club = organizer.club,
-        role = organizer.role,
-        password = hash_password
+    hashed_password = pwd_context.hash(organizer.password)
+
+    new = models.Organizer(
+        name=organizer.name,
+        organizer_id=organizer.organizer_id,
+        number=organizer.number,
+        email=organizer.email,
+        college=organizer.college,
+        department=organizer.department,
+        club=organizer.club,
+        role=organizer.role,
+        password=hashed_password
     )
-    db.add(new_organizer)
-    db.commit()
-    db.refresh(new_organizer)
 
-    return{
-        "message":"Organizer created successfully",
-        "organizer":new_organizer
+    db.add(new)
+    db.commit()
+    db.refresh(new)
+
+    return {
+        "message": "Organizer registered successfully",
+        "id": new.id
     }
 
-#-----------------------
-# Get All Organizers
-#-----------------------
-@router.get("/organizers")
-def get_organizers(db: Session = Depends(get_db)):
-    return db.query(models.Organizer).all()
 
-#-----------------------
-# Get  Organizer By ID
-#-----------------------
-@router.get("/organizers/{id}")
-def get_organizer(id: int, db: Session = Depends(get_db)):
-    organizer = db.query(models.Organizer).filter(models.Organizer.id == id).first()
-
-    if not organizer:
-        raise HTTPException(status_code=404, detail="Organizer not found")
-
-    return organizer
-
-
-#------------------
-# Organizer Login
-#-----------------
-
+# =========================
+# LOGIN
+# =========================
 @router.post("/organizer_login")
-def login(user : schemas.Login , db : Session = Depends(get_db)):
+def login(user: schemas.Login, db: Session = Depends(get_db)):
+
     db_user = db.query(models.Organizer).filter(
         or_(
             models.Organizer.email == user.identifier,
             models.Organizer.organizer_id == user.identifier
         )
     ).first()
-    if not db_user : 
-        raise HTTPException(status_code=400 , detail="Invalid Email or Organiser_id")
 
-    if not pwd_context.verify( user.password , db_user.password ):
-        raise HTTPException(status_code=400 , detail = "Invalid Password")
+    if not db_user:
+        raise HTTPException(status_code=400, detail="Invalid credentials")
+
+    if not pwd_context.verify(user.password, db_user.password):
+        raise HTTPException(status_code=400, detail="Invalid password")
     
-    return{
-        "message" : "Organizer login Successfully",
-        "id" : db_user.id,
-        "FullName" : db_user.name
+     # 🔴 NEW CONDITION (Pending approval)
+    if db_user.status == "Pending":
+        raise HTTPException(status_code=403, detail="Wait for Admin Approval")
+
+    # ❌ Optional: Rejected case
+    if db_user.status == "Rejected":
+        raise HTTPException(status_code=403, detail="Your account was rejected by admin")
+
+ 
+    return {
+        "message": "Login successful",
+        "id": db_user.id,
+        "name": db_user.name,
+        "email": db_user.email
     }
 
 
+# =========================
+# GET ORGANIZER
+# =========================
+@router.get("/get-organizer/{id}")
+def get_organizer(id: int, db: Session = Depends(get_db)):
+
+    user = db.query(models.Organizer).filter(models.Organizer.id == id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Organizer not found")
+
+    return {
+        "id": user.id,
+        "name": user.name,
+        "user_id": user.organizer_id,
+        "phone": user.number,
+        "email": user.email,
+        "college": user.college,
+        "department": user.department,
+        "club": user.club,
+        "role": user.role,
+        "bio": user.bio or "",
+        "linkedin": user.linkedin or "",
+        "github": user.github or "",
+        "image": user.image or ""
+    }
+
+
+# =========================
+# UPDATE PROFILE
+# =========================
+@router.patch("/update-organizer/{id}")
+async def update_organizer(
+    id: int,
+    name: str = Form(None),
+    phone: str = Form(None),
+    email: str = Form(None),
+    college: str = Form(None),
+    department: str = Form(None),
+    club: str = Form(None),
+    role: str = Form(None),
+    bio: str = Form(None),
+    linkedin: str = Form(None),
+    github: str = Form(None),
+    image: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
+
+    user = db.query(models.Organizer).filter(models.Organizer.id == id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Organizer not found")
+
+    # Email uniqueness check
+    if email:
+        existing = db.query(models.Organizer).filter(models.Organizer.email == email).first()
+        if existing and existing.id != id:
+            raise HTTPException(status_code=400, detail="Email already in use")
+        # Image upload
+    if image:
+        file_bytes = await image.read()
+        file_name = f"{id}_{uuid.uuid4()}.jpg"
+
+        supabase.storage.from_("Profile_Images").upload(
+            file_name,
+            file_bytes,
+            {"content-type": image.content_type}
+        )
+
+        user.image = f"{SUPABASE_URL}/storage/v1/object/public/Profile_Images/{file_name}"
+
+    # Update fields
+    if name: user.name = name
+    if phone: user.number = phone
+    if email: user.email = email
+    if college: user.college = college
+    if department: user.department = department
+    if club: user.club = club
+    if role: user.role = role
+    if bio: user.bio = bio
+    if linkedin: user.linkedin = linkedin
+    if github: user.github = github
+
+    db.commit()
+
+    return {"message": "Organizer updated successfully"}
