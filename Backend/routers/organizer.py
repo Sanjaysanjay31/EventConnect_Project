@@ -121,9 +121,9 @@ def get_organizer(id: int, db: Session = Depends(get_db)):
     }
 
 
-# =========================
-# UPDATE PROFILE
-# =========================
+#--------------------
+# Update Organizer Profile
+#--------------------
 @router.patch("/update-organizer/{id}")
 async def update_organizer(
     id: int,
@@ -137,34 +137,72 @@ async def update_organizer(
     bio: str = Form(None),
     linkedin: str = Form(None),
     github: str = Form(None),
+
+    # 🔐 Password fields
+    current_password: str = Form(None),
+    new_password: str = Form(None),
+
     image: UploadFile = File(None),
     db: Session = Depends(get_db)
 ):
-
+    # =========================
+    # 🔍 Get Organizer
+    # =========================
     user = db.query(models.Organizer).filter(models.Organizer.id == id).first()
 
     if not user:
         raise HTTPException(status_code=404, detail="Organizer not found")
 
-    # Email uniqueness check
+    # =========================
+    # ✅ Email Check
+    # =========================
     if email:
         existing = db.query(models.Organizer).filter(models.Organizer.email == email).first()
         if existing and existing.id != id:
             raise HTTPException(status_code=400, detail="Email already in use")
-        # Image upload
+
+    # =========================
+    # 🔐 Password Update
+    # =========================
+    if current_password or new_password:
+
+        if not (current_password and new_password):
+            raise HTTPException(status_code=400, detail="Both passwords required")
+
+        # ✅ Verify current password
+        if not pwd_context.verify(current_password, user.password):
+            raise HTTPException(status_code=400, detail="Current password is incorrect")
+
+        # ✅ Validate new password
+        if len(new_password) < 6:
+            raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
+
+        # ✅ Update password
+        user.password = pwd_context.hash(new_password)
+
+    # =========================
+    # 🖼️ Image Upload
+    # =========================
     if image:
-        file_bytes = await image.read()
-        file_name = f"{id}_{uuid.uuid4()}.jpg"
+        try:
+            file_bytes = await image.read()
+            file_name = f"{id}_{uuid.uuid4()}.jpg"
 
-        supabase.storage.from_("Profile_Images").upload(
-            file_name,
-            file_bytes,
-            {"content-type": image.content_type}
-        )
+            supabase.storage.from_("Profile_Images").upload(
+                file_name,
+                file_bytes,
+                {"content-type": image.content_type}
+            )
 
-        user.image = f"{SUPABASE_URL}/storage/v1/object/public/Profile_Images/{file_name}"
+            user.image = f"{SUPABASE_URL}/storage/v1/object/public/Profile_Images/{file_name}"
 
-    # Update fields
+        except Exception as e:
+            print("Image Upload Error:", e)
+            raise HTTPException(status_code=500, detail="Image upload failed")
+
+    # =========================
+    # ✏️ Update Fields
+    # =========================
     if name: user.name = name
     if phone: user.number = phone
     if email: user.email = email
@@ -176,6 +214,13 @@ async def update_organizer(
     if linkedin: user.linkedin = linkedin
     if github: user.github = github
 
+    # =========================
+    # 💾 Save Changes
+    # =========================
     db.commit()
+    db.refresh(user)
 
-    return {"message": "Organizer updated successfully"}
+    return {
+        "message": "Organizer updated successfully",
+        "image": user.image
+    }

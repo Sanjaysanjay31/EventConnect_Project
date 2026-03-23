@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 # Engine 
-engine = create_engine("postgresql://postgres:EventConnectSanjay@db.cwejlpzhdljrcxzmmwgu.supabase.co:5432/postgres?sslmode=require" , pool_pre_ping=True)
+engine = create_engine("postgresql://postgres.cwejlpzhdljrcxzmmwgu:EventConnectSanjay@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres" , pool_pre_ping=True)
 # Session maker
 SessionLocal = sessionmaker(
     autocommit=False,

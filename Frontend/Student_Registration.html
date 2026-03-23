@@ -362,10 +362,10 @@
                     // Store student_id in localStorage
                     localStorage.setItem("student_id", result.student_id);
 
-                    alert("🎉 Registration Successful!");
+                    alert("🎉 Registration Successful! , Login first");
                     
                     // Redirect directly to dashboard
-                    window.location.href = "Student_Dashboard.html";
+                    window.location.href = "Login_2.html?role=student";
                 }
                 else {
                     alert("❌ Error: " + (result.detail || "Something went wrong"));

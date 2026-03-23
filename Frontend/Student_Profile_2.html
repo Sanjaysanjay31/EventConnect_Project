@@ -854,7 +854,7 @@
                     setText("display-email-text", user.email);
                     setText("display-bio", user.bio);
 
-                    setVal("display-id", user.user_id);
+                    setText("display-id", user.user_id);
 
                     setVal("input-name", user.full_name);
                     setVal("input-email", user.email);
@@ -980,6 +980,7 @@
             async function handleUpdatePasswordMain() {
                 const userId = localStorage.getItem("user_id");
 
+                const currentPass = getVal("cur-pass");
                 const newPass = getVal("new-pass-main");
                 const confirmPass = getVal("conf-pass-main");
 
@@ -988,10 +989,12 @@
                 if (newPass !== confirmPass) return showToast("Passwords do not match", "error");
 
                 try {
+                    const formData = new FormData();
+                    formData.append("current_password", currentPass);
+                    formData.append("new_password", newPass);
                     const res = await fetch(`${API_BASE}/update-profile/${userId}`, {
                         method: "PATCH",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ password: newPass })
+                        body: formData
                     });
 
                     if (res.ok) {

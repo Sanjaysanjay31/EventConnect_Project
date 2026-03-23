@@ -154,43 +154,65 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
 
 
 #--------------------
-# Update the details
+# Update Student Profile
 #--------------------
-@router.patch("/update-organizer/{id}")
-async def update_organizer(
+@router.patch("/update-profile/{id}")
+async def update_profile(
     id: int,
     name: str = Form(None),
     phone: str = Form(None),
     email: str = Form(None),
     college: str = Form(None),
     department: str = Form(None),
-    club: str = Form(None),
-    role: str = Form(None),
     bio: str = Form(None),
     linkedin: str = Form(None),
     github: str = Form(None),
-    password: str = Form(None),   # ✅ added
+
+    # 🔐 Password fields
+    current_password: str = Form(None),
+    new_password: str = Form(None),
+
     image: UploadFile = File(None),
     db: Session = Depends(get_db)
 ):
-    user = db.query(models.Organizer).filter(models.Organizer.id == id).first()
+    # =========================
+    # 🔍 Get User
+    # =========================
+    user = db.query(models.User).filter(models.User.id == id).first()
 
     if not user:
-        raise HTTPException(status_code=404, detail="Organizer not found")
+        raise HTTPException(status_code=404, detail="User not found")
 
-    # ✅ Email check
+    # =========================
+    # ✅ Email Check
+    # =========================
     if email:
-        existing = db.query(models.Organizer).filter(models.Organizer.email == email).first()
+        existing = db.query(models.User).filter(models.User.email == email).first()
         if existing and existing.id != id:
             raise HTTPException(status_code=400, detail="Email already in use")
 
-    # ✅ Password update
-    if password:
-        if len(password) < 6:
-            raise HTTPException(status_code=400, detail="Password too short")
-        user.password = pwd_context.hash(password)
+    # =========================
+    # 🔐 Password Update
+    # =========================
+    if current_password or new_password:
 
-    # ✅ Image upload
+        if not (current_password and new_password):
+            raise HTTPException(status_code=400, detail="Both passwords required")
+
+        # ✅ Verify current password
+        if not pwd_context.verify(current_password, user.hashed_password):
+            raise HTTPException(status_code=400, detail="Current password is incorrect")
+
+        # ✅ Validate new password
+        if len(new_password) < 6:
+            raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
+
+        # ✅ Update password
+        user.hashed_password = pwd_context.hash(new_password)
+
+    # =========================
+    # 🖼️ Image Upload
+    # =========================
     if image:
         try:
             file_bytes = await image.read()
@@ -203,26 +225,31 @@ async def update_organizer(
             )
 
             user.image = f"{SUPABASE_URL}/storage/v1/object/public/Profile_Images/{file_name}"
-        except:
+
+        except Exception as e:
+            print("Image Upload Error:", e)
             raise HTTPException(status_code=500, detail="Image upload failed")
 
-    # ✅ Update fields
-    if name: user.name = name
-    if phone: user.number = phone
+    # =========================
+    # ✏️ Update Other Fields
+    # =========================
+    if name: user.full_name = name
+    if phone: user.phone_number = phone
     if email: user.email = email
     if college: user.college = college
     if department: user.department = department
-    if club: user.club = club
-    if role: user.role = role
     if bio: user.bio = bio
     if linkedin: user.linkedin = linkedin
     if github: user.github = github
 
+    # =========================
+    # 💾 Save Changes
+    # =========================
     db.commit()
     db.refresh(user)
 
     return {
-        "message": "Organizer updated successfully",
+        "message": "Profile updated successfully",
         "image": user.image
     }
 
