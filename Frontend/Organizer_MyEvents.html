@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventConnect - My Events Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Base Reset & Variables */
+        :root {
+            --bg-dark: #85c5d1;
+            --bg-sidebar: #06060ac4;
+            --bg-card: #12121ecb;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --text-muted: #8ba1c0;
+            --primary-org: #9a9cf4;
+            --border-slate: #1e1e2e;
+
+            /* Action Colors */
+            --accent-create: #10b981;
+            /* Emerald */
+            --accent-modify: #3b82f6;
+            /* Blue */
+            --accent-delete: #ef4444;
+            /* Red */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles (Matching Dashboard) */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-slate);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding: 0 16px;
+        }
+
+        .logo-box {
+            background: linear-gradient(135deg, var(--primary-org), #a855f7);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .sidebar-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #fff;
+        }
+
+        .nav-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: #818cf8;
+            transform: translateX(4px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary-org) 0%, #4f46e5 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.25);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-slate);
+        }
+
+        .logout-btn {
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            text-decoration: none;
+            width: 100%;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+
+        .logout-btn:hover {
+            color: #f87171;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 60px;
+            margin-left: 280px;
+            overflow-y: auto;
+            background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.05), transparent);
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out forwards;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: #334155;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* Top Actions Bar */
+        .top-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-create {
+            background: linear-gradient(135deg, var(--accent-create), #059669);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-create:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Events Grid */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .event-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .event-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.25);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .event-img-container {
+            height: 180px;
+            width: 100%;
+            background: #0f172a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .event-card:hover .event-img {
+            transform: scale(1.05);
+        }
+
+        /* Default Placeholder Image Pattern */
+        .event-img-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e293b 25%, transparent 25%) -50px 0,
+                linear-gradient(225deg, #1e293b 25%, transparent 25%) -50px 0,
+                linear-gradient(315deg, #1e293b 25%, transparent 25%),
+                linear-gradient(45deg, #1e293b 25%, transparent 25%);
+            background-size: 100px 100px;
+            background-color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #334155;
+        }
+
+        .event-category-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .event-details {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .event-meta {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .event-meta svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--primary-org);
+        }
+
+        .event-status {
+            margin-top: auto;
+            padding-top: 15px;
+        }
+
+        .event-card-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-slate);
+        }
+
+        .btn-card {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-edit {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .btn-edit:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px dashed var(--border-slate);
+            grid-column: 1 / -1;
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            stroke: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .empty-state p {
+            color: var(--text-dim);
+            margin-bottom: 25px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            main {
+                margin-left: 0;
+                padding: 30px 20px;
+            }
+
+            .top-actions {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-box">
+                <svg class="nav-icon" viewBox="0 0 24 24" stroke="white">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+            </div>
+            <h1 class="sidebar-title">Management</h1>
+        </div>
+
+        <nav class="nav-list">
+            <a href="Organizer_Dashboard.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                </svg>
+                Dashboard
+            </a>
+            <a href="Home_Page_2.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6" />
+                </svg>
+                Home
+            </a>
+            <a href="Events_Page.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                Explore Events
+            </a>
+            <a href="Organizer_MyEvents.html" class="nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                </svg>
+                Manage My Events
+            </a>
+            <a href="Organizer_Participants.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                </svg>
+                Participants
+            </a>
+            <a href="#" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+                    <path d="M22 12A10 10 0 0 0 12 2v10z" />
+                </svg>
+                Analytics
+            </a>
+            <a href="#" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                Notifications
+            </a>
+            <a href="Organizer_Profile_2.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+                Profile Settings
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="#" class="logout-btn" onclick="logout()">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <main>
+        <div class="page-header">
+            <h1 class="page-title">Event Library</h1>
+            <p class="page-subtitle">Manage all the events you've created. Update details, manage participants, or clean
+                up past activities from your workspace.</p>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions"
+            style="display: flex; gap: 20px; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1);">
+            <a href="Create_Event.html" class="event-card stat-card"
+                style="flex: 1; text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 25px; cursor: pointer; border: 1px solid rgba(16, 185, 129, 0.2);">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-create)"
+                    stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <line x1="12" y1="8" x2="12" y2="16" />
+                    <line x1="8" y1="12" x2="16" y2="12" />
+                </svg>
+                <span style="color: white; font-weight: 700; font-size: 1.1rem;">Create Event</span>
+                <span style="color: var(--text-dim); font-size: 0.8rem;">Host a new event</span>
+            </a>
+
+            <a href="#eventsContainer" class="event-card stat-card"
+                style="flex: 1; text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 25px; cursor: pointer; border: 1px solid rgba(59, 130, 246, 0.2);">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-modify)"
+                    stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+                <span style="color: white; font-weight: 700; font-size: 1.1rem;">Modify Event</span>
+                <span style="color: var(--text-dim); font-size: 0.8rem;">Select below to edit</span>
+            </a>
+
+            <a href="#eventsContainer" class="event-card stat-card"
+                style="flex: 1; text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 25px; cursor: pointer; border: 1px solid rgba(239, 68, 68, 0.2);">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-delete)"
+                    stroke-width="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    <line x1="10" y1="11" x2="10" y2="17" />
+                    <line x1="14" y1="11" x2="14" y2="17" />
+                </svg>
+                <span style="color: white; font-weight: 700; font-size: 1.1rem;">Delete Event</span>
+                <span style="color: var(--text-dim); font-size: 0.8rem;">Select below to remove</span>
+            </a>
+        </div>
+
+        <div class="events-grid" id="eventsContainer">
+            <!-- Loader -->
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">
+                Fetching your events...
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function logout() {
+            localStorage.clear();
+            window.location.href = "Login_2.html?role=organizer";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const userId = localStorage.getItem("user_id");
+            if (!userId) {
+                alert("You need to login first!");
+                window.location.href = "Login_2.html?role=organizer";
+                return;
+            }
+
+            fetchEvents(userId);
+        });
+
+        async function fetchEvents(userId) {
+            const container = document.getElementById('eventsContainer');
+
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/organizer/${userId}/events`);
+
+                if (!response.ok) {
+                    throw new Error("No events found");
+                }
+
+                const events = await response.json();
+
+                if (!events || events.length === 0) {
+                    showEmptyState(container);
+                    return;
+                }
+
+                container.innerHTML = ''; // Clear loader
+
+                events.forEach((ev, index) => {
+                    const dateStr = ev.event_date ? new Date(ev.event_date).toLocaleDateString(undefined, {
+                        year: 'numeric', month: 'short', day: 'numeric',
+                        hour: '2-digit', minute: '2-digit'
+                    }) : 'TBD';
+
+                    // Convert base64 or fallback to placeholder
+                    const imageHtml = ev.poster_url && ev.poster_url !== "null"
+                        ? `<img src="${ev.poster_url}" class="event-img" alt="${ev.event_name}">`
+                        : `<div class="event-img-placeholder"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`;
+
+                    const card = document.createElement('div');
+                    card.className = 'event-card';
+                    card.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s forwards`;
+                    card.style.opacity = '0';
+                    card.innerHTML = `
+                        <div class="event-img-container">
+                            ${imageHtml}
+                            <div class="event-category-badge">${ev.category}</div>
+                        </div>
+                        <div class="event-details">
+                            <h2 class="event-title">${ev.event_name}</h2>
+                            
+                            <div class="event-meta">
+                                <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                ${dateStr}
+                            </div>
+                            
+                            <div class="event-meta">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                ${ev.location}, ${ev.college}
+                            </div>
+
+                            <div class="event-meta" style="margin-top: 10px; font-weight: 500;">
+                                <svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                Max ${ev.max_participants} Participants
+                            </div>
+
+                            <div class="event-card-actions">
+                                <a href="Organizer_EditEvent.html?id=${ev.id}" class="btn-card btn-edit">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                    Edit
+                                </a>
+                                <button onclick="deleteEvent(${ev.id})" class="btn-card btn-delete">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error("Error fetching events:", error);
+                showEmptyState(container);
+            }
+        }
+
+        function showEmptyState(container) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <h3>No Events Found</h3>
+                    <p>It looks like you haven't published any events yet. Start by creating a new one!</p>
+                    <a href="Create_Event.html" class="btn-create">Create Your First Event</a>
+                </div>
+            `;
+        }
+
+        window.deleteEvent = function (eventId) {
+            if (confirm("Are you highly sure you want to permanently delete this event?")) {
+                fetch(`http://127.0.0.1:8000/events/${eventId}`, {
+                    method: 'DELETE'
+                })
+                    .then(res => {
+                        if (res.ok) {
+                            alert("Event deleted successfully!");
+                            window.location.reload();
+                        } else {
+                            alert("Failed to delete the event.");
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert("An error occurred while deleting the event.");
+                    });
+            }
+        };
+    </script>
+</body>
+
+</html>

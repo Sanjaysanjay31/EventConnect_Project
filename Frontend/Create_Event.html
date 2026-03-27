@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create Event | EventConnect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Modern Properties & Reset */
+        :root {
+            --bg-body: #55699a;
+            --bg-navbar: rgba(15, 23, 42, 0.85);
+            --bg-card: #1e293b;
+            --bg-input: #0f172a;
+
+            --primary-gradient: linear-gradient(135deg, #29afed, #3b82f6);
+            --primary-glow: rgba(14, 165, 233, 0.4);
+
+            --text-main: #f8fafc;
+            --text-muted: #c7d6ea;
+            --text-dark: #cbd5e1;
+
+            --border-color: #334155;
+            --border-focus: #3aa7d6;
+
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            background-image: radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.04), transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.04), transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-top: 100px;
+            padding-bottom: 60px;
+        }
+
+        /* Navbar Layout */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10%;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(16px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            background: var(--primary-gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #38bdf8;
+        }
+
+        .profile-btn {
+            background: var(--primary-gradient);
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .profile-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--primary-glow);
+        }
+
+        /* Page Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Form Structure */
+        .form-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            position: relative;
+        }
+
+        .form-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.5;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* Form Inputs */
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .input-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .input-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-field {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-field:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+            background-color: #111827;
+        }
+
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.8) sepia(1) hue-rotate(180deg) saturate(3);
+            cursor: pointer;
+        }
+
+        /* Image Upload Area */
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            background-color: var(--bg-input);
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 250px;
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--border-focus);
+            background-color: rgba(56, 189, 248, 0.05);
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            color: var(--border-focus);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+
+        .upload-hint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .poster-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            z-index: 10;
+        }
+
+        .upload-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            z-index: 20;
+            transition: opacity 0.3s;
+        }
+
+        .upload-area:hover .upload-overlay {
+            opacity: 1;
+        }
+
+        /* Sticky Action Sidebar */
+        .action-sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        .submit-btn {
+            background: var(--primary-gradient);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 18px;
+            border: none;
+            border-radius: var(--radius-md);
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px var(--primary-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.5);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Status Toast */
+        .status-toast {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: none;
+            animation: slideUp 0.4s ease-out forwards;
+        }
+
+        .status-toast.success {
+            display: block;
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .status-toast.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .form-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .action-sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <h1>EventConnect</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="Home_Page_2.html">Home</a></li>
+            <li><a href="Organizer_Dashboard.html">Dashboard</a></li>
+            <li><a href="Organizer_MyEvents.html">Manage My Events</a></li>
+            <li><a href="Events_Page.html">Explore</a></li>
+            <li><a href="Organizer_Profile_2.html" class="profile-btn">Profile</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Create New Event</h1>
+            <p class="page-subtitle">Publish your next big activity. Fill in the details to reach thousands of students
+                instantly.</p>
+        </div>
+
+        <form id="createEventForm" autocomplete="off">
+            <div class="form-layout">
+                <!-- Left Column: Main Form Fields -->
+                <div class="main-column">
+
+                    <!-- Basic Info -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                </svg>
+                            </div>
+                            <h2 class="section-title">Event Essentials</h2>
+                        </div>
+
+                        <div class="input-grid">
+                            <div class="input-group full-width">
+                                <label class="input-label" for="event_name">Event Name *</label>
+                                <input type="text" id="event_name" class="input-field" required
+                                    placeholder="e.g. CodeBrew 24 Hour Hackathon">
+                            </div>
+
+                            <div class="input-group">
+                                <label class="input-label" for="category">Category *</label>
+                                <select id="category" class="input-field" required>
+                                    <option value="" disabled selected>Select Category</option>
+                                    <option value="technical">Technical / Hackathon</option>
+                                    <option value="cultural">Cultural Fest</option>
+                                    <option value="sports">Sports Tournament</option>
+                                    <option value="workshop">Workshop / Seminar</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group">
+                                <label class="input-label" for="event_date">Date and Time *</label>
+                                <input type="datetime-local" id="event_date" class="input-field" required>
+                            </div>
+
+                            <div class="input-group full-width">
+                                <label class="input-label" for="description">Detailed Description</label>
+                                <textarea id="description" class="input-field" rows="4"
+                                    placeholder="Tell students exactly what to look forward to..."
+                                    style="resize: vertical;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Venue Info -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                    <circle cx="12" cy="10" r="3" />
+                                </svg>
+                            </div>
+                            <h2 class="section-title">Location Details</h2>
+                        </div>
+
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label class="input-label" for="college">College / University *</label>
+                                <input type="text" id="college" class="input-field" required
+                                    placeholder="e.g. Osmania University">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="location">Venue Room / Area *</label>
+                                <input type="text" id="location" class="input-field" required
+                                    placeholder="e.g. Main Auditorium">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coordinator Info -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                </svg>
+                            </div>
+                            <h2 class="section-title">Coordinator Contact</h2>
+                        </div>
+
+                        <div class="input-grid">
+                            <div class="input-group full-width">
+                                <label class="input-label" for="coordinator_name">Lead Coordinator Name *</label>
+                                <input type="text" id="coordinator_name" class="input-field" required
+                                    placeholder="Name of point of contact">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="coordinator_number">Contact Number *</label>
+                                <input type="tel" id="coordinator_number" class="input-field" required
+                                    placeholder="+91 0000000000">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="coordinator_email">Contact Email *</label>
+                                <input type="email" id="coordinator_email" class="input-field" required
+                                    placeholder="contact@example.com">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Sidebar Actions -->
+                <div class="action-sidebar">
+
+                    <!-- Media Upload -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                    <circle cx="8.5" cy="8.5" r="1.5" />
+                                    <polyline points="21 15 16 10 5 21" />
+                                </svg>
+                            </div>
+                            <h2 class="section-title">Event Poster</h2>
+                        </div>
+
+                        <div class="upload-area" id="drop_area"
+                            onclick="document.getElementById('poster_upload').click()">
+                            <!-- Hidden File Input -->
+                            <input type="file" id="poster_upload" style="display: none;"
+                                accept="image/png, image/jpeg, image/jpg">
+
+                            <!-- Preview Image -->
+                            <img id="poster_preview" class="poster-preview" alt="Poster Preview">
+
+                            <!-- Placeholder Context -->
+                            <div id="upload_placeholder">
+                                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="17 8 12 3 7 8" />
+                                    <line x1="12" y1="3" x2="12" y2="15" />
+                                </svg>
+                                <div class="upload-text">Click to Upload Image</div>
+                                <div class="upload-hint">PNG, JPG up to 5MB</div>
+                            </div>
+
+                            <div class="upload-overlay" id="upload_overlay">
+                                <svg style="width: 32px; height: 32px; color: white;" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path
+                                        d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                    <circle cx="12" cy="13" r="4" />
+                                </svg>
+                                <div style="color: white; margin-top: 10px; font-weight: 600;">Change Image</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ticketing / Limits -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path
+                                        d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2z" />
+                                </svg>
+                            </div>
+                            <h2 class="section-title">Ticketing & Capacity</h2>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="entry_fee">Entry Fee (₹)</label>
+                            <input type="number" id="entry_fee" class="input-field"
+                                placeholder="0 or leave empty for free">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="max_participants">Participant Limit</label>
+                            <input type="number" id="max_participants" class="input-field" value="100" min="1">
+                        </div>
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <label class="input-label" for="registration_link">External Form Link (URL)</label>
+                            <input type="url" id="registration_link" class="input-field"
+                                placeholder="Optional Google Form">
+                        </div>
+                    </div>
+
+                    <!-- Submit Area -->
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        Publish Event
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                    </button>
+
+                    <div id="statusMessage" class="status-toast"></div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let base64PosterUrl = null;
+
+        // Image Upload Logic
+        const uploadArea = document.getElementById('drop_area');
+        const fileInput = document.getElementById('poster_upload');
+        const previewImg = document.getElementById('poster_preview');
+        const placeholder = document.getElementById('upload_placeholder');
+
+        fileInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select a valid image file (PNG, JPG).');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (evt) {
+                    base64PosterUrl = evt.target.result;
+                    previewImg.src = base64PosterUrl;
+                    previewImg.style.display = 'block';
+                    placeholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Form Submit Logic
+        document.getElementById('createEventForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const statusMsg = document.getElementById('statusMessage');
+
+            // Check auth (Fallback to 1 if testing without login)
+            let orgId = localStorage.getItem("user_id");
+            if (!orgId) {
+                console.warn("No organizer ID found in localStorage, using ID: 1 for testing.");
+                orgId = 1;
+            }
+
+            // UI Feedback
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                Publishing...
+            `;
+
+            const formData = new FormData();
+            formData.append('event_name', document.getElementById('event_name').value.trim());
+            formData.append('category', document.getElementById('category').value);
+            formData.append('description', document.getElementById('description').value.trim() || '');
+            formData.append('college', document.getElementById('college').value.trim());
+            formData.append('location', document.getElementById('location').value.trim());
+            formData.append('event_date', new Date(document.getElementById('event_date').value).toISOString());
+            
+            formData.append('organizer_id', orgId);
+
+            formData.append('coordinator_name', document.getElementById('coordinator_name').value.trim());
+            formData.append('coordinator_number', document.getElementById('coordinator_number').value.trim());
+            formData.append('coordinator_email', document.getElementById('coordinator_email').value.trim());
+            
+            const entryFee = document.getElementById('entry_fee').value;
+            if (entryFee) {
+                formData.append('entry_fee', entryFee);
+            }
+            formData.append('max_participants', document.getElementById('max_participants').value);
+            
+            const regLink = document.getElementById('registration_link').value.trim();
+            if (regLink) {
+                formData.append('registration_link', regLink);
+            }
+
+            // Append image file if present
+            const fileInput = document.getElementById('poster_upload');
+            if (fileInput.files.length > 0) {
+                formData.append('image', fileInput.files[0]);
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/CreateEvent', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                statusMsg.className = 'status-toast';
+
+                if (response.ok) {
+                    statusMsg.classList.add('success');
+                    statusMsg.innerHTML = '🎉 Event published successfully!';
+                    document.getElementById('createEventForm').reset();
+                    base64PosterUrl = null;
+                    previewImg.style.display = 'none';
+                    placeholder.style.display = 'block';
+
+                    setTimeout(() => {
+                        window.location.href = 'Organizer_MyEvents.html';
+                    }, 2000);
+
+                } else {
+                    statusMsg.classList.add('error');
+                    statusMsg.textContent = result.detail || '⚠️ Failed to create event.';
+                }
+
+            } catch (error) {
+                statusMsg.className = 'status-toast error';
+                statusMsg.textContent = '❌ Server error occurred. Please try again.';
+                console.error('API Error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `
+                    Publish Event
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                `;
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,11 +20,11 @@
             --border-slate: #1e293b;
             --border-input: #374151;
             --accent-orange: #f97316;
-            
+
             --success-green: #10b981;
             --error-red: #f87171;
             --modal-overlay: rgba(0, 0, 0, 0.85);
-            
+
             /* Social Brand Colors */
             --linkedin-blue: #0077b5;
             --github-white: #ffffff;
@@ -56,10 +57,12 @@
             flex-direction: column;
             padding: 24px;
 
-            position: fixed;   /* 🔥 IMPORTANT */
+            position: fixed;
+            /* 🔥 IMPORTANT */
             top: 0;
             left: 0;
-            height: 100vh;     /* full screen height */
+            height: 100vh;
+            /* full screen height */
         }
 
         .sidebar-header {
@@ -127,7 +130,8 @@
         }
 
         .sidebar-footer {
-            margin-top: auto; /* 🔥 this pushes it to bottom */
+            margin-top: auto;
+            /* 🔥 this pushes it to bottom */
             padding-top: 10px;
             border-top: 1px solid var(--border-slate);
         }
@@ -136,10 +140,12 @@
             color: #cbd5e1;
             display: flex;
             align-items: center;
-            gap: 10px; /* increase spacing */
+            gap: 10px;
+            /* increase spacing */
             padding: 12px 16px;
             text-decoration: none;
-            width: 100%; /* full width */
+            width: 100%;
+            /* full width */
             border-radius: 10px;
             transition: 0.2s;
         }
@@ -148,6 +154,7 @@
             color: #f87171;
             background: rgba(255, 255, 255, 0.05);
         }
+
         .logo-box {
             background-color: var(--primary-cyan);
             width: 40px;
@@ -158,16 +165,21 @@
             justify-content: center;
             color: white;
         }
+
         .nav-list {
-            flex: 1; /* takes remaining space */
+            flex: 1;
+            /* takes remaining space */
         }
+
         /* Main Content */
         main {
             flex: 1;
             padding: 40px;
-            margin-left: 280px; /* 🔥 same as sidebar width */
+            margin-left: 280px;
+            /* 🔥 same as sidebar width */
             overflow-y: auto;
         }
+
         .container {
             max-width: 1050px;
             margin: 0 auto;
@@ -272,10 +284,25 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
-        .social-icon.linkedin:hover { background: var(--linkedin-blue); border-color: var(--linkedin-blue); }
-        .social-icon.github:hover { background: #333; border-color: #444; }
-        .social-icon.portfolio:hover { background: var(--portfolio-emerald); border-color: var(--portfolio-emerald); }
-        .social-icon.email:hover { background: var(--email-rose); border-color: var(--email-rose); }
+        .social-icon.linkedin:hover {
+            background: var(--linkedin-blue);
+            border-color: var(--linkedin-blue);
+        }
+
+        .social-icon.github:hover {
+            background: #333;
+            border-color: #444;
+        }
+
+        .social-icon.portfolio:hover {
+            background: var(--portfolio-emerald);
+            border-color: var(--portfolio-emerald);
+        }
+
+        .social-icon.email:hover {
+            background: var(--email-rose);
+            border-color: var(--email-rose);
+        }
 
         /* Form Controls */
         .form-rows {
@@ -441,7 +468,7 @@
             padding: 16px 24px;
             border-radius: 12px;
             border-left: 4px solid var(--success-green);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -472,70 +499,154 @@
         }
 
         @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         /* Utilities */
-        .text-2xl { font-size: 1.5rem; font-weight: 700; }
-        .text-lg { font-size: 1.125rem; font-weight: 600; }
-        .text-sm { font-size: 0.875rem; }
-        .text-xs { font-size: 0.75rem; }
-        .mb-2 { margin-bottom: 8px; }
-        .mb-4 { margin-bottom: 16px; }
-        .mb-6 { margin-bottom: 24px; }
-        .uppercase { text-transform: uppercase; }
-        .tracking-widest { letter-spacing: 0.1em; }
-        .font-bold { font-weight: 700; }
-        .hidden { display: none; }
+        .text-2xl {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .text-lg {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .text-xs {
+            font-size: 0.75rem;
+        }
+
+        .mb-2 {
+            margin-bottom: 8px;
+        }
+
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+
+        .mb-6 {
+            margin-bottom: 24px;
+        }
+
+        .uppercase {
+            text-transform: uppercase;
+        }
+
+        .tracking-widest {
+            letter-spacing: 0.1em;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .hidden {
+            display: none;
+        }
 
         @media (max-width: 768px) {
-            .sidebar { display: none; }
-            main { padding: 20px; }
-            .profile-header-content { flex-direction: column; text-align: center; }
-            .social-bar { justify-content: center; }
-            .btn-group { flex-direction: column; }
-            .form-grid { grid-template-columns: 1fr; }
+            .sidebar {
+                display: none;
+            }
+
+            main {
+                padding: 20px;
+            }
+
+            .profile-header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .social-bar {
+                justify-content: center;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sidebar-header">
             <div class="logo-box">
-                <svg class="nav-icon" viewBox="0 0 24 24" stroke="white"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                <svg class="nav-icon" viewBox="0 0 24 24" stroke="white">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                    <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                </svg>
             </div>
             <h1 class="sidebar-title">Organizer PANEL</h1>
         </div>
 
         <nav class="nav-list">
             <a href="Home_Page_2.html" class="nav-item">
-                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
                 Home
             </a>
             <a href="Organizer_Dashboard.html" class="nav-item active">
-                <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                </svg>
                 Dashboard
             </a>
             <a href="Events_Page.html" class="nav-item">
-                <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
                 Explore Events
             </a>
-            <a href="#" class="nav-item">
-                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <a href="Organizer_MyEvents.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
                 My Events
             </a>
             <a href="Organizer_Profile_2.html" class="nav-item">
-                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
                 Profile Settings
             </a>
         </nav>
 
         <div class="sidebar-footer">
             <a href="#" class="logout-btn">
-                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
                 Logout
             </a>
         </div>
@@ -544,7 +655,7 @@
     <main>
         <div class="container">
             <div class="header-row">
-                <h2 class="text-2xl" >Profile Settings</h2>
+                <h2 class="text-2xl">Profile Settings</h2>
                 <div id="role-indicator" class="role-indicator">Organizer</div>
             </div>
 
@@ -554,38 +665,66 @@
                     <div class="profile-pic-container" onclick="document.getElementById('avatar-input').click()">
                         <img id="display-avatar" src="" alt="Avatar">
                         <div class="profile-upload-overlay">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                <circle cx="12" cy="13" r="4" />
+                            </svg>
                             <span class="text-xs mt-2" style="color:white">Change Photo</span>
                         </div>
-                        <input type="file" id="avatar-input" style="display: none;" accept="image/*" onchange="handleImageUpload(event)">
+                        <input type="file" id="avatar-input" style="display: none;" accept="image/*"
+                            onchange="handleImageUpload(event)">
                     </div>
 
                     <div style="flex: 1;">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 8px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 8px;">
                             <div>
                                 <h3 id="display-name" class="text-2xl">Username Loading...</h3>
-                                <p id="display-email-text" style="color: var(--text-muted); font-size: 14px;">user@gmail.com</p>
+                                <p id="display-email-text" style="color: var(--text-muted); font-size: 14px;">
+                                    user@gmail.com</p>
                             </div>
                             <div>
-                                <span class="text-xs uppercase font-bold tracking-widest" style="font-size: 20px;  display: block ;  margin-bottom: 4px;">User ID</span>
+                                <span class="text-xs uppercase font-bold tracking-widest"
+                                    style="font-size: 20px;  display: block ;  margin-bottom: 4px;">User ID</span>
                                 <p id="display-id" style="color: var(--text-muted); font-size: 16px;">id223242</p>
-                                
+
                             </div>
                         </div>
-                        <p id="display-bio" style="color: #cbd5e1; font-size: 14px; line-height: 1.6; font-style: italic; margin-bottom: 12px;">
+                        <p id="display-bio"
+                            style="color: #cbd5e1; font-size: 14px; line-height: 1.6; font-style: italic; margin-bottom: 12px;">
                             "No Bio"
                         </p>
 
                         <!-- SOCIAL LINKS BAR (Dynamic) -->
                         <div class="social-bar">
-                            <a id="btn-link-linkedin" href="https://linkedin.com" target="_blank" class="social-icon linkedin" title="LinkedIn">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                            <a id="btn-link-linkedin" href="https://linkedin.com" target="_blank"
+                                class="social-icon linkedin" title="LinkedIn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                                    <rect x="2" y="9" width="4" height="12" />
+                                    <circle cx="4" cy="4" r="2" />
+                                </svg>
                             </a>
-                            <a id="btn-link-github" href="https://github.com" target="_blank" class="social-icon github" title="GitHub">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                            <a id="btn-link-github" href="https://github.com" target="_blank" class="social-icon github"
+                                title="GitHub">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                                </svg>
                             </a>
-                            <a id="btn-link-email" href="mailto:kattasanjay39@gmail.com" class="social-icon email" title="Contact Email">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            <a id="btn-link-email" href="mailto:kattasanjay39@gmail.com" class="social-icon email"
+                                title="Contact Email">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                    <polyline points="22,6 12,13 2,6" />
+                                </svg>
                             </a>
                         </div>
                     </div>
@@ -596,7 +735,11 @@
                 <!-- Personal Details Card -->
                 <div class="settings-card">
                     <h4 class="text-lg mb-6" style="display: flex; align-items: center; gap: 8px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
                         Personal Details
                     </h4>
                     <div class="form-rows">
@@ -609,16 +752,17 @@
                                 <label class="label">Phone Number</label>
                                 <input type="tel" id="input-phone" class="input-field" placeholder="+91 0000000000">
                             </div>
-                            
+
                         </div>
-                            
-                            <div>
-                                <label class="label">Email Address</label>
-                                <input type="email" id="input-email" class="input-field" placeholder="Enter Email Address">                            
-                            </div>
+
+                        <div>
+                            <label class="label">Email Address</label>
+                            <input type="email" id="input-email" class="input-field" placeholder="Enter Email Address">
+                        </div>
                         <div>
                             <label class="label">About Me (Bio)</label>
-                            <textarea id="input-bio" rows="2" class="input-field" style="resize: vertical;" placeholder="Tell us about yourself..."></textarea>
+                            <textarea id="input-bio" rows="2" class="input-field" style="resize: vertical;"
+                                placeholder="Tell us about yourself..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -626,9 +770,10 @@
                 <!-- Academic Details Card -->
                 <div class="settings-card">
                     <h4 class="text-lg mb-6" style="display:flex;align-items:center;gap:8px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)" stroke-width="2">
-                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                            <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)"
+                            stroke-width="2">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                            <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
                         </svg>
                         Academic Details
                     </h4>
@@ -637,11 +782,13 @@
                         <div class="form-grid">
                             <div>
                                 <label class="label">Educational Institution</label>
-                                <input type="text" id="input-college" class="input-field" placeholder="Enter College/University name">
+                                <input type="text" id="input-college" class="input-field"
+                                    placeholder="Enter College/University name">
                             </div>
                             <div>
                                 <label class="label">Department</label>
-                                <input type="text" id="input-department" class="input-field" placeholder="Computer Science">
+                                <input type="text" id="input-department" class="input-field"
+                                    placeholder="Computer Science">
                             </div>
                         </div>
 
@@ -652,40 +799,55 @@
                             </div>
                             <div>
                                 <label class="label">Club Name</label>
-                                <input type="text" id="input-clubname" class="input-field" placeholder="Digital Media club" >
+                                <input type="text" id="input-clubname" class="input-field"
+                                    placeholder="Digital Media club">
                             </div>
                         </div>
                     </div>
                 </div>
 
 
-                
+
                 <!-- NEW: SOCIAL LINKS MODIFICATION SECTION  -->
                 <div class="settings-card">
                     <h4 class="text-lg mb-6" style="display: flex; align-items: center; gap: 8px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-cyan)"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="2" y1="12" x2="22" y2="12" />
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                        </svg>
                         Social Profiles & Links
                     </h4>
-                    <div class="form-rows">   
+                    <div class="form-rows">
                         <div>
                             <label class="label">LinkedIn URL</label>
-                            <input type="text" id="input-linkedin" rows="2" class="input-field" placeholder="https://linkedin.com/in/username"></textarea>
+                            <input type="text" id="input-linkedin" rows="2" class="input-field"
+                                placeholder="https://linkedin.com/in/username"></textarea>
                         </div>
                         <div>
                             <label class="label">GitHub URL</label>
-                            <input type="text" id="input-github"  class="input-field" placeholder="https://github.com/username"></textarea>
-                        </div>  
+                            <input type="text" id="input-github" class="input-field"
+                                placeholder="https://github.com/username"></textarea>
+                        </div>
                     </div>
                 </div>
 
                 <!-- ENHANCED SECURITY SECTION -->
                 <div class="settings-card security-card">
-                    <h4 class="text-lg mb-2" style="color: var(--accent-orange); display: flex; align-items: center; gap: 8px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <h4 class="text-lg mb-2"
+                        style="color: var(--accent-orange); display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
                         Security & Password
                     </h4>
-                    <p class="text-sm mb-6" style="color: var(--text-dim);">Manage your password and recovery methods.</p>
-                    
+                    <p class="text-sm mb-6" style="color: var(--text-dim);">Manage your password and recovery methods.
+                    </p>
+
                     <div class="password-section">
                         <div class="password-grid">
                             <div>
@@ -694,15 +856,18 @@
                             </div>
                             <div>
                                 <label class="label">New Password</label>
-                                <input type="password" id="new-pass-main" class="input-field" placeholder="Min. 8 characters">
+                                <input type="password" id="new-pass-main" class="input-field"
+                                    placeholder="Min. 8 characters">
                             </div>
                             <div>
                                 <label class="label">Confirm New Password</label>
-                                <input type="password" id="conf-pass-main" class="input-field" placeholder="Repeat new password">
+                                <input type="password" id="conf-pass-main" class="input-field"
+                                    placeholder="Repeat new password">
                             </div>
                         </div>
                         <div style="display: flex; justify-content: flex-start;">
-                            <button type="button" class="btn-primary" style="background: var(--accent-orange);" onclick="handleUpdatePasswordMain()">
+                            <button type="button" class="btn-primary" style="background: var(--accent-orange);"
+                                onclick="handleUpdatePasswordMain()">
                                 Change Password
                             </button>
                         </div>
@@ -710,23 +875,35 @@
 
                     <!-- RESET OPTIONS -->
                     <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-slate);">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
                             <div>
                                 <p class="font-bold text-sm">Forgot your password?</p>
-                                <p class="text-xs" style="color: var(--text-dim); margin-bottom: 12px;">Choose where to receive your verification code:</p>
-                                
+                                <p class="text-xs" style="color: var(--text-dim); margin-bottom: 12px;">Choose where to
+                                    receive your verification code:</p>
+
                                 <div class="recovery-options">
                                     <div class="recovery-chip selected" onclick="selectRecovery('email', this)">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path
+                                                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                            <polyline points="22,6 12,13 2,6" />
+                                        </svg>
                                         Email
                                     </div>
                                     <div class="recovery-chip" onclick="selectRecovery('phone', this)">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path
+                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                                        </svg>
                                         Phone (SMS)
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="btn-outline" onclick="openResetModal()">Send Verification Code</button>
+                            <button type="button" class="btn-outline" onclick="openResetModal()">Send Verification
+                                Code</button>
                         </div>
                     </div>
                 </div>
@@ -734,7 +911,12 @@
                 <div class="btn-group">
                     <button type="button" class="btn-ghost" onclick="resetForm()">Discard Changes</button>
                     <button type="submit" class="btn-primary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                            <polyline points="17 21 17 13 7 13 7 21" />
+                            <polyline points="7 3 7 8 15 8" />
+                        </svg>
                         Save All Modifications
                     </button>
                 </div>
@@ -750,10 +932,11 @@
                 <p id="modal-desc" class="text-sm" style="color: var(--text-dim); margin-bottom: 20px;">
                     A 6-digit code has been sent to your <span id="recovery-target">email</span>.
                 </p>
-                
+
                 <div class="mb-6">
                     <label class="label">Enter Verification OTP</label>
-                    <input type="text" id="otp-input" maxlength="6" class="input-field text-2xl tracking-widest" style="text-align: center; font-family: monospace;" placeholder="000000">
+                    <input type="text" id="otp-input" maxlength="6" class="input-field text-2xl tracking-widest"
+                        style="text-align: center; font-family: monospace;" placeholder="000000">
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -767,7 +950,7 @@
                 <p class="text-sm" style="color: var(--text-dim); margin-bottom: 24px;">
                     Your identity is verified. Please set your new secure password.
                 </p>
-                
+
                 <div class="mb-4">
                     <label class="label">New Password</label>
                     <input type="password" id="modal-new-pass" class="input-field" placeholder="Min. 8 characters">
@@ -779,7 +962,8 @@
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <button type="button" class="btn-primary" style="background: var(--success-green);" onclick="submitNewPassword()">Update Password</button>
+                    <button type="button" class="btn-primary" style="background: var(--success-green);"
+                        onclick="submitNewPassword()">Update Password</button>
                     <button type="button" class="btn-ghost" onclick="closeResetModal()">Cancel</button>
                 </div>
             </div>
@@ -787,385 +971,386 @@
     </div>
 
     <div id="toast-container"></div>
-    
-        <script>
-            const API_BASE = "http://127.0.0.1:8000";
 
-            // ===============================
-            // 🚀 INIT (ONLY ONCE)
-            // ===============================
-            document.addEventListener("DOMContentLoaded", () => {
-                loadProfile();
-                document.getElementById("profile-form")?.addEventListener("submit", handleProfileUpdate);
-            });
+    <script>
+        const API_BASE = "http://127.0.0.1:8000";
 
-            // ===============================
-            // 🔧 COMMON HELPERS
-            // ===============================
-            const getVal = (id) => document.getElementById(id)?.value.trim();
-            const setVal = (id, val) => {
-                const el = document.getElementById(id);
-                if (el) el.value = val || "";
-            };
-            const setText = (id, val) => {
-                const el = document.getElementById(id);
-                if (el) el.innerText = val || "";
-            };
+        // ===============================
+        // 🚀 INIT (ONLY ONCE)
+        // ===============================
+        document.addEventListener("DOMContentLoaded", () => {
+            loadProfile();
+            document.getElementById("profile-form")?.addEventListener("submit", handleProfileUpdate);
+        });
 
-            // ===============================
-            // 🔐 LOAD PROFILE
-            // ===============================
-            async function loadProfile() {
-                const userId = localStorage.getItem("user_id");
+        // ===============================
+        // 🔧 COMMON HELPERS
+        // ===============================
+        const getVal = (id) => document.getElementById(id)?.value.trim();
+        const setVal = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.value = val || "";
+        };
+        const setText = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.innerText = val || "";
+        };
 
-                if (!userId) {
-                    console.warn("User not logged in");
-                    window.location.href = "Login_2.html?role=organizer";
-                    return;
-                }
+        // ===============================
+        // 🔐 LOAD PROFILE
+        // ===============================
+        async function loadProfile() {
+            const userId = localStorage.getItem("user_id");
 
-                try {
-                    const res = await fetch(`${API_BASE}/get-organizer/${userId}`);
-                    if (!res.ok) throw new Error();
-
-                    const user = await res.json();
-
-                    setText("display-name", user.name);
-                    setText("display-email-text", user.email);
-                    setText("display-bio", user.bio);
-
-                    setText("display-id", user.user_id);
-
-                    setVal("input-name", user.name);
-                    setVal("input-email", user.email);
-                    setVal("input-phone", user.phone);
-                    setVal("input-bio", user.bio);
-
-                    setVal("input-college", user.college);
-                    setVal("input-department", user.department);
-                    setVal("input-clubname",user.club);
-                    setVal("input-role",user.role)
-
-                    setVal("input-linkedin", user.linkedin);
-                    setVal("input-github", user.github);
-
-                    if (user.image) {
-                        document.getElementById("display-avatar").src = user.image;
-                    }
-
-                } catch {
-                    showToast("Error loading profile", "error");
-                }
+            if (!userId) {
+                console.warn("User not logged in");
+                window.location.href = "Login_2.html?role=organizer";
+                return;
             }
 
-            let selectedImage = null;
+            try {
+                const res = await fetch(`${API_BASE}/get-organizer/${userId}`);
+                if (!res.ok) throw new Error();
 
-            // ===============================
-            // 📸 IMAGE
-            // ===============================
-            function handleImageUpload(event) {
-                const file = event.target.files[0];
-                if (!file.type.startsWith("image/")) {
-                    return showToast("Only image files allowed", "error");
+                const user = await res.json();
+
+                setText("display-name", user.name);
+                setText("display-email-text", user.email);
+                setText("display-bio", user.bio);
+
+                setText("display-id", user.user_id);
+
+                setVal("input-name", user.name);
+                setVal("input-email", user.email);
+                setVal("input-phone", user.phone);
+                setVal("input-bio", user.bio);
+
+                setVal("input-college", user.college);
+                setVal("input-department", user.department);
+                setVal("input-clubname", user.club);
+                setVal("input-role", user.role)
+
+                setVal("input-linkedin", user.linkedin);
+                setVal("input-github", user.github);
+
+                if (user.image) {
+                    document.getElementById("display-avatar").src = user.image;
                 }
 
-                if (file.size > 5 * 1024 * 1024) {
-                    return showToast("Image must be less than 5MB", "error");
-                }
-                if (!file) return;
+            } catch {
+                showToast("Error loading profile", "error");
+            }
+        }
 
-                selectedImage = file; // ✅ store for upload
+        let selectedImage = null;
 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById("display-avatar").src = e.target.result;
-                };
-                reader.readAsDataURL(file);
+        // ===============================
+        // 📸 IMAGE
+        // ===============================
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file.type.startsWith("image/")) {
+                return showToast("Only image files allowed", "error");
             }
 
+            if (file.size > 5 * 1024 * 1024) {
+                return showToast("Image must be less than 5MB", "error");
+            }
+            if (!file) return;
 
-            // ===============================
-            // ✏️ UPDATE PROFILE
-            // ===============================
-            async function handleProfileUpdate(e) {
-                e.preventDefault();
+            selectedImage = file; // ✅ store for upload
 
-                const userId = localStorage.getItem("user_id");
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById("display-avatar").src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
 
-                const updateData = {
-                    name: getVal("input-name"),
-                    email: getVal("input-email"),
-                    phone: getVal("input-phone"),
-                    bio: getVal("input-bio"),
-                    college: getVal("input-college"),
-                    department: getVal("input-department"),
-                    club: getVal("input-clubname"),
-                    role: getVal("input-role"),
-                    linkedin: getVal("input-linkedin"),
-                    github: getVal("input-github"),
-                };
 
-                // Remove empty fields
-                Object.keys(updateData).forEach(
-                    key => !updateData[key] && delete updateData[key]
-                );
+        // ===============================
+        // ✏️ UPDATE PROFILE
+        // ===============================
+        async function handleProfileUpdate(e) {
+            e.preventDefault();
 
-                // Validations
-                if (updateData.email && !updateData.email.includes("@")) {
-                    return showToast("Invalid email", "error");
+            const userId = localStorage.getItem("user_id");
+
+            const updateData = {
+                name: getVal("input-name"),
+                email: getVal("input-email"),
+                phone: getVal("input-phone"),
+                bio: getVal("input-bio"),
+                college: getVal("input-college"),
+                department: getVal("input-department"),
+                club: getVal("input-clubname"),
+                role: getVal("input-role"),
+                linkedin: getVal("input-linkedin"),
+                github: getVal("input-github"),
+            };
+
+            // Remove empty fields
+            Object.keys(updateData).forEach(
+                key => !updateData[key] && delete updateData[key]
+            );
+
+            // Validations
+            if (updateData.email && !updateData.email.includes("@")) {
+                return showToast("Invalid email", "error");
+            }
+
+            if (updateData.phone && updateData.phone.length < 10) {
+                return showToast("Invalid phone number", "error");
+            }
+
+            try {
+                // ✅ Create FormData
+                const formData = new FormData();
+
+                // ✅ Add all text fields
+                Object.keys(updateData).forEach(key => {
+                    formData.append(key, updateData[key]);
+                });
+
+                // ✅ ADD IMAGE HERE
+                if (selectedImage) {
+                    formData.append("image", selectedImage);
+                }
+                const res = await fetch(`${API_BASE}/update-organizer/${userId}`, {
+                    method: "PATCH",
+                    body: formData
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    showToast("Profile updated successfully");
+                    selectedImage = null;
+                    loadProfile();
+                } else {
+                    showToast(data.detail || "Update failed", "error");
                 }
 
-                if (updateData.phone && updateData.phone.length < 10) {
-                    return showToast("Invalid phone number", "error");
-                }
+            } catch {
+                showToast("Server error", "error");
+            }
+        }
 
-                try {
-                    // ✅ Create FormData
-                    const formData = new FormData();
 
-                    // ✅ Add all text fields
-                    Object.keys(updateData).forEach(key => {
-                        formData.append(key, updateData[key]);
-                    });
 
-                    // ✅ ADD IMAGE HERE
-                    if (selectedImage) {
-                        formData.append("image", selectedImage);
-                    }
-                    const res = await fetch(`${API_BASE}/update-organizer/${userId}`, {
-                        method: "PATCH",
-                        body: formData
-                    });
+        // ===============================
+        // 🔐 CHANGE PASSWORD
+        // ===============================
+        async function handleUpdatePasswordMain() {
+            const userId = localStorage.getItem("user_id");
 
+            const newPass = getVal("new-pass-main");
+            const confirmPass = getVal("conf-pass-main");
+
+            if (!newPass) return showToast("Enter new password", "error");
+            if (newPass.length < 6) return showToast("Min 6 characters", "error");
+            if (newPass !== confirmPass) return showToast("Passwords do not match", "error");
+
+            try {
+                const formData = new FormData();
+                formData.append("password", newPass);
+
+                const res = await fetch(`${API_BASE}/update-organizer/${userId}`, {
+                    method: "PATCH",
+                    body: formData
+                });
+
+                if (res.ok) {
+                    showToast("Password updated");
+                    setVal("new-pass-main", "");
+                    setVal("conf-pass-main", "");
+                } else {
                     const data = await res.json();
-
-                    if (res.ok) {
-                        showToast("Profile updated successfully");
-                        selectedImage = null;
-                        loadProfile();
-                    } else {
-                        showToast(data.detail || "Update failed", "error");
-                    }
-
-                } catch {
-                    showToast("Server error", "error");
+                    showToast(data.detail, "error");
                 }
+
+            } catch {
+                showToast("Server error", "error");
+            }
+        }
+
+        // ===============================
+        // 🔄 Recovery Type (Email / Phone)
+        // ===============================
+        let recoveryType = "email";
+        let recoveryValue = "";
+
+        // Select chip
+        function selectRecovery(type, element) {
+            recoveryType = type;
+
+            document.querySelectorAll(".recovery-chip").forEach(el => el.classList.remove("selected"));
+            element.classList.add("selected");
+        }
+
+
+        // ===============================
+        // 📩 Open Modal + Send OTP
+        // ===============================
+        async function openResetModal() {
+
+            const email = document.getElementById("input-email").value.trim();
+            const phone = document.getElementById("input-phone").value.trim();
+
+            recoveryValue = (recoveryType === "email") ? email : phone;
+
+            if (!recoveryValue) {
+                return alert(`Please enter your ${recoveryType}`);
             }
 
+            try {
+                const response = await fetch("http://127.0.0.1:8000/send-otp", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        identifier: recoveryValue
+                    })
+                });
 
+                const data = await response.json();
 
-            // ===============================
-            // 🔐 CHANGE PASSWORD
-            // ===============================
-            async function handleUpdatePasswordMain() {
-                const userId = localStorage.getItem("user_id");
-
-                const newPass = getVal("new-pass-main");
-                const confirmPass = getVal("conf-pass-main");
-
-                if (!newPass) return showToast("Enter new password", "error");
-                if (newPass.length < 6) return showToast("Min 6 characters", "error");
-                if (newPass !== confirmPass) return showToast("Passwords do not match", "error");
-
-                try {
-                    const formData = new FormData();
-                    formData.append("password", newPass);
-
-                    const res = await fetch(`${API_BASE}/update-organizer/${userId}`, {
-                        method: "PATCH",
-                        body: formData
-                    });
-
-                    if (res.ok) {
-                        showToast("Password updated");
-                        setVal("new-pass-main", "");
-                        setVal("conf-pass-main", "");
-                    } else {
-                        const data = await res.json();
-                        showToast(data.detail, "error");
-                    }
-
-                } catch {
-                    showToast("Server error", "error");
+                if (!response.ok) {
+                    return alert(data.detail);
                 }
+
+                document.getElementById("recovery-modal").style.display = "flex";
+                document.getElementById("recovery-target").innerText = recoveryType;
+
+            } catch (error) {
+                alert("Error sending OTP");
+                console.error(error);
+            }
+        }
+
+
+        // ===============================
+        // ❌ Close Modal
+        // ===============================
+        function closeResetModal() {
+            document.getElementById("recovery-modal").style.display = "none";
+
+            // Reset steps
+            document.getElementById("step-otp").classList.remove("hidden");
+            document.getElementById("step-password").classList.add("hidden");
+        }
+
+
+        // ===============================
+        // 🔐 Verify OTP
+        // ===============================
+        async function verifyOTP() {
+
+            const otp = document.getElementById("otp-input").value.trim();
+
+            if (otp.length !== 6) {
+                return alert("Enter valid 6-digit OTP");
             }
 
-            // ===============================
-            // 🔄 Recovery Type (Email / Phone)
-            // ===============================
-            let recoveryType = "email";
-            let recoveryValue = "";
+            try {
+                const response = await fetch("http://127.0.0.1:8000/verify-otp", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        identifier: recoveryValue,
+                        otp: otp
+                    })
+                });
 
-            // Select chip
-            function selectRecovery(type, element) {
-                recoveryType = type;
+                const data = await response.json();
 
-                document.querySelectorAll(".recovery-chip").forEach(el => el.classList.remove("selected"));
-                element.classList.add("selected");
+                if (!response.ok) {
+                    return alert(data.detail);
+                }
+
+                // Move to password step
+                document.getElementById("step-otp").classList.add("hidden");
+                document.getElementById("step-password").classList.remove("hidden");
+
+            } catch (error) {
+                alert("Error verifying OTP");
+                console.error(error);
+            }
+        }
+
+
+        // ===============================
+        // 🔑 Submit New Password
+        // ===============================
+        async function submitNewPassword() {
+
+            const newPass = document.getElementById("modal-new-pass").value.trim();
+            const confirmPass = document.getElementById("modal-conf-pass").value.trim();
+
+            if (newPass.length < 6) {
+                return alert("Password must be at least 6 characters");
             }
 
-
-            // ===============================
-            // 📩 Open Modal + Send OTP
-            // ===============================
-            async function openResetModal() {
-
-                const email = document.getElementById("input-email").value.trim();
-                const phone = document.getElementById("input-phone").value.trim();
-
-                recoveryValue = (recoveryType === "email") ? email : phone;
-
-                if (!recoveryValue) {
-                    return alert(`Please enter your ${recoveryType}`);
-                }
-
-                try {
-                    const response = await fetch("http://127.0.0.1:8000/send-otp", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            identifier: recoveryValue
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok) {
-                        return alert(data.detail);
-                    }
-
-                    document.getElementById("recovery-modal").style.display = "flex";
-                    document.getElementById("recovery-target").innerText = recoveryType;
-
-                } catch (error) {
-                    alert("Error sending OTP");
-                    console.error(error);
-                }
+            if (newPass !== confirmPass) {
+                return alert("Passwords do not match");
             }
 
+            try {
+                const response = await fetch("http://127.0.0.1:8000/reset-password", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        identifier: recoveryValue,
+                        new_password: newPass
+                    })
+                });
 
-            // ===============================
-            // ❌ Close Modal
-            // ===============================
-            function closeResetModal() {
-                document.getElementById("recovery-modal").style.display = "none";
+                const data = await response.json();
 
-                // Reset steps
-                document.getElementById("step-otp").classList.remove("hidden");
-                document.getElementById("step-password").classList.add("hidden");
+                if (!response.ok) {
+                    return alert(data.detail);
+                }
+
+                alert("Password updated successfully!");
+
+                closeResetModal();
+
+            } catch (error) {
+                alert("Error resetting password");
+                console.error(error);
             }
-
-
-            // ===============================
-            // 🔐 Verify OTP
-            // ===============================
-            async function verifyOTP() {
-
-                const otp = document.getElementById("otp-input").value.trim();
-
-                if (otp.length !== 6) {
-                    return alert("Enter valid 6-digit OTP");
-                }
-
-                try {
-                    const response = await fetch("http://127.0.0.1:8000/verify-otp", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            identifier: recoveryValue,
-                            otp: otp
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok) {
-                        return alert(data.detail);
-                    }
-
-                    // Move to password step
-                    document.getElementById("step-otp").classList.add("hidden");
-                    document.getElementById("step-password").classList.remove("hidden");
-
-                } catch (error) {
-                    alert("Error verifying OTP");
-                    console.error(error);
-                }
-            }
-
-
-            // ===============================
-            // 🔑 Submit New Password
-            // ===============================
-            async function submitNewPassword() {
-
-                const newPass = document.getElementById("modal-new-pass").value.trim();
-                const confirmPass = document.getElementById("modal-conf-pass").value.trim();
-
-                if (newPass.length < 6) {
-                    return alert("Password must be at least 6 characters");
-                }
-
-                if (newPass !== confirmPass) {
-                    return alert("Passwords do not match");
-                }
-
-                try {
-                    const response = await fetch("http://127.0.0.1:8000/reset-password", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            identifier: recoveryValue,
-                            new_password: newPass
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok) {
-                        return alert(data.detail);
-                    }
-
-                    alert("Password updated successfully!");
-
-                    closeResetModal();
-
-                } catch (error) {
-                    alert("Error resetting password");
-                    console.error(error);
-                }
-            }
+        }
 
 
 
-            // ===============================
-            // 🔔 TOAST
-            // ===============================
-            function showToast(message, type = "success") {
-                const container = document.getElementById("toast-container");
+        // ===============================
+        // 🔔 TOAST
+        // ===============================
+        function showToast(message, type = "success") {
+            const container = document.getElementById("toast-container");
 
-                const toast = document.createElement("div");
-                toast.className = "toast";
-                toast.style.borderLeftColor = type === "error" ? "#f87171" : "#10b981";
-                toast.innerText = message;
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.style.borderLeftColor = type === "error" ? "#f87171" : "#10b981";
+            toast.innerText = message;
 
-                container.appendChild(toast);
-                setTimeout(() => toast.remove(), 3000);
-            }
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
 
-            // ===============================
-            // 🚪 LOGOUT
-            // ===============================
-           document.querySelector(".logout-btn")?.addEventListener("click", function () {
-                localStorage.clear();
-                window.location.href = "login_2.html?role=organizer";
-            });
-        </script>
-    </body>
+        // ===============================
+        // 🚪 LOGOUT
+        // ===============================
+        document.querySelector(".logout-btn")?.addEventListener("click", function () {
+            localStorage.clear();
+            window.location.href = "login_2.html?role=organizer";
+        });
+    </script>
+</body>
+
 </html>

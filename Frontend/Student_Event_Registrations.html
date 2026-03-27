@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Panel - Registrations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Base Reset & Variables */
+        :root {
+            --bg-dark: #0f172a;
+            --bg-sidebar: #0b0f1a;
+            --bg-card: #111827;
+            --bg-panel: rgba(255, 255, 255, 0.03);
+            --bg-input: #1f2937;
+            --bg-card-border: rgba(255, 255, 255, 0.08);
+            --border-slate: #1e293b;
+            --border-input: #374151;
+            --primary-cyan: #0891b2;
+            --primary-hover: #0e7490;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --text-muted: #64748b;
+            --accent-green: #22c55e;
+            --accent-purple: #a855f7;
+            --accent-yellow: #eab308;
+            --accent-blue: #3b82f6;
+            --accent-orange: #f97316;
+            --accent-rose: #f43f5e;
+            --success-green: #10b981;
+            --error-red: #f87171;
+            --modal-overlay: rgba(0, 0, 0, 0.85);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-slate);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding: 0 16px;
+        }
+
+        .logo-box {
+            background-color: var(--primary-cyan);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: -0.025em;
+        }
+
+        .nav-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #22d3ee;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+            color: white;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .sidebar-footer {
+            padding-top: 24px;
+            border-top: 1px solid var(--border-slate);
+        }
+
+        .logout-btn {
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .logout-btn:hover {
+            color: #f87171;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .panel {
+            background: var(--bg-panel);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        /* Welcome Header */
+        .welcome-header {
+            border-left: 4px solid var(--accent-purple);
+        }
+
+        .welcome-title {
+            font-size: 1.875rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .welcome-subtitle {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        /* Stats Grid - 4 columns */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            padding: 24px;
+            border-bottom-width: 3px;
+            border-bottom-style: solid;
+            transition: transform 0.2s;
+            background: var(--bg-card);
+            border: 1px solid var(--border-slate);
+            border-bottom: 3px solid;
+            border-radius: 16px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 900;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        td {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.875rem;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        .badge-confirmed { background: rgba(8, 145, 178, 0.1); color: #22d3ee; }
+        .badge-pending { background: rgba(234, 179, 8, 0.1); color: #eab308; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-box">
+                <svg class="nav-icon" viewBox="0 0 24 24" stroke="white"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <h1 class="sidebar-title">STUDENT PANEL</h1>
+        </div>
+
+        <nav class="nav-list">
+            <a href="Home_Page_2.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Home
+            </a>
+            <a href="Student_Dashboard.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a>
+            <a href="Events_Page.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Explore Events
+            </a>
+            <a href="Student_Registrations.html" class="nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Registrations
+            </a>
+            <a href="Student_Profile_2.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Profile Settings
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="javascript:void(0)" class="logout-btn">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <header class="panel welcome-header">
+            <h2 class="welcome-title">My Registrations</h2>
+            <p class="welcome-subtitle">Here are all the events you've signed up for. Keep track of your schedules.</p>
+        </header>
+
+        <!-- STATS GRID -->
+        <section class="stats-grid">
+            <div class="stat-card" style="border-bottom-color: var(--accent-purple);">
+                <p class="stat-label" style="color: var(--accent-purple);">Total Registered</p>
+                <h3 class="stat-value" id="stat-registered">--</h3>
+            </div>
+            <div class="stat-card" style="border-bottom-color: var(--accent-yellow);">
+                <p class="stat-label" style="color: var(--accent-yellow);">Upcoming</p>
+                <h3 class="stat-value" id="stat-upcoming">--</h3>
+            </div>
+            <div class="stat-card" style="border-bottom-color: var(--accent-blue);">
+                <p class="stat-label" style="color: var(--accent-blue);">Participated</p>
+                <h3 class="stat-value" id="stat-participated">--</h3>
+            </div>
+        </section>
+
+        <!-- REGISTERED EVENTS -->
+        <section class="panel">
+            <h4 style="font-size: 1.25rem; font-weight: 700; font-style: italic; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+                <svg class="nav-icon" style="color: var(--primary-cyan);"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Event Registration Details
+            </h4>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event Details</th>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th style="text-align: right;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registered-events-table">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 30px;">Loading your registrations...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+       document.addEventListener("DOMContentLoaded", function () {
+            console.log("Registrations page loaded successfully.");
+
+            const userId = localStorage.getItem("user_id");
+            if (!userId) {
+                alert("Please login first");
+                window.location.href = "login_2.html?role=student";
+                return;
+            }
+
+            // Logout 
+            document.querySelector(".logout-btn").addEventListener("click", function () {
+                localStorage.clear();
+                window.location.href = "login_2.html?role=student";
+            });
+
+            // =========================
+            // FETCH STUDENT REGISTRATIONS
+            // =========================
+            fetch(`http://127.0.0.1:8000/user/${userId}/registrations`)
+                .then(res => res.json())
+                .then(data => {
+                    const tbody = document.getElementById("registered-events-table");
+                    tbody.innerHTML = "";
+
+                    if (!data || data.length === 0 || data.detail) {
+                        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 30px;">You haven't registered for any events yet.</td></tr>`;
+                        document.getElementById("stat-registered").textContent = "0";
+                        document.getElementById("stat-upcoming").textContent = "0";
+                        document.getElementById("stat-participated").textContent = "0";
+                        return;
+                    }
+
+                    // Populate Table
+                    data.forEach(reg => {
+                        const tr = document.createElement("tr");
+                        const dateStr = reg.event_date ? new Date(reg.event_date).toLocaleDateString() : 'TBD';
+                        const badgeClass = reg.status && reg.status.toLowerCase() === 'confirmed' ? 'badge-confirmed' : 'badge-pending';
+                        
+                        tr.innerHTML = `
+                            <td style="font-weight: 600;">${reg.event_name}</td>
+                            <td style="color: var(--text-dim);">${dateStr}</td>
+                            <td style="color: var(--text-muted); font-size: 12px; text-transform: capitalize;">${reg.category}</td>
+                            <td style="text-align: right;"><span class="badge ${badgeClass}">${(reg.status || 'PENDING').toUpperCase()}</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+
+                    // Update stats
+                    document.getElementById("stat-registered").textContent = data.length;
+                    
+                    const upcoming = data.filter(r => r.event_date && new Date(r.event_date) > new Date()).length;
+                    document.getElementById("stat-upcoming").textContent = upcoming;
+                    
+                    const participated = data.filter(r => r.event_date && new Date(r.event_date) <= new Date()).length;
+                    document.getElementById("stat-participated").textContent = participated;
+                })
+                .catch(err => {
+                    console.error("Failed to load registrations:", err);
+                    document.getElementById("registered-events-table").innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 30px;">Failed to load registrations.</td></tr>`;
+                });
+        });
+    </script>
+</body>
+</html>

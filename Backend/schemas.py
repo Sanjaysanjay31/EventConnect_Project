@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr , Field
+from pydantic import BaseModel, EmailStr , Field 
 from datetime import datetime
 from typing import Optional
 
@@ -36,15 +36,14 @@ class OrganizerCreate(BaseModel):
     email : EmailStr
     college : str
     department : str
-    club : Optional[str]=None
     role : str
+    club : Optional[str]=None
     password : str = Field(min_length=6 , max_length=20)
     
 
 class EventCreate(BaseModel):
     event_name : str
     category : str
-    description : Optional[str] = None
     college : str
     location : str
     event_date :datetime
@@ -52,6 +51,7 @@ class EventCreate(BaseModel):
     coordinator_name : str
     coordinator_number : str
     coordinator_email : EmailStr
+    description : Optional[str] = None
     entry_fee : Optional[int] = None
     poster_url : Optional[str] = None
     registration_link : Optional[str] = None
@@ -68,3 +68,22 @@ class OTPVerify(BaseModel):
 class ResetPassword(BaseModel):
     identifier: str
     new_password: str
+
+class EventUpdate(BaseModel):
+    event_name: Optional[str] = None
+    category: Optional[str] = None
+    description: Optional[str] = None
+    college: Optional[str] = None
+    location: Optional[str] = None
+    event_date: Optional[datetime] = None
+    coordinator_name: Optional[str] = None
+    coordinator_number: Optional[str] = None
+    coordinator_email: Optional[EmailStr] = None
+    entry_fee: Optional[int] = None
+    poster_url: Optional[str] = None
+    registration_link: Optional[str] = None
+    max_participants: Optional[int] = None
+
+class RegistrationCreate(BaseModel):
+    user_id: int
+    event_id: int

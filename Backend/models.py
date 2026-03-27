@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String , Float , DateTime , ForeignKey
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Text
 from sqlalchemy.orm import declarative_base , relationship
 from datetime import datetime , timezone
 
@@ -65,13 +65,35 @@ class Event(Base):
     coordinator_number = Column(String(15), nullable=False)
     coordinator_email = Column(String(150), nullable=False)
     entry_fee = Column(Integer, nullable=True)
-    poster_url = Column(String(500))
+    poster_url = Column(Text)
     registration_link = Column(String)
     max_participants = Column(Integer , default=500 )
     registered_participants = Column(Integer, default=0, nullable=False)
+
     status = Column(String, default="upcoming")
     approval = Column(String , default="Pending")
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     
     organizers = relationship("Organizer", back_populates="events")
 
+class Registration(Base):
+    __tablename__ = "registrations"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    event_id = Column(Integer, ForeignKey("events.id"), nullable=False)
+    
+    # Snapshot data for direct database exports
+    student_name = Column(String, nullable=True)
+    student_roll = Column(String, nullable=True)
+    student_phone = Column(String, nullable=True)
+    student_email = Column(String, nullable=True)
+    student_college = Column(String, nullable=True)
+    student_department = Column(String, nullable=True)
+    event_name = Column(String, nullable=True)
+    event_category = Column(String, nullable=True)
+
+    registered_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    status = Column(String, default="Registered")
+
+    user = relationship("User")
+    event = relationship("Event")

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventConnect - Participants List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #85c5d1;
+            --bg-sidebar: #06060ac4;
+            --bg-card: #12121ecb;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --text-muted: #8ba1c0;
+            --primary-org: #9a9cf4;
+            --border-slate: #1e1e2e;
+            --accent-success: #10b981;
+            --accent-info: #0ea5e9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-slate);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding: 0 16px;
+        }
+
+        .logo-box {
+            background: linear-gradient(135deg, var(--primary-org), #a855f7);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .sidebar-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #fff;
+        }
+
+        .nav-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: #818cf8;
+            transform: translateX(4px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary-org) 0%, #4f46e5 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.25);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-slate);
+        }
+
+        .logout-btn {
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .logout-btn:hover {
+            color: #f87171;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 40px 60px;
+            margin-left: 280px;
+            background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.05), transparent);
+            overflow-y: auto;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease-out forwards;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 1.05rem;
+            color: #334155;
+        }
+
+        /* Filters Bar */
+        .filters-container {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .filter-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            border-color: var(--primary-org);
+            box-shadow: 0 0 0 3px rgba(154, 156, 244, 0.1);
+        }
+
+        .btn-filter {
+            background: linear-gradient(135deg, var(--primary-org), #4f46e5);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-family: inherit;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: 0.2s;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-filter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        /* Participants Table */
+        .table-container {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.7s ease-out forwards;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.2);
+            text-align: left;
+            padding: 16px 24px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        td {
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .student-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-org);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .pill {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .pill-category {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+        }
+
+        .pill-dept {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-box">
+                <svg class="nav-icon" viewBox="0 0 24 24" stroke="white">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+            </div>
+            <h1 class="sidebar-title">Management</h1>
+        </div>
+
+        <nav class="nav-list">
+            <a href="Organizer_Dashboard.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                </svg>
+                Dashboard
+            </a>
+            <a href="Home_Page_2.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6" />
+                </svg>
+                Home
+            </a>
+            <a href="Events_Page.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                Explore Events
+            </a>
+            <a href="Organizer_MyEvents.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                </svg>
+                Manage My Events
+            </a>
+            <a href="Organizer_Participants.html" class="nav-item active">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                </svg>
+                Participants
+            </a>
+            <a href="#" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+                    <path d="M22 12A10 10 0 0 0 12 2v10z" />
+                </svg>
+                Analytics
+            </a>
+            <a href="Organizer_Profile_2.html" class="nav-item">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+                Profile Settings
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="#" class="logout-btn" onclick="logout()">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <main>
+        <div class="page-header">
+            <h1 class="page-title">Participants Management</h1>
+            <p class="page-subtitle">View and filter students who registered for your events.</p>
+        </div>
+
+        <!-- Filters Box -->
+        <div class="filters-container">
+            <div class="filter-group">
+                <label>Event Name</label>
+                <select id="filterEvent">
+                    <option value="all">All Events</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Event Category</label>
+                <select id="filterCategory">
+                    <option value="all">All Categories</option>
+                    <option value="Technical">Technical</option>
+                    <option value="Cultural">Cultural</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Workshop">Workshop</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>College</label>
+                <select id="filterCollege">
+                    <option value="all">All Colleges</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Department</label>
+                <select id="filterDept">
+                    <option value="all">All Departments</option>
+                    <option value="CSE">CSE</option>
+                    <option value="IT">IT</option>
+                    <option value="ECE">ECE</option>
+                    <option value="MECH">MECH</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 24px;">
+                <button class="btn-filter" style="margin-top: 0;" onclick="applyFilters()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                    </svg>
+                    Filter
+                </button>
+                <button class="btn-filter" style="background: linear-gradient(135deg, #10b981, #059669); margin-top: 0;"
+                    onclick="exportToCSV()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    Export CSV
+                </button>
+            </div>
+        </div>
+
+        <!-- Participants Table -->
+        <div class="table-container">
+            <table id="participantsTable">
+                <thead>
+                    <tr>
+                        <th>Participant Info</th>
+                        <th>College</th>
+                        <th>Department</th>
+                        <th>Registered Event</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody id="participantsBody">
+                    <!-- Data will be populated via JS -->
+                </tbody>
+            </table>
+            <div id="noDataMessage" style="display: none; padding: 40px; text-align: center; color: var(--text-muted);">
+                No participants found matching the filters.
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let participantsData = [];
+        let currentFilteredData = [];
+        let eventsList = [];
+        const colors = ["#ef4444", "#f59e0b", "#10b981", "#3b82f6", "#a855f7"];
+
+        function getAvatarColor(name) {
+            let hash = 0;
+            for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+            return colors[Math.abs(hash) % colors.length];
+        }
+
+        async function initParticipants() {
+            const userId = localStorage.getItem("user_id");
+            if (!userId) {
+                alert("Please login first");
+                window.location.href = "Login_2.html?role=organizer";
+                return;
+            }
+
+            try {
+                // Fetch Events to populate Event filter fully
+                const evtRes = await fetch(`http://127.0.0.1:8000/organizer/${userId}/events`);
+                if (evtRes.ok) {
+                    eventsList = await evtRes.json();
+                    eventsList.sort((a, b) => a.event_name.localeCompare(b.event_name));
+                }
+
+                // Fetch registered participants
+                const pRes = await fetch(`http://127.0.0.1:8000/organizer/${userId}/participants`);
+                if (pRes.ok) {
+                    participantsData = await pRes.json();
+                    currentFilteredData = participantsData;
+                }
+
+                populateFilters();
+                renderTable(participantsData);
+
+            } catch (err) {
+                console.error("Error loading participants", err);
+                const noData = document.getElementById("noDataMessage");
+                noData.style.display = "block";
+                noData.innerText = "Failed to load participants.";
+            }
+        }
+
+        function populateFilters() {
+            // Populate Events Alphabetically
+            const evSelect = document.getElementById("filterEvent");
+            eventsList.forEach(e => {
+                const opt = document.createElement("option");
+                opt.value = e.event_name;
+                opt.textContent = e.event_name;
+                evSelect.appendChild(opt);
+            });
+
+            // Populate Colleges from real Participant data (Alphabetically)
+            const colleges = [...new Set(participantsData.map(p => p.college))].sort((a, b) => a.localeCompare(b));
+            const colSelect = document.getElementById("filterCollege");
+            colSelect.innerHTML = '<option value="all">All Colleges</option>';
+            colleges.forEach(c => {
+                const opt = document.createElement("option");
+                opt.value = c;
+                opt.textContent = c;
+                colSelect.appendChild(opt);
+            });
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById("participantsBody");
+            const noData = document.getElementById("noDataMessage");
+            tbody.innerHTML = "";
+
+            if (data.length === 0) {
+                noData.style.display = "block";
+                noData.innerText = "No participants found matching the filters.";
+            } else {
+                noData.style.display = "none";
+                data.forEach(p => {
+                    const tr = document.createElement("tr");
+                    const dateStr = p.registered_at ? new Date(p.registered_at).toLocaleDateString() : 'N/A';
+
+                    tr.innerHTML = `
+                        <td>
+                            <div class="student-profile">
+                                <div class="avatar" style="background: ${getAvatarColor(p.name)}">${p.name.charAt(0)}</div>
+                                <div>
+                                    <div style="font-weight: 700; margin-bottom: 2px;">${p.name}</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-dim);">${p.student_id}</div>
+                                    <div style="font-size: 0.75rem; color: #64748b; margin-top: 2px;">${p.email || 'No email'} | ${p.phone || 'No phone'}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="font-weight: 600;">${p.college}</td>
+                        <td><span class="pill pill-dept">${p.department}</span></td>
+                        <td>
+                            <span style="color: var(--primary-org); font-weight:600;">${p.event_name}</span>
+                            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top:3px;">Reg on: ${dateStr}</div>
+                        </td>
+                        <td><span class="pill pill-category">${p.category}</span></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        function applyFilters() {
+            const eventName = document.getElementById("filterEvent").value;
+            const category = document.getElementById("filterCategory").value;
+            const college = document.getElementById("filterCollege").value;
+            const dept = document.getElementById("filterDept").value;
+
+            const filteredData = participantsData.filter(p => {
+                const matchEvent = (eventName === "all" || p.event_name === eventName);
+                const matchCategory = (category === "all" || p.category === category);
+                const matchCollege = (college === "all" || p.college === college);
+                const matchDept = (dept === "all" || p.department === dept); // DB property is department, not dept
+                return matchEvent && matchCategory && matchCollege && matchDept;
+            });
+
+            currentFilteredData = filteredData;
+            renderTable(filteredData);
+        }
+
+        function exportToCSV() {
+            if (currentFilteredData.length === 0) {
+                alert("No data available to export.");
+                return;
+            }
+
+            const headers = ["Participant Name", "Roll Number", "Email", "Phone", "College", "Department", "Event Name", "Category", "Registered Date"];
+
+            const rows = currentFilteredData.map(p => {
+                const dateStr = p.registered_at ? new Date(p.registered_at).toLocaleDateString() : 'N/A';
+                return [
+                    `"${p.name}"`,
+                    `"${p.student_id}"`,
+                    `"${p.email || 'N/A'}"`,
+                    `"${p.phone || 'N/A'}"`,
+                    `"${p.college}"`,
+                    `"${p.department}"`,
+                    `"${p.event_name}"`,
+                    `"${p.category}"`,
+                    `"${dateStr}"`
+                ].join(",");
+            });
+
+            const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows].join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Participants_Export.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Initialize table
+        document.addEventListener("DOMContentLoaded", () => {
+            initParticipants();
+        });
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "Login_2.html?role=organizer";
+        }
+    </script>
+</body>
+
+</html>

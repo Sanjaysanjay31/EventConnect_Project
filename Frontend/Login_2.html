@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unified Login | EventConnect</title>
     <link rel="stylesheet" href="Global_Components.css">
     <style>
-
         /* Navbar */
         .navbar {
             display: flex;
@@ -22,11 +22,11 @@
             top: 0;
             left: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .logo h1 {
-            font-size:30px;
+            font-size: 30px;
             color: #080808;
         }
 
@@ -40,7 +40,7 @@
         .nav-links a {
             text-decoration: none;
             color: #444;
-            font-size: 20px ;
+            font-size: 20px;
             font-weight: 500;
             transition: 0.3s;
         }
@@ -82,7 +82,7 @@
             color: rgb(255, 255, 255);
             margin-top: 70px;
             text-align: center;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         /* Container for the 3 Login Boxes */
@@ -92,7 +92,8 @@
             align-items: flex-start;
             gap: 20px;
             padding: 40px 10px;
-            flex-wrap: wrap; /* Wraps on mobile */
+            flex-wrap: wrap;
+            /* Wraps on mobile */
             max-width: 1200px;
         }
 
@@ -100,16 +101,16 @@
         .login-box {
             background: rgb(251, 250, 250);
             width: 550px;
-            padding:20px;
+            padding: 20px;
             border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
         }
 
         .login-box:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
         }
 
         .login-box h2 {
@@ -120,9 +121,17 @@
         }
 
         /* Visual indicator for different roles */
-        .student-box { border-top: 8px solid #ca202b; }
-        .organizer-box { border-top: 8px solid #ca202b; }
-        .admin-box { border-top: 8px solid #ca202b; }
+        .student-box {
+            border-top: 8px solid #ca202b;
+        }
+
+        .organizer-box {
+            border-top: 8px solid #ca202b;
+        }
+
+        .admin-box {
+            border-top: 8px solid #ca202b;
+        }
 
         .input-group {
             margin-bottom: 20px;
@@ -175,18 +184,20 @@
         .box-footer a:hover {
             text-decoration: underline;
         }
-
     </style>
 </head>
+
 <body>
     <!-- Navbar -->
-   <nav class="navbar">
-        <div class="logo"><h1>🎓 EventConnect</h1></div>
+    <nav class="navbar">
+        <div class="logo">
+            <h1>🎓 EventConnect</h1>
+        </div>
         <ul class="nav-links">
             <li><a href="Home_Page_2.html">Home</a></li>
             <li><a href="Events_Page.html">Events</a></li>
             <li><a href="#">Contact</a></li>
-            
+
             <li class="dropdown">
                 <a href="#" class="login-btn"><b>Registration</b></a>
                 <div class="dropdown-card">
@@ -203,7 +214,7 @@
     </div>
 
     <div class="login-grid">
-        
+
         <div id="student-section" class="login-box student-box">
             <h2>🧑‍🎓 Student Login</h2>
             <p><b>Access and register for events</b></p>
@@ -291,94 +302,97 @@
         }
 
         document.getElementById("studentLoginForm")
-        .addEventListener("submit", function(e) {
+            .addEventListener("submit", function (e) {
 
-            e.preventDefault();
+                e.preventDefault();
 
-            const identifier = document.getElementById("studentEmail").value;
-            const password = document.getElementById("studentPassword").value;
+                const identifier = document.getElementById("studentEmail").value;
+                const password = document.getElementById("studentPassword").value;
 
-            fetch("http://127.0.0.1:8000/Student_login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    identifier: identifier,
-                    password: password
+                fetch("http://127.0.0.1:8000/Student_login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        identifier: identifier,
+                        password: password
+                    })
                 })
-            })
-            .then(response => {
+                    .then(response => {
 
-                if (!response.ok) {
-                    throw new Error("Invalid credentials");
-                }
+                        if (!response.ok) {
+                            throw new Error("Invalid credentials");
+                        }
 
-                return response.json();
-            })
-            .then(data => {
+                        return response.json();
+                    })
+                    .then(data => {
 
-                // ✅ Store user id (consistent key)
-                localStorage.setItem("user_id", data.id);
+                        // ✅ Store user id (consistent key)
+                        localStorage.setItem("user_id", data.id);
+                        localStorage.setItem("user_role", "student");
 
-                // ✅ Store user basic data for dashboard
-                localStorage.setItem("userData", JSON.stringify({
-                    name: data.full_name,
-                    email:data.email || "",
-                }));
+                        // ✅ Store user basic data for dashboard
+                        localStorage.setItem("userData", JSON.stringify({
+                            name: data.full_name,
+                            email: data.email || "",
+                        }));
 
-                // ✅ Redirect
-                window.location.href = "Student_Dashboard.html";
+                        // ✅ Redirect
+                        window.location.href = "Student_Dashboard.html";
 
-            })
-            .catch(error => {
-                alert("Login failed: " + error.message);
+                    })
+                    .catch(error => {
+                        alert("Login failed: " + error.message);
+                    });
+
             });
-
-        });
 
 
         document.getElementById("Organizerloginform")
-        .addEventListener("submit", function(e) {
+            .addEventListener("submit", function (e) {
 
-            e.preventDefault();
+                e.preventDefault();
 
-            const identifier = document.getElementById("organizerIdentifier").value;
-            const password = document.getElementById("password_o").value;
+                const identifier = document.getElementById("organizerIdentifier").value;
+                const password = document.getElementById("password_o").value;
 
-            fetch("http://127.0.0.1:8000/organizer_login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    identifier: identifier,
-                    password: password
+                fetch("http://127.0.0.1:8000/organizer_login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        identifier: identifier,
+                        password: password
+                    })
                 })
-            })
-            .then(response => {
+                    .then(response => {
 
-                if (!response.ok) {
-                    throw new Error("Invalid credentials");
-                }
+                        if (!response.ok) {
+                            throw new Error("Invalid credentials");
+                        }
 
-                return response.json();
-            })
-            .then(data => {
+                        return response.json();
+                    })
+                    .then(data => {
 
-                // ✅ Store student id
-                localStorage.setItem("user_id", data.id);
+                        // ✅ Store user id
+                        localStorage.setItem("user_id", data.id);
+                        localStorage.setItem("user_role", "organizer");
 
-                // ✅ Redirect to dashboard
-                window.location.href = "Organizer_Dashboard.html";
+                        // ✅ Redirect to dashboard
+                        window.location.href = "Organizer_Dashboard.html";
 
-            })
-            .catch(error => {
-                alert("Login failed: " + error.message);
+                    })
+                    .catch(error => {
+                        alert("Login failed: " + error.message);
+                    });
+
             });
-
-        });
 
     </script>
 </body>
+
 </html>

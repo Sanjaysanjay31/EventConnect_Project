@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Events | EventConnect</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Global_Components.css">
     <style>
         * {
             margin: 0;
@@ -21,38 +23,39 @@
             color: #333;
         }
 
-        /* Navbar Styles */
+        /* Navbar */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 5%;
-            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 80px;
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
+            color: #333;
             position: fixed;
             width: 100%;
             top: 0;
             left: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .logo h1 {
-            font-size: 24px;
+            font-size: 30px;
             color: #080808;
         }
 
         .nav-links {
             list-style: none;
             display: flex;
-            gap: 20px;
+            gap: 30px;
             align-items: center;
         }
 
         .nav-links a {
             text-decoration: none;
             color: #444;
-            font-size: 16px;
+            font-size: 20px;
             font-weight: 500;
             transition: 0.3s;
         }
@@ -64,16 +67,21 @@
         .login-btn {
             background: #6f42c1;
             color: white !important;
-            padding: 8px 18px;
+            padding: 8px 20px;
             border-radius: 20px;
-            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: #ca202b;
+            transform: translateY(-2px);
         }
 
         /* Container */
         .container {
-            max-width: 1100px;
+            max-width: 1400px;
             margin: 40px auto;
-            padding: 0 20px;
+            padding: 0 40px;
             width: 100%;
         }
 
@@ -97,7 +105,7 @@
             flex-wrap: wrap;
             gap: 15px;
             margin-bottom: 40px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .search-box {
@@ -117,7 +125,8 @@
         /* Events Grid - Set to 2 Columns */
         .events-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Exactly 2 cards per row */
+            grid-template-columns: repeat(2, 1fr);
+            /* Exactly 2 cards per row */
             gap: 30px;
         }
 
@@ -132,11 +141,11 @@
             background: #ffffff;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .event-card:hover {
@@ -167,7 +176,7 @@
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .event-details {
@@ -231,7 +240,6 @@
             margin: 15px 0;
             line-height: 1.5;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -269,20 +277,40 @@
         footer {
             text-align: center;
             padding: 40px;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             margin-top: auto;
         }
     </style>
 </head>
+
 <body>
 
     <nav class="navbar">
-        <div class="logo"><h1>🎓 EventConnect</h1></div>
+        <div class="logo">
+            <h1>🎓 EventConnect</h1>
+        </div>
         <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#" style="color: #c14244;">Events</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#" class="login-btn">Login</a></li>
+            <li><a href="Home_Page_2.html" class="login-btn">Home</a></li>
+            <div class="dropdown">
+                <a href="#" class="login-btn"><b>Login</b></a>
+                <div class="dropdown-card">
+                    <div class="arrow-up"></div>
+                    <a href="Login_2.html?role=student" class="hub-btn">Student Login</a>
+                    <a href="Login_2.html?role=organizer" class="hub-btn">Organizer Login</a>
+                    <a href="Login_2.html?role=admin" class="hub-btn">Admin Login</a>
+                </div>
+            </div>
+            <li class="dropdown">
+                <a href="#" class="login-btn"><b>Registration</b></a>
+                <div class="dropdown-card">
+                    <div class="arrow-up"></div>
+                    <a href="Student_Registration.html" class="hub-btn">Student Registration</a>
+                    <a href="Organizer_Registration.html" class="hub-btn">Organizer Registration</a>
+                </div>
+            </li>
+            <li>
+                <a href="#" onclick="goToProfile(event)" class="login-btn"><b>Profile</b></a>
+            </li>
         </ul>
     </nav>
 
@@ -293,146 +321,28 @@
         </div>
 
         <div class="filter-bar">
-            <input type="text" class="search-box" placeholder="Search by name, college, or activity...">
-            <select class="category-filter">
+            <input type="text" id="filterSearch" class="search-box"
+                placeholder="Search by event name, college, or location..." onkeyup="applyFilters()">
+            <select id="filterCategory" class="category-filter" onchange="applyFilters()">
                 <option value="all">All Categories</option>
-                <option value="cultural">Cultural</option>
                 <option value="technical">Technical</option>
+                <option value="cultural">Cultural</option>
                 <option value="sports">Sports</option>
+                <option value="workshop">Workshop</option>
             </select>
-            <button class="reg-btn">Filter Results</button>
+            <select id="filterCollege" class="category-filter" onchange="applyFilters()">
+                <option value="all">All Colleges</option>
+            </select>
+            <select id="filterFee" class="category-filter" onchange="applyFilters()">
+                <option value="all">Any Entry Fee</option>
+                <option value="free">Free</option>
+                <option value="paid">Paid</option>
+            </select>
+            <button class="reg-btn" onclick="applyFilters()">Filter Results</button>
         </div>
 
         <div class="events-grid">
-            
-            <!-- Card 1: Technical -->
-            <div class="event-card">
-                <div class="event-image-container">
-                    <span class="event-tag">Technical</span>
-                    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=800" alt="Hackathon">
-                </div>
-                <div class="event-details">
-                    <div class="college-name">📍 Chaitanya Bharathi Institute of Technology (CBIT)</div>
-                    <h3 class="event-title">Byte-Blast Hackathon 2025</h3>
-                    
-                    <div class="info-row">
-                        <span class="label">Event Category</span>
-                        <span class="value">Technical Fest</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="label">Activity Type</span>
-                        <span class="value">Hackathon / Coding</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="label">Date & Time</span>
-                        <span class="value">Mar 15, 10:00 AM</span>
-                    </div>
-
-                    <p class="event-description">A 24-hour intense coding competition where students solve real-world problems using cutting edge technologies.</p>
-                    
-                    <div class="event-footer">
-                        <span class="event-price">Free</span>
-                        <a href="#" class="reg-btn">More Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 2: Cultural -->
-            <div class="event-card">
-                <div class="event-image-container">
-                    <span class="event-tag">Cultural</span>
-                    <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=800" alt="Dance">
-                </div>
-                <div class="event-details">
-                    <div class="college-name">📍 Osmania University College of Engineering</div>
-                    <h3 class="event-title">⚡ Thunder Thursday Beats</h3>
-                    
-                    <div class="info-row">
-                        <span class="label">Event Category</span>
-                        <span class="value">Cultural Extravaganza</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="label">Activity Type</span>
-                        <span class="value">Dancing / Music</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="label">Date & Time</span>
-                        <span class="value">Feb 26, 05:00 PM</span>
-                    </div>
-
-                    <p class="event-description">Witness the biggest inter-college dance face-off! Featuring solo, group performances, and professional guest acts.</p>
-                    
-                    <div class="event-footer">
-                        <span class="event-price">₹100.00</span>
-                        <a href="#" class="reg-btn">More Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3: Error Hunting -->
-            <div class="event-card">
-                <div class="event-image-container">
-                    <span class="event-tag">Technical</span>
-                    <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=800" alt="Code">
-                </div>
-                <div class="event-details">
-                    <div class="college-name">📍 Vasavi College of Engineering</div>
-                    <h3 class="event-title">Debug Master: Error Hunting</h3>
-                    
-                    <div class="info-row">
-                        <span class="label">Event Category</span>
-                        <span class="value">Programming Contest</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="label">Activity Type</span>
-                        <span class="value">Error Hunting / Debugging</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="label">Date & Time</span>
-                        <span class="value">Apr 02, 02:00 PM</span>
-                    </div>
-
-                    <p class="event-description">Can you find the needle in the haystack? Fix broken code across C++, Java, and Python to win the title.</p>
-                    
-                    <div class="event-footer">
-                        <span class="event-price">Free</span>
-                        <a href="#" class="reg-btn">More Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 4: Sports -->
-            <div class="event-card">
-                <div class="event-image-container">
-                    <span class="event-tag">Sports</span>
-                    <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&q=80&w=800" alt="Basketball">
-                </div>
-                <div class="event-details">
-                    <div class="college-name">📍 VNR Vignan Jyothi (VNRVJIET)</div>
-                    <h3 class="event-title">Slam Dunk Championship</h3>
-                    
-                    <div class="info-row">
-                        <span class="label">Event Category</span>
-                        <span class="value">Inter-College Sports</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="label">Activity Type</span>
-                        <span class="value">Basketball Tournament</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="label">Date & Time</span>
-                        <span class="value">Dec 01, 09:00 AM</span>
-                    </div>
-
-                    <p class="event-description">Bring your team to the court for the most anticipated basketball championship of the year.</p>
-                    
-                    <div class="event-footer">
-                        <span class="event-price">Free</span>
-                        <a href="#" class="reg-btn">More details</a>
-                    </div>
-                </div>
-            </div>
-
+            <!-- Events rendered by JS -->
         </div>
     </div>
 
@@ -440,5 +350,140 @@
         <p>&copy; 2025 EventConnect. All rights reserved.</p>
     </footer>
 
+    <script>
+        let allEvents = [];
+
+        document.addEventListener('DOMContentLoaded', fetchEvents);
+
+        async function fetchEvents() {
+            const container = document.querySelector('.events-grid');
+            container.innerHTML = '<p style="color:white; text-align:center; grid-column: 1/-1;">Loading events...</p>';
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/events');
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        container.innerHTML = '<p style="color:white; text-align:center; font-size: 1.2rem; grid-column: 1/-1;">No events found. Be the first to create one!</p>';
+                        return;
+                    }
+                    throw new Error('Failed to fetch events');
+                }
+
+                allEvents = await response.json();
+
+                populateFilters();
+                renderEvents(allEvents);
+
+            } catch (error) {
+                console.error('Error fetching events:', error);
+                container.innerHTML = '<p style="color:#ff6b6b; text-align:center; font-weight:bold; grid-column: 1/-1;">Could not load events. Make sure the backend server and database are running!</p>';
+            }
+        }
+
+        function populateFilters() {
+            // Get unique colleges alphabetically sorted
+            const colleges = [...new Set(allEvents.map(e => e.college))].sort((a, b) => a.localeCompare(b));
+            const colSelect = document.getElementById("filterCollege");
+            colleges.forEach(c => {
+                const opt = document.createElement("option");
+                opt.value = c;
+                opt.textContent = c;
+                colSelect.appendChild(opt);
+            });
+        }
+
+        function renderEvents(eventsToRender) {
+            const container = document.querySelector('.events-grid');
+            container.innerHTML = '';
+
+            if (eventsToRender.length === 0) {
+                container.innerHTML = '<p style="color:white; text-align:center; grid-column: 1/-1;">No events match your filter criteria.</p>';
+                return;
+            }
+
+            eventsToRender.forEach(event => {
+                const card = document.createElement('div');
+                card.className = 'event-card';
+
+                const dateObj = new Date(event.event_date);
+                const dateStr = dateObj.toLocaleString('en-US', {
+                    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                });
+
+                const imgUrl = event.poster_url || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=800';
+                const price = event.entry_fee ? `₹${event.entry_fee}` : 'Free';
+                const regLink = event.registration_link || '#';
+
+                card.innerHTML = `
+                    <div class="event-image-container">
+                        <span class="event-tag">${event.category || 'Event'}</span>
+                        <img src="${imgUrl}" alt="${event.event_name}">
+                    </div>
+                    <div class="event-details">
+                        <div class="college-name">📍 ${event.college}</div>
+                        <h3 class="event-title">${event.event_name}</h3>
+                        
+                        <div class="info-row">
+                            <span class="label">Location</span>
+                            <span class="value">${event.location}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Date & Time</span>
+                            <span class="value">${dateStr}</span>
+                        </div>
+
+                        <p class="event-description">${event.description || 'No description provided.'}</p>
+                        
+                        <div class="event-footer">
+                            <span class="event-price">${price}</span>
+                            <a href="Event_Details.html?id=${event.id}" class="reg-btn">More Details</a>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function applyFilters() {
+            const search = document.getElementById("filterSearch").value.toLowerCase();
+            const category = document.getElementById("filterCategory").value.toLowerCase();
+            const college = document.getElementById("filterCollege").value;
+            const fee = document.getElementById("filterFee").value;
+
+            const filtered = allEvents.filter(e => {
+                const titleStr = (e.event_name || "").toLowerCase();
+                const colStr = (e.college || "").toLowerCase();
+                const locStr = (e.location || "").toLowerCase();
+
+                const matchSearch = search === "" || titleStr.includes(search) || colStr.includes(search) || locStr.includes(search);
+                const matchCat = category === "all" || (e.category || "").toLowerCase() === category;
+                const matchCol = college === "all" || e.college === college;
+
+                let matchFee = true;
+                if (fee === "free") matchFee = !e.entry_fee || e.entry_fee === 0;
+                if (fee === "paid") matchFee = e.entry_fee && e.entry_fee > 0;
+
+                return matchSearch && matchCat && matchCol && matchFee;
+            });
+
+            renderEvents(filtered);
+        }
+
+        function goToProfile(event) {
+            event.preventDefault();
+            const role = localStorage.getItem("user_role");
+            if (role === "student") {
+                window.location.href = "Student_Dashboard.html";
+            } else if (role === "organizer") {
+                window.location.href = "Organizer_Dashboard.html";
+            } else if (role === "admin") {
+                window.location.href = "Admin_Dashboard.html";
+            } else {
+                alert("Please login first based on your role.");
+            }
+        }
+    </script>
 </body>
+
 </html>

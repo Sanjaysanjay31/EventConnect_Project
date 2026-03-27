@@ -393,7 +393,7 @@
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 Home
             </a>
-            <a href="Student_Profile_2.html" class="nav-item active">
+            <a href="Student_Dashboard.html" class="nav-item active">
                 <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 Dashboard
             </a>
@@ -401,7 +401,7 @@
                 <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 Explore Events
             </a>
-            <a href="#" class="nav-item">
+            <a href="Student_Event_Registrations.html" class="nav-item">
                 <svg class="nav-icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                 Registrations
             </a>
@@ -475,27 +475,27 @@
         <section class="stats-grid">
             <div class="panel stat-card" style="border-color: var(--accent-green);">
                 <p class="stat-label" style="color: var(--accent-green);">Total Events</p>
-                <h3 class="stat-value">30</h3>
+                <h3 class="stat-value" id="stat-total-events">--</h3>
             </div>
             <div class="panel stat-card" style="border-color: var(--accent-purple);">
                 <p class="stat-label" style="color: var(--accent-purple);">Registered</p>
-                <h3 class="stat-value">15</h3>
+                <h3 class="stat-value" id="stat-registered">--</h3>
             </div>
             <div class="panel stat-card" style="border-color: var(--accent-yellow);">
                 <p class="stat-label" style="color: var(--accent-yellow);">Upcoming</p>
-                <h3 class="stat-value">10</h3>
+                <h3 class="stat-value" id="stat-upcoming">--</h3>
             </div>
             <div class="panel stat-card" style="border-color: var(--accent-blue);">
                 <p class="stat-label" style="color: var(--accent-blue);">Participated</p>
-                <h3 class="stat-value">12</h3>
+                <h3 class="stat-value" id="stat-participated">--</h3>
             </div>
             <div class="panel stat-card" style="border-color: var(--accent-orange);">
                 <p class="stat-label" style="color: var(--accent-orange);">Winnings</p>
-                <h3 class="stat-value">03</h3>
+                <h3 class="stat-value" id="stat-winnings">--</h3>
             </div>
             <div class="panel stat-card" style="border-color: var(--accent-rose);">
                 <p class="stat-label" style="color: var(--accent-rose);">External</p>
-                <h3 class="stat-value">08</h3>
+                <h3 class="stat-value" id="stat-external">--</h3>
             </div>
         </section>
 
@@ -515,18 +515,9 @@
                             <th style="text-align: right;">Status</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="registered-events-table">
                         <tr>
-                            <td style="font-weight: 600;">Tech Fest 2026</td>
-                            <td style="color: var(--text-dim);">15 Mar 2026</td>
-                            <td style="color: var(--text-muted); font-size: 12px;">Technical</td>
-                            <td style="text-align: right;"><span class="badge badge-confirmed">CONFIRMED</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 600;">Cultural Night</td>
-                            <td style="color: var(--text-dim);">20 Mar 2026</td>
-                            <td style="color: var(--text-muted); font-size: 12px;">Cultural</td>
-                            <td style="text-align: right;"><span class="badge badge-pending">PENDING</span></td>
+                            <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 30px;">Loading your registrations...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -644,13 +635,73 @@
                 }
             });
 
+            fetch(`http://127.0.0.1:8000/events`)
+                .then(res => res.json())
+                .then(events => {
+                    if (events && !events.detail) {
+                        document.getElementById("stat-total-events").textContent = events.length;
+                    }
+                })
+                .catch(err => console.error("Could not load total events count.", err));
+
+            // =========================
+            // FETCH STUDENT REGISTRATIONS
+            // =========================
+            fetch(`http://127.0.0.1:8000/user/${userId}/registrations`)
+                .then(res => res.json())
+                .then(data => {
+                    const tbody = document.getElementById("registered-events-table");
+                    tbody.innerHTML = "";
+
+                    if (!data || data.length === 0 || data.detail) {
+                        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 30px;">You haven't registered for any events yet.</td></tr>`;
+                        document.getElementById("stat-registered").textContent = "0";
+                        document.getElementById("stat-upcoming").textContent = "0";
+                        document.getElementById("stat-participated").textContent = "0";
+                        return;
+                    }
+
+                    // Populate Table
+                    data.forEach(reg => {
+                        const tr = document.createElement("tr");
+                        const dateStr = reg.event_date ? new Date(reg.event_date).toLocaleDateString() : 'TBD';
+                        const badgeClass = reg.status && reg.status.toLowerCase() === 'confirmed' ? 'badge-confirmed' : 'badge-pending';
+                        
+                        tr.innerHTML = `
+                            <td style="font-weight: 600;">${reg.event_name}</td>
+                            <td style="color: var(--text-dim);">${dateStr}</td>
+                            <td style="color: var(--text-muted); font-size: 12px; text-transform: capitalize;">${reg.category}</td>
+                            <td style="text-align: right;"><span class="badge ${badgeClass}">${(reg.status || 'PENDING').toUpperCase()}</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+
+                    // Update stats
+                    document.getElementById("stat-registered").textContent = data.length;
+                    
+                    const upcoming = data.filter(r => r.event_date && new Date(r.event_date) > new Date()).length;
+                    document.getElementById("stat-upcoming").textContent = upcoming;
+                    
+                    const participated = data.filter(r => r.event_date && new Date(r.event_date) <= new Date()).length;
+                    document.getElementById("stat-participated").textContent = participated;
+                })
+                .catch(err => {
+                    console.error("Failed to load registrations:", err);
+                    document.getElementById("registered-events-table").innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 30px;">Failed to load registrations.</td></tr>`;
+                });
+
             // =========================
             // OPTIONAL: CLICK EVENT ROWS
             // =========================
-            document.querySelectorAll("tbody tr").forEach(row => {
-                row.addEventListener("click", () => {
-                    const eventName = row.cells[0].innerText;
-                    console.log("Clicked event:", eventName);
+            document.querySelectorAll("tbody").forEach(tbody => {
+                tbody.addEventListener("click", (e) => {
+                    const row = e.target.closest('tr');
+                    if (row) {
+                        const cell = row.cells[0];
+                        if (cell) {
+                            console.log("Clicked event:", cell.innerText);
+                        }
+                    }
                 });
             });
         });

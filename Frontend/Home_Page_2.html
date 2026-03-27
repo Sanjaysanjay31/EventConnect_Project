@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Event Registration Portal</title>
@@ -7,15 +8,17 @@
     <link rel="stylesheet" href="Bubble_Background.css">
     <link rel="stylesheet" href="Global_Components.css">
 </head>
+
 <body>
 
     <!-- Navbar -->
-   <nav class="navbar">
-        <div class="logo"><h1>🎓 EventConnect</h1></div>
+    <nav class="navbar">
+        <div class="logo">
+            <h1>EventConnect 🎓</h1>
+        </div>
         <ul class="nav-links">
             <li><a href="Home_Page_2.html">Home</a></li>
             <li><a href="Events_Page.html">Events</a></li>
-            <li><a href="#">Contact</a></li>
             <div class="dropdown">
                 <a href="#" class="login-btn"><b>Login</b></a>
                 <div class="dropdown-card">
@@ -33,11 +36,14 @@
                     <a href="Organizer_Registration.html" class="hub-btn">Organizer Registration</a>
                 </div>
             </li>
+            <li>
+                <a href="#" onclick="goToProfile(event)" class="login-btn"><b>Profile</b></a>
+            </li>
         </ul>
     </nav>
 
-   <!--Hero Section-->
-   <section class="hero">
+    <!--Hero Section-->
+    <section class="hero">
         <div class="hero-bg-shapes">
             <div class="shape shape-1"></div>
             <div class="shape shape-2"></div>
@@ -65,7 +71,8 @@
             <h1 class="animate-text">Welcome to <span>EventConnect</span></h1>
             <p class="tagline animate-text-delay">Your Smart & Simple Event Registration Platform</p>
             <p class="description animate-text-delay-2">
-                Discover, Register, and Participate in the most exciting Technical, Cultural, and Sports events across campus.
+                Discover, Register, and Participate in the most exciting Technical, Cultural, and Sports events across
+                campus.
             </p>
             <div class="hero-btns">
                 <a href="Events_Page.html" class="btn primary-btn">Explore Events</a>
@@ -99,12 +106,14 @@
             Get ready for an immersive experience featuring keynote speakers,
             workshops, and networking sessions
         </p>
-        
-        <!--Event Name-->
-          <div class="event-name">
-            <h3><u>Event Name :</u> ⚡ Thunder Thursday</h3>
-          </div>
 
+        <!--Event Name-->
+        <div class="event-name" style="text-align: center; margin-top: 20px;">
+            <h3
+                style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 10px 30px rgba(59, 130, 246, 0.3); display: inline-block;">
+                <span id="upcoming-event-name">Loading Next Event...</span>
+            </h3>
+        </div>
 
         <!-- Countdown Box -->
         <div class="countdown-container">
@@ -112,22 +121,22 @@
 
             <div class="countdown">
                 <div class="time-box">
-                    <span>03</span>
+                    <span id="timer-days">00</span>
                     <p>Days</p>
                 </div>
 
                 <div class="time-box">
-                    <span>00</span>
+                    <span id="timer-hours">00</span>
                     <p>Hours</p>
                 </div>
 
                 <div class="time-box">
-                    <span>00</span>
+                    <span id="timer-minutes">00</span>
                     <p>Minutes</p>
                 </div>
 
                 <div class="time-box">
-                    <span>00</span>
+                    <span id="timer-seconds">00</span>
                     <p>Seconds</p>
                 </div>
             </div>
@@ -138,44 +147,51 @@
 
             <div class="info-card">
                 <h4>📅 Date</h4>
-                <p>February 19 , 2026</p>
+                <p id="upcoming-date">...</p>
             </div>
 
             <div class="info-card">
                 <h4>🕑 Time</h4>
-                <p>3:00 - 4:30 PM</p>
+                <p id="upcoming-time">...</p>
+            </div>
+
+            <div class="info-card">
+                <h4>🏢 Collage</h4>
+                <p id="upcoming-location">...</p>
             </div>
 
             <div class="info-card">
                 <h4>📍 Location</h4>
-                <p>Aditya University,<br>
-                 Surampalem,<br>
-                 Andhra Pradesh</p>
+                <p id="upcoming-venue">...</p>
             </div>
 
-            <div class="info-card">
-                <h4>🏢 Venue</h4>
-                <p>Gallery</p>
-            </div>
+        </div>
 
+        <div style="text-align: center; margin-top: 50px; animation: fadeInUp 0.8s ease-out;">
+            <a href="" id="upcoming-event-link"
+                style="background: linear-gradient(135deg, #f59e0b, #f05c5c); color: white; padding: 18px 40px; border-radius: 50px; font-size: 1.15rem; font-weight: 700; text-decoration: none; display: none; box-shadow: 0 12px 30px rgba(239, 68, 68, 0.3); transition: transform 0.3s ease;">
+                More Details : Full details of event and registration 🚀
+            </a>
         </div>
 
     </section>
 
 
-   
+
     <!-- Why EventConnect Section -->
     <section class="details">
         <h2>Why Choose EventConnect?</h2>
         <div class="benefits-container">
             <div class="benefit-box">
                 <h3>🚀 Easy Registration</h3>
-                <p>Register for technical, cultural, and sports events quickly with a simple and user-friendly interface.</p>
+                <p>Register for technical, cultural, and sports events quickly with a simple and user-friendly
+                    interface.</p>
             </div>
 
             <div class="benefit-box">
                 <h3>📊 Smart Event Management</h3>
-                <p>Organizers can easily manage participants, track registrations, and maintain event records efficiently.</p>
+                <p>Organizers can easily manage participants, track registrations, and maintain event records
+                    efficiently.</p>
             </div>
 
 
@@ -198,28 +214,110 @@
             <div>
                 <h3><u>About EventConnect</u></h3>
                 <p>EventConnect helps students discover technical, cultural, and sports events easily.<br>
-            Register online, get updates, and participate without hassle.<br>
-            EventConnect is a modern web-based platform designed to simplify event registration and management.</p>
+                    Register online, get updates, and participate without hassle.<br>
+                    EventConnect is a modern web-based platform designed to simplify event registration and management.
+                </p>
             </div>
 
             <div>
                 <h3><u>Popular Link</u></h3>
-                <p>Event Details</p>
-                <p>Register Now</p>
-                <p>Contact Us</p>
+                <a href="Events_Page.html" style="font-weight: 600; color: #fbf7f7;text-decoration: none">Explore Events</a><br>
+                <a href="Home_Page_2.html" style="font-weight: 600; color: #fbf7f7;text-decoration: none">Home</a><br>
+                <a href="#" onclick="goToProfile(event)" style="font-weight: 400; color: #fbf7f7;text-decoration: none"><b>Profile</b></a>
+
             </div>
 
             <div>
                 <h3><u>Contact Info</u></h3>
-                <p>123 Tech Street, Innovation City</p>
-                <p>(+91) 6484528452</p>
-                <p>events@eventconnect.com</p>
+                <p>K Sanjay</p>
+                <p> +91 8978806254</p>
+                <p>Kattasanjay31@gmail.com</p>
+                <p>Aditya University , Surampalem</p>
             </div>
         </div>
 
-        
-    </footer>
-    
 
+    </footer>
+
+    <script>
+        let countdownTimer;
+
+        async function fetchUpcomingEvent() {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/events');
+                if (!response.ok) return;
+                const events = await response.json();
+
+                const now = new Date();
+                const upcomingEvents = events.filter(e => new Date(e.event_date) > now);
+
+                if (upcomingEvents.length === 0) {
+                    document.getElementById('upcoming-event-name').innerText = "No upcoming events soon";
+                    return;
+                }
+
+                upcomingEvents.sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
+                const nextEvent = upcomingEvents[0];
+                const eventDateMs = new Date(nextEvent.event_date).getTime();
+
+                document.getElementById('upcoming-event-name').innerText = nextEvent.event_name || 'Event';
+
+                const ctaBtn = document.getElementById('upcoming-event-link');
+                ctaBtn.href = `Event_Details.html?id=${nextEvent.id}`;
+                ctaBtn.style.display = "inline-block";
+
+                const dObj = new Date(nextEvent.event_date);
+                document.getElementById('upcoming-date').innerText = dObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                document.getElementById('upcoming-time').innerText = dObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                document.getElementById('upcoming-location').innerText = nextEvent.college || 'N/A';
+                document.getElementById('upcoming-venue').innerText = nextEvent.location || 'N/A';
+
+                if (countdownTimer) clearInterval(countdownTimer);
+                countdownTimer = setInterval(() => {
+                    const currentTime = new Date().getTime();
+                    const distance = eventDateMs - currentTime;
+
+                    if (distance <= 0) {
+                        clearInterval(countdownTimer);
+                        document.getElementById('timer-days').innerText = "00";
+                        document.getElementById('timer-hours').innerText = "00";
+                        document.getElementById('timer-minutes').innerText = "00";
+                        document.getElementById('timer-seconds').innerText = "00";
+                        return;
+                    }
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    document.getElementById('timer-days').innerText = days.toString().padStart(2, '0');
+                    document.getElementById('timer-hours').innerText = hours.toString().padStart(2, '0');
+                    document.getElementById('timer-minutes').innerText = minutes.toString().padStart(2, '0');
+                    document.getElementById('timer-seconds').innerText = seconds.toString().padStart(2, '0');
+                }, 1000);
+
+            } catch (err) {
+                console.error("Error fetching future events:", err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchUpcomingEvent);
+
+        function goToProfile(event) {
+            event.preventDefault();
+            const role = localStorage.getItem("user_role");
+            if (role === "student") {
+                window.location.href = "Student_Dashboard.html";
+            } else if (role === "organizer") {
+                window.location.href = "Organizer_Dashboard.html";
+            } else if (role === "admin") {
+                window.location.href = "Admin_Dashboard.html";
+            } else {
+                alert("Please login first based on your role.");
+            }
+        }
+    </script>
 </body>
+
 </html>
