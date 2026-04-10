@@ -59,14 +59,20 @@ class EventCreate(BaseModel):
 
 
 class OTPRequest(BaseModel):
-    identifier: str
+    email: str
+    user_id: str
+    role: str
 
 class OTPVerify(BaseModel):
-    identifier: str
+    email: str
+    user_id: str
+    role: str
     otp: str
 
 class ResetPassword(BaseModel):
-    identifier: str
+    email: str
+    user_id: str
+    role: str
     new_password: str
 
 class EventUpdate(BaseModel):

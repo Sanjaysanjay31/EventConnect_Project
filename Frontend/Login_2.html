@@ -184,6 +184,56 @@
         .box-footer a:hover {
             text-decoration: underline;
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 2000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.5); 
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .modal-content h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .close {
+            color: #aaa;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover, .close:focus {
+            color: #ca202b;
+            text-decoration: none;
+        }
+
+        #otpSection, #passwordSection {
+            display: none;
+        }
     </style>
 </head>
 
@@ -235,7 +285,7 @@
             </form>
             <div class="box-footer">
                 <p>New here? <a href="Student_Registration.html">Create Account</a></p>
-                <p><a href="#">Forgot Password?</a></p>
+                <p><a href="#" onclick="openForgotPassword('student')">Forgot Password?</a></p>
             </div>
         </div>
 
@@ -255,6 +305,7 @@
             </form>
             <div class="box-footer">
                 <p>Need access? <a href="Organizer_Registration.html">Register Hub</a></p>
+                <p><a href="#" onclick="openForgotPassword('organizer')">Forgot Password?</a></p>
             </div>
         </div>
 
@@ -277,6 +328,48 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeForgotPassword()">&times;</span>
+            <h3 id="modalTitle">Reset Password</h3>
+            
+            <form id="forgotPasswordForm">
+                <div id="requestOtpSection">
+                    <div class="input-group">
+                        <label>ID (Roll No / Organizer ID)</label>
+                        <input type="text" id="fpUserId" placeholder="Enter your ID" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" id="fpEmail" placeholder="Enter your Email" required>
+                    </div>
+                    <button type="button" class="login-btn submit-btn" onclick="requestOtp()">Send OTP</button>
+                </div>
+
+                <div id="otpSection">
+                    <div class="input-group">
+                        <label>Enter OTP</label>
+                        <input type="text" id="fpOtp" placeholder="6-digit OTP">
+                    </div>
+                    <button type="button" class="login-btn submit-btn" onclick="verifyOtp()">Verify OTP</button>
+                </div>
+
+                <div id="passwordSection">
+                    <div class="input-group">
+                        <label>New Password</label>
+                        <input type="password" id="fpNewPassword" placeholder="••••••••">
+                    </div>
+                    <div class="input-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="fpConfirmPassword" placeholder="••••••••">
+                    </div>
+                    <button type="button" class="login-btn submit-btn" onclick="resetPassword()">Reset Password</button>
+                </div>
+            </form>
+        </div>
     </div>
 
 
@@ -391,6 +484,112 @@
                     });
 
             });
+
+        // -------------------------
+        // Forgot Password Logic
+        // -------------------------
+        let fpRole = "";
+
+        function openForgotPassword(role) {
+            fpRole = role;
+            document.getElementById("forgotPasswordModal").style.display = "block";
+            document.getElementById("modalTitle").innerText = (role === 'student' ? 'Student' : 'Organizer') + " Password Reset";
+            
+            // Reset modal sections
+            document.getElementById("requestOtpSection").style.display = "block";
+            document.getElementById("otpSection").style.display = "none";
+            document.getElementById("passwordSection").style.display = "none";
+            document.getElementById("forgotPasswordForm").reset();
+        }
+
+        function closeForgotPassword() {
+            document.getElementById("forgotPasswordModal").style.display = "none";
+        }
+
+        // Close modal if clicked outside
+        window.onclick = function(event) {
+            const modal = document.getElementById("forgotPasswordModal");
+            if (event.target == modal) {
+                closeForgotPassword();
+            }
+        }
+
+        async function requestOtp() {
+            const userId = document.getElementById("fpUserId").value.trim();
+            const email = document.getElementById("fpEmail").value.trim();
+            if(!userId || !email) return alert("Please enter both ID and Email");
+
+            try {
+                const res = await fetch("http://127.0.0.1:8000/send-otp", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ user_id: userId, email: email, role: fpRole })
+                });
+                const data = await res.json();
+                if(res.ok) {
+                    alert("OTP sent to your email!");
+                    document.getElementById("requestOtpSection").style.display = "none";
+                    document.getElementById("otpSection").style.display = "block";
+                } else {
+                    alert(data.detail || "Error sending OTP");
+                }
+            } catch (err) {
+                alert("Network error: " + err.message);
+            }
+        }
+
+        async function verifyOtp() {
+            const userId = document.getElementById("fpUserId").value.trim();
+            const email = document.getElementById("fpEmail").value.trim();
+            const otp = document.getElementById("fpOtp").value.trim();
+            if(!otp) return alert("Please enter OTP");
+
+            try {
+                const res = await fetch("http://127.0.0.1:8000/verify-otp", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ user_id: userId, email: email, role: fpRole, otp: otp })
+                });
+                const data = await res.json();
+                if(res.ok) {
+                    alert("OTP verified successfully!");
+                    document.getElementById("otpSection").style.display = "none";
+                    document.getElementById("passwordSection").style.display = "block";
+                } else {
+                    alert(data.detail || "Invalid OTP");
+                }
+            } catch (err) {
+                alert("Network error: " + err.message);
+            }
+        }
+
+        async function resetPassword() {
+            const userId = document.getElementById("fpUserId").value.trim();
+            const email = document.getElementById("fpEmail").value.trim();
+            const newPassword = document.getElementById("fpNewPassword").value.trim();
+            const confirmPassword = document.getElementById("fpConfirmPassword").value.trim();
+            
+            if(!newPassword || !confirmPassword) return alert("Please enter passwords");
+            if(newPassword !== confirmPassword) return alert("Passwords do not match");
+            if(newPassword.length < 6) return alert("Password must be at least 6 characters");
+
+            try {
+                const res = await fetch("http://127.0.0.1:8000/reset-password", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ user_id: userId, email: email, role: fpRole, new_password: newPassword })
+                });
+                const data = await res.json();
+                if(res.ok) {
+                    alert("Password reset successfully! You can now login.");
+                    closeForgotPassword();
+                } else {
+                    alert(data.detail || "Error resetting password");
+                }
+            } catch (err) {
+                alert("Network error: " + err.message);
+            }
+        }
 
     </script>
 </body>

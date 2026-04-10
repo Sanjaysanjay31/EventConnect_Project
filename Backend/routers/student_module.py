@@ -259,30 +259,36 @@ async def update_profile(
 @router.post("/send-otp")
 def send_otp(data: schemas.OTPRequest, db: Session = Depends(get_db)):
 
-    user = db.query(models.User).filter(
-        or_(
-            models.User.email == data.identifier,
-            models.User.phone_number == data.identifier
-        )
-    ).first()
+    if data.role == "student":
+        user = db.query(models.User).filter(
+            models.User.email == data.email,
+            models.User.student_id == data.user_id
+        ).first()
+    elif data.role == "organizer":
+        user = db.query(models.Organizer).filter(
+            models.Organizer.email == data.email,
+            models.Organizer.organizer_id == data.user_id
+        ).first()
+    else:
+        raise HTTPException(status_code=400, detail="Invalid role")
 
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    if "@" not in data.identifier:
-        raise HTTPException(status_code=400, detail="Use email for OTP")
+        raise HTTPException(status_code=404, detail="User not found with provided ID and Email")
     
+    otp_key = f"{data.role}:{data.email}"
+
     # simple rate-limit
-    if data.identifier in otp_store:
-        _, old_exp = otp_store[data.identifier]
+    if otp_key in otp_store:
+        _, old_exp = otp_store[otp_key]
         if datetime.utcnow() < old_exp:
             raise HTTPException(status_code=429, detail="Wait before requesting again")
 
     otp = str(random.randint(100000, 999999))
     expiry = datetime.utcnow() + timedelta(minutes=OTP_EXPIRY_MINUTES)
 
-    otp_store[data.identifier] = (otp, expiry)
+    otp_store[otp_key] = (otp, expiry)
 
-    send_email_otp(data.identifier, otp)
+    send_email_otp(data.email, otp)
 
     return {"message": "OTP sent successfully"}
 
@@ -292,8 +298,9 @@ def send_otp(data: schemas.OTPRequest, db: Session = Depends(get_db)):
 # ===============================
 @router.post("/verify-otp")
 def verify_otp(data: schemas.OTPVerify):
-
-    record = otp_store.get(data.identifier)
+    
+    otp_key = f"{data.role}:{data.email}"
+    record = otp_store.get(otp_key)
 
     if not record:
         raise HTTPException(status_code=400, detail="OTP not found")
@@ -301,7 +308,7 @@ def verify_otp(data: schemas.OTPVerify):
     otp, expiry = record
 
     if datetime.utcnow() > expiry:
-        otp_store.pop(data.identifier)
+        otp_store.pop(otp_key)
         raise HTTPException(status_code=400, detail="OTP expired")
 
     if otp != data.otp:
@@ -315,26 +322,36 @@ def verify_otp(data: schemas.OTPVerify):
 # ===============================
 @router.post("/reset-password")
 def reset_password(data: schemas.ResetPassword, db: Session = Depends(get_db)):
-
-    record = otp_store.get(data.identifier)
+    
+    otp_key = f"{data.role}:{data.email}"
+    record = otp_store.get(otp_key)
 
     if not record:
         raise HTTPException(status_code=400, detail="Verify OTP first")
 
-    user = db.query(models.User).filter(
-        or_(
-            models.User.email == data.identifier,
-            models.User.phone_number == data.identifier
-        )
-    ).first()
+    if data.role == "student":
+        user = db.query(models.User).filter(
+            models.User.email == data.email,
+            models.User.student_id == data.user_id
+        ).first()
+    elif data.role == "organizer":
+        user = db.query(models.Organizer).filter(
+            models.Organizer.email == data.email,
+            models.Organizer.organizer_id == data.user_id
+        ).first()
+    else:
+        raise HTTPException(status_code=400, detail="Invalid role")
 
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    user.hashed_password = pwd_context.hash(data.new_password)
+    if data.role == "student":
+        user.hashed_password = pwd_context.hash(data.new_password)
+    else:
+        user.password = pwd_context.hash(data.new_password)
 
     # 🔥 Remove OTP after use
-    otp_store.pop(data.identifier)
+    otp_store.pop(otp_key)
 
     db.commit()
     db.refresh(user)
