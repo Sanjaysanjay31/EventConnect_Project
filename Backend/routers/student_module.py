@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException , Form , File , UploadFile
 from sqlalchemy.orm import Session
 from database import SessionLocal , supabase ,SUPABASE_URL , SUPABASE_KEY
 from passlib.context import CryptContext
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 from datetime import datetime,timedelta
 import random , os , uuid , models , schemas
 from sendgrid import SendGridAPIClient
@@ -261,13 +261,13 @@ def send_otp(data: schemas.OTPRequest, db: Session = Depends(get_db)):
 
     if data.role == "student":
         user = db.query(models.User).filter(
-            models.User.email == data.email,
-            models.User.student_id == data.user_id
+            func.lower(models.User.email) == func.lower(data.email),
+            func.lower(models.User.student_id) == func.lower(data.user_id)
         ).first()
     elif data.role == "organizer":
         user = db.query(models.Organizer).filter(
-            models.Organizer.email == data.email,
-            models.Organizer.organizer_id == data.user_id
+            func.lower(models.Organizer.email) == func.lower(data.email),
+            func.lower(models.Organizer.organizer_id) == func.lower(data.user_id)
         ).first()
     else:
         raise HTTPException(status_code=400, detail="Invalid role")
@@ -331,13 +331,13 @@ def reset_password(data: schemas.ResetPassword, db: Session = Depends(get_db)):
 
     if data.role == "student":
         user = db.query(models.User).filter(
-            models.User.email == data.email,
-            models.User.student_id == data.user_id
+            func.lower(models.User.email) == func.lower(data.email),
+            func.lower(models.User.student_id) == func.lower(data.user_id)
         ).first()
     elif data.role == "organizer":
         user = db.query(models.Organizer).filter(
-            models.Organizer.email == data.email,
-            models.Organizer.organizer_id == data.user_id
+            func.lower(models.Organizer.email) == func.lower(data.email),
+            func.lower(models.Organizer.organizer_id) == func.lower(data.user_id)
         ).first()
     else:
         raise HTTPException(status_code=400, detail="Invalid role")
