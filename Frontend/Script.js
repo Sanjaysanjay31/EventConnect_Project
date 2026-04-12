@@ -1,0 +1,1 @@
+const BASE_URL = "https://eventconnect-z0gu.onrender.com";

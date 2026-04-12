@@ -493,6 +493,7 @@
         </div>
     </main>
 
+    <script src="Script.js"></script>
     <script>
         let participantsData = [];
         let currentFilteredData = [];
@@ -515,14 +516,14 @@
 
             try {
                 // Fetch Events to populate Event filter fully
-                const evtRes = await fetch(`http://127.0.0.1:8000/organizer/${userId}/events`);
+                const evtRes = await fetch(`${BASE_URL}/organizer/${userId}/events`);
                 if (evtRes.ok) {
                     eventsList = await evtRes.json();
                     eventsList.sort((a, b) => a.event_name.localeCompare(b.event_name));
                 }
 
                 // Fetch registered participants
-                const pRes = await fetch(`http://127.0.0.1:8000/organizer/${userId}/participants`);
+                const pRes = await fetch(`${BASE_URL}/organizer/${userId}/participants`);
                 if (pRes.ok) {
                     participantsData = await pRes.json();
                     currentFilteredData = participantsData;

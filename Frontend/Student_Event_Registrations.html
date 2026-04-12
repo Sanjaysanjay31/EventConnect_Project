@@ -349,6 +349,8 @@
 
     </main>
 
+
+    <script src="Script.js"></script>
     <script>
        document.addEventListener("DOMContentLoaded", function () {
             console.log("Registrations page loaded successfully.");
@@ -369,7 +371,7 @@
             // =========================
             // FETCH STUDENT REGISTRATIONS
             // =========================
-            fetch(`http://127.0.0.1:8000/user/${userId}/registrations`)
+            fetch(`${BASE_URL}/user/${userId}/registrations`)
                 .then(res => res.json())
                 .then(data => {
                     const tbody = document.getElementById("registered-events-table");

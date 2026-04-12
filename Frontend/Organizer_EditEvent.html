@@ -626,6 +626,7 @@
         </form>
     </div>
 
+    <script src="Script.js"></script>
     <script>
         let base64PosterUrl = null;
         let eventIdToEdit = null;
@@ -645,7 +646,7 @@
 
         async function loadEventData(id) {
             try {
-                const res = await fetch(`http://127.0.0.1:8000/events/${id}`);
+                const res = await fetch(`${BASE_URL}/events/${id}`);
                 if (!res.ok) throw new Error("Event not found");
 
                 const event = await res.json();
@@ -753,7 +754,7 @@
             }
 
             try {
-                const response = await fetch(`http://127.0.0.1:8000/events/${eventIdToEdit}`, {
+                const response = await fetch(`${BASE_URL}/events/${eventIdToEdit}`, {
                     method: 'PUT',
                     body: formData
                 });

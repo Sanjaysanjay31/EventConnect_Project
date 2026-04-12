@@ -370,7 +370,7 @@
             </div>
         </div>
     </div>
-
+    <script src="Script.js"></script>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const eventId = urlParams.get('id');
@@ -384,7 +384,7 @@
             }
 
             try {
-                const response = await fetch(`http://127.0.0.1:8000/events/${eventId}`);
+                const response = await fetch(`${BASE_URL}/events/${eventId}`);
                 if (!response.ok) {
                     throw new Error("Event not found or server error.");
                 }
@@ -453,7 +453,7 @@
             btn.disabled = true;
 
             try {
-                const res = await fetch(`http://127.0.0.1:8000/events/${eventId}/register`, {
+                const res = await fetch(`${BASE_URL}/events/${eventId}/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ user_id: parseInt(userId), event_id: parseInt(eventId) })

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from database import SessionLocal , supabase ,SUPABASE_URL , SUPABASE_KEY
 from passlib.context import CryptContext
 from sqlalchemy import or_, func
-from datetime import datetime,timedelta
+from datetime import datetime,timedelta, timezone
 import random , os , uuid , models , schemas
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
@@ -34,7 +34,7 @@ SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 # OTP STORE (with expiry)
 # ===============================
 otp_store = {}  # {identifier: (otp, expiry_time)}
-OTP_EXPIRY_MINUTES = 1
+OTP_EXPIRY_MINUTES = 4
 
 # =========================
 # SEND EMAIL (SendGrid)
@@ -97,7 +97,9 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
     return {
         "message": "User registered successfully",
-        "student_id": new_user.id
+        "student_id": new_user.id,
+        "user_id":new_user.student_id,
+        "role":"student"
     }
 
 # Student Login
@@ -121,8 +123,10 @@ def login(user: schemas.Login, db: Session = Depends(get_db)):
     return {
         "message": "Login successful",
         "id": db_user.id,
+        "user_id": db_user.student_id,
         "full_name": db_user.full_name,
-        "email":db_user.email
+        "email":db_user.email,
+        "role":"student"
     }
 
 
@@ -280,11 +284,11 @@ def send_otp(data: schemas.OTPRequest, db: Session = Depends(get_db)):
     # simple rate-limit
     if otp_key in otp_store:
         _, old_exp = otp_store[otp_key]
-        if datetime.utcnow() < old_exp:
+        if datetime.now(timezone.utc) < old_exp:
             raise HTTPException(status_code=429, detail="Wait before requesting again")
 
     otp = str(random.randint(100000, 999999))
-    expiry = datetime.utcnow() + timedelta(minutes=OTP_EXPIRY_MINUTES)
+    expiry = datetime.now(timezone.utc) + timedelta(minutes=OTP_EXPIRY_MINUTES)
 
     otp_store[otp_key] = (otp, expiry)
 
@@ -307,7 +311,7 @@ def verify_otp(data: schemas.OTPVerify):
 
     otp, expiry = record
 
-    if datetime.utcnow() > expiry:
+    if datetime.now(timezone.utc) > expiry:
         otp_store.pop(otp_key)
         raise HTTPException(status_code=400, detail="OTP expired")
 

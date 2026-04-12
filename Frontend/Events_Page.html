@@ -297,7 +297,6 @@
                     <div class="arrow-up"></div>
                     <a href="Login_2.html?role=student" class="hub-btn">Student Login</a>
                     <a href="Login_2.html?role=organizer" class="hub-btn">Organizer Login</a>
-                    <a href="Login_2.html?role=admin" class="hub-btn">Admin Login</a>
                 </div>
             </div>
             <li class="dropdown">
@@ -350,6 +349,8 @@
         <p>&copy; 2025 EventConnect. All rights reserved.</p>
     </footer>
 
+
+    <script src="Script.js"></script>
     <script>
         let allEvents = [];
 
@@ -360,7 +361,7 @@
             container.innerHTML = '<p style="color:white; text-align:center; grid-column: 1/-1;">Loading events...</p>';
 
             try {
-                const response = await fetch('http://127.0.0.1:8000/events');
+                const response = await fetch(`${BASE_URL}/events`);
 
                 if (!response.ok) {
                     if (response.status === 404) {

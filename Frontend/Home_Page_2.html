@@ -247,13 +247,13 @@
 
 
     </footer>
-
+    <script src="Script.js"></script>
     <script>
         let countdownTimer;
 
         async function fetchUpcomingEvent() {
             try {
-                const response = await fetch('http://127.0.0.1:8000/events');
+                const response = await fetch(`${BASE_URL}/events`);
                 if (!response.ok) return;
                 const events = await response.json();
 

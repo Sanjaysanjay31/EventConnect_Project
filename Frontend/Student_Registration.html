@@ -313,7 +313,7 @@
     </form>
 </div>
 
-
+    <script src="Script.js"></script>
     <script>
         const registrationForm = document.querySelector('form');
 
@@ -343,7 +343,7 @@
 
             try {
                 // 3. Send data to FastAPI (running on port 8000)
-                const response = await fetch('http://127.0.0.1:8000/Student_register', {
+                const response = await fetch(`${BASE_URL}/Student_register`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

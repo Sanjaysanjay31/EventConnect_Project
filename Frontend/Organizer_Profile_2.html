@@ -971,8 +971,9 @@
 
     <div id="toast-container"></div>
 
+    <script src="Script.js"></script>
     <script>
-        const API_BASE = "http://127.0.0.1:8000";
+        const API_BASE = "https://eventconnect-z0gu.onrender.com";
 
         // ===============================
         // 🚀 INIT (ONLY ONCE)
@@ -995,6 +996,8 @@
             if (el) el.innerText = val || "";
         };
 
+
+        
         // ===============================
         // 🔐 LOAD PROFILE
         // ===============================
@@ -1018,7 +1021,7 @@
                 setText("display-bio", user.bio);
 
                 setText("display-id", user.user_id);
-
+                localStorage.setItem("organizer_id", user.user_id);
                 setVal("input-name", user.name);
                 setVal("input-email", user.email);
                 setVal("input-phone", user.phone);
@@ -1143,16 +1146,19 @@
         async function handleUpdatePasswordMain() {
             const userId = localStorage.getItem("user_id");
 
+            const currentPass = getVal("cur-pass");   // ✅ ADD THIS INPUT
             const newPass = getVal("new-pass-main");
             const confirmPass = getVal("conf-pass-main");
 
+            if (!currentPass) return showToast("Enter current password", "error");
             if (!newPass) return showToast("Enter new password", "error");
             if (newPass.length < 6) return showToast("Min 6 characters", "error");
             if (newPass !== confirmPass) return showToast("Passwords do not match", "error");
 
             try {
                 const formData = new FormData();
-                formData.append("password", newPass);
+                formData.append("current_password", currentPass);  // ✅ REQUIRED
+                formData.append("new_password", newPass);          // ✅ REQUIRED
 
                 const res = await fetch(`${API_BASE}/update-organizer/${userId}`, {
                     method: "PATCH",
@@ -1161,6 +1167,7 @@
 
                 if (res.ok) {
                     showToast("Password updated");
+                    setVal("cur-pass", "");
                     setVal("new-pass-main", "");
                     setVal("conf-pass-main", "");
                 } else {
@@ -1193,38 +1200,51 @@
         // ===============================
         async function openResetModal() {
 
-            const email = document.getElementById("input-email").value.trim();
-            const phone = document.getElementById("input-phone").value.trim();
+            const email = document.getElementById("input-email")?.value.trim();
+            const user_id = localStorage.getItem("organizer_id");
+            const role_name = localStorage.getItem("role_name");
+            // ✅ Validation
+            if (!email) return alert("Please enter your email");
+            if (!email.includes("@")) return alert("Enter a valid email");
 
-            recoveryValue = (recoveryType === "email") ? email : phone;
-
-            if (!recoveryValue) {
-                return alert(`Please enter your ${recoveryType}`);
-            }
+            if (!user_id) return alert("Please enter your ID");
 
             try {
-                const response = await fetch("http://127.0.0.1:8000/send-otp", {
+                const response = await fetch(`${API_BASE}/send-otp`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        identifier: recoveryValue
+                        email: email,
+                        user_id: user_id,
+                        role: "organizer"  // change to "student" if needed
                     })
                 });
 
                 const data = await response.json();
 
+                // ✅ Error handling
                 if (!response.ok) {
-                    return alert(data.detail);
+                    return alert(data.detail || "Failed to send OTP");
                 }
 
+                // ✅ Store for next steps (VERY IMPORTANT)
+                recoveryValue = email;
+                window.recoveryUserId = user_id;   // store ID also
+                window.recoveryRole = "organizer"; // store role
+
+                // ✅ Open modal
                 document.getElementById("recovery-modal").style.display = "flex";
-                document.getElementById("recovery-target").innerText = recoveryType;
+                document.getElementById("recovery-target").innerText = "email";
+
+                // ✅ Clear previous OTP input (better UX)
+                const otpInput = document.getElementById("otp-input");
+                if (otpInput) otpInput.value = "";
 
             } catch (error) {
-                alert("Error sending OTP");
                 console.error(error);
+                alert("Server error while sending OTP");
             }
         }
 
@@ -1253,13 +1273,15 @@
             }
 
             try {
-                const response = await fetch("http://127.0.0.1:8000/verify-otp", {
+                const response = await fetch(`${API_BASE}/verify-otp`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        identifier: recoveryValue,
+                        email: recoveryValue,
+                        user_id: window.recoveryUserId,
+                        role: "organizer", // change to "student" if needed
                         otp: otp
                     })
                 });
@@ -1298,13 +1320,15 @@
             }
 
             try {
-                const response = await fetch("http://127.0.0.1:8000/reset-password", {
+                const response = await fetch(`${API_BASE}/reset-password`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        identifier: recoveryValue,
+                        email: recoveryValue,
+                        user_id: window.recoveryUserId,
+                        role: "organizer", // change to "student" if needed
                         new_password: newPass
                     })
                 });

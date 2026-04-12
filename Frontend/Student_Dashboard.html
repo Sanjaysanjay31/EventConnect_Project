@@ -559,6 +559,8 @@
         </section>
     </main>
 
+
+    <script src="Script.js"></script>
     <script>
        document.addEventListener("DOMContentLoaded", function () {
             console.log("Dashboard loaded successfully.");
@@ -573,7 +575,7 @@
                 return;
             }
 
-            fetch(`http://127.0.0.1:8000/get-user/${userId}`)
+            fetch(`${BASE_URL}/get-user/${userId}`)
             .then(res => {
                 if (!res.ok) {
                     throw new Error("Failed to fetch user");
@@ -635,7 +637,7 @@
                 }
             });
 
-            fetch(`http://127.0.0.1:8000/events`)
+            fetch(`${BASE_URL}/events`)
                 .then(res => res.json())
                 .then(events => {
                     if (events && !events.detail) {
@@ -647,7 +649,7 @@
             // =========================
             // FETCH STUDENT REGISTRATIONS
             // =========================
-            fetch(`http://127.0.0.1:8000/user/${userId}/registrations`)
+            fetch(`${BASE_URL}/user/${userId}/registrations`)
                 .then(res => res.json())
                 .then(data => {
                     const tbody = document.getElementById("registered-events-table");

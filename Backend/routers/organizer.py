@@ -53,7 +53,10 @@ def create_organizer(organizer: schemas.OrganizerCreate, db: Session = Depends(g
 
     return {
         "message": "Organizer registered successfully",
-        "id": new.id
+        "id": new.id,
+        "organizer_id": new.organizer_id,
+        "email": new.email,
+        "role": new.role
     }
 
 
@@ -89,7 +92,9 @@ def login(user: schemas.Login, db: Session = Depends(get_db)):
         "message": "Login successful",
         "id": db_user.id,
         "name": db_user.name,
-        "email": db_user.email
+        "email": db_user.email,
+        "role": db_user.role,
+        "organizer_id": db_user.organizer_id
     }
 
 

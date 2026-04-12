@@ -263,7 +263,7 @@
 
             <div class="input-box">
                 <label>Email Address</label>
-                <input type="email" id="email" placeholder="student@university.edu" required>
+                <input type="email" id="email" placeholder="Organizer@university.edu" required>
             </div>
         </div>
 
@@ -327,7 +327,7 @@
     </form>
 </div>
 
-
+    <script src="Script.js"></script>
     <script>
         const registrationForm = document.querySelector('form');
 
@@ -359,7 +359,7 @@
 
             try {
                 // 3. Send data to FastAPI (running on port 8000)
-                const response = await fetch('http://127.0.0.1:8000/Organizer_register', {
+                const response = await fetch(`${BASE_URL}/Organizer_register`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

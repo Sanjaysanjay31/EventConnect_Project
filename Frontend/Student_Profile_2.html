@@ -804,8 +804,10 @@
 
     <div id="toast-container"></div>
     
+
+        <script src="Script.js"></script>
         <script>
-            const API_BASE = "http://127.0.0.1:8000";
+            const API_BASE = "https://eventconnect-z0gu.onrender.com";
 
             // ===============================
             // 🚀 INIT (ONLY ONCE)
@@ -827,6 +829,7 @@
                 const el = document.getElementById(id);
                 if (el) el.innerText = val || "";
             };
+          // or organizer
 
             // ===============================
             // 🔐 LOAD PROFILE
@@ -845,6 +848,7 @@
                     if (!res.ok) throw new Error();
 
                     const user = await res.json();
+                    localStorage.setItem("student_id", user.user_id);
 
                     setText("display-name", user.full_name);
                     setText("display-email-text", user.email);
@@ -1027,38 +1031,58 @@
             // ===============================
             async function openResetModal() {
 
-                const email = document.getElementById("input-email").value.trim();
-                const phone = document.getElementById("input-phone").value.trim();
+                const email = document.getElementById("input-email")?.value.trim().toLowerCase();
+                const user_id = localStorage.getItem("student_id");
 
-                recoveryValue = (recoveryType === "email") ? email : phone;
+                console.log("EMAIL:", email);
+                console.log("USER_ID:", user_id);
 
-                if (!recoveryValue) {
-                    return alert(`Please enter your ${recoveryType}`);
-                }
+                if (!email) return alert("Please enter your email");
+                if (!user_id) return alert("User not found. Login again.");
 
                 try {
-                    const response = await fetch("http://127.0.0.1:8000/send-otp", {
+                    const response = await fetch(`${API_BASE}/send-otp`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify({
-                            identifier: recoveryValue
+                            email: email,
+                            user_id: user_id,
+                            role: "student"
                         })
                     });
 
-                    const data = await response.json();
+                    console.log("RESPONSE STATUS:", response.status);
 
-                    if (!response.ok) {
-                        return alert(data.detail);
+                    // ❗ DO NOT FORCE JSON
+                    let dataText = await response.text();
+                    console.log("RAW RESPONSE:", dataText);
+
+                    let data = {};
+                    try {
+                        data = JSON.parse(dataText);
+                    } catch {
+                        data = {};
                     }
 
+                    if (!response.ok) {
+                        alert(data.detail || "Failed to send OTP");
+                        return;
+                    }
+
+                    // ✅ SUCCESS
+                    recoveryValue = email;
+                    window.recoveryUserId = user_id;
+                    window.recoveryRole = "student";
+
                     document.getElementById("recovery-modal").style.display = "flex";
-                    document.getElementById("recovery-target").innerText = recoveryType;
+
+                    console.log("OTP FLOW SUCCESS");
 
                 } catch (error) {
-                    alert("Error sending OTP");
-                    console.error(error);
+                    console.error("ACTUAL ERROR:", error);
+                    alert("Something went wrong (check console)");
                 }
             }
 
@@ -1087,13 +1111,15 @@
                 }
 
                 try {
-                    const response = await fetch("http://127.0.0.1:8000/verify-otp", {
+                    const response = await fetch(`${API_BASE}/verify-otp`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify({
-                            identifier: recoveryValue,
+                            email: recoveryValue,        // ✅ FIX
+                            user_id: recoveryUserId,     // ✅ FIX
+                            role: recoveryRole,          // ✅ FIX
                             otp: otp
                         })
                     });
@@ -1104,13 +1130,15 @@
                         return alert(data.detail);
                     }
 
-                    // Move to password step
+                    // ✅ SUCCESS → go to password step
                     document.getElementById("step-otp").classList.add("hidden");
                     document.getElementById("step-password").classList.remove("hidden");
 
+                    console.log("OTP VERIFIED SUCCESS");
+
                 } catch (error) {
-                    alert("Error verifying OTP");
                     console.error(error);
+                    alert("Error verifying OTP");
                 }
             }
 
@@ -1132,13 +1160,15 @@
                 }
 
                 try {
-                    const response = await fetch("http://127.0.0.1:8000/reset-password", {
+                    const response = await fetch(`${API_BASE}/reset-password`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify({
-                            identifier: recoveryValue,
+                            email: recoveryValue,
+                            user_id : recoveryUserId,
+                            role: recoveryRole,
                             new_password: newPass
                         })
                     });

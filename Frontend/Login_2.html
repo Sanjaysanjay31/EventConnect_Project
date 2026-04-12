@@ -372,7 +372,7 @@
         </div>
     </div>
 
-
+    <script src="Script.js"></script>
     <script>
         const params = new URLSearchParams(window.location.search);
         const role = params.get("role");
@@ -402,7 +402,7 @@
                 const identifier = document.getElementById("studentEmail").value;
                 const password = document.getElementById("studentPassword").value;
 
-                fetch("http://127.0.0.1:8000/Student_login", {
+                fetch(`${BASE_URL}/Student_login`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -451,7 +451,7 @@
                 const identifier = document.getElementById("organizerIdentifier").value;
                 const password = document.getElementById("password_o").value;
 
-                fetch("http://127.0.0.1:8000/organizer_login", {
+                fetch(`${BASE_URL}/organizer_login`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -520,7 +520,7 @@
             if(!userId || !email) return alert("Please enter both ID and Email");
 
             try {
-                const res = await fetch("http://127.0.0.1:8000/send-otp", {
+                const res = await fetch(`${BASE_URL}/send-otp`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({ user_id: userId, email: email, role: fpRole })
@@ -545,7 +545,7 @@
             if(!otp) return alert("Please enter OTP");
 
             try {
-                const res = await fetch("http://127.0.0.1:8000/verify-otp", {
+                const res = await fetch(`${BASE_URL}/verify-otp`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({ user_id: userId, email: email, role: fpRole, otp: otp })
@@ -574,7 +574,7 @@
             if(newPassword.length < 6) return alert("Password must be at least 6 characters");
 
             try {
-                const res = await fetch("http://127.0.0.1:8000/reset-password", {
+                const res = await fetch(`${BASE_URL}/reset-password`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({ user_id: userId, email: email, role: fpRole, new_password: newPassword })
