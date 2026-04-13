@@ -627,8 +627,9 @@
             </div>
         </form>
     </div>
-
+    <script src="Scr"></script>
     <script>
+
         let base64PosterUrl = null;
 
         // Image Upload Logic
@@ -709,7 +710,7 @@
             }
 
             try {
-                const response = await fetch('http://127.0.0.1:8000/CreateEvent', {
+                const response = await fetch('${BASE_URL}/CreateEvent', {
                     method: 'POST',
                     body: formData
                 });
